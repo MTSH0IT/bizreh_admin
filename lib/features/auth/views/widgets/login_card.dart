@@ -1,21 +1,19 @@
 import 'package:bizreh_admin/utils/consts/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:bizreh_admin/features/auth/views/widgets/login_button.dart';
 import 'package:bizreh_admin/features/auth/views/widgets/login_remember_row.dart';
 import 'package:bizreh_admin/features/auth/views/widgets/login_text_field.dart';
+import 'package:bizreh_admin/features/auth/controllers/auth_controller.dart';
 
-class LoginCard extends StatefulWidget {
+class LoginCard extends StatelessWidget {
   const LoginCard({super.key});
 
   @override
-  State<LoginCard> createState() => _LoginCardState();
-}
-
-class _LoginCardState extends State<LoginCard> {
-  bool _rememberMe = false;
-
-  @override
   Widget build(BuildContext context) {
+    final AuthController authController = Get.put(AuthController());
+    final RxBool rememberMe = false.obs;
+
     return Container(
       width: 420,
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
@@ -58,28 +56,35 @@ class _LoginCardState extends State<LoginCard> {
             style: const TextStyle(color: Color(0xFF6B7280), fontSize: 14),
           ),
           const SizedBox(height: 24),
-          const LoginTextField(
+          LoginTextField(
             label: 'Email',
             hintText: 'Enter your email',
             icon: Icons.person_outline,
+            controller: authController.loginEmailCtrl,
           ),
           const SizedBox(height: 16),
-          const LoginTextField(
+          LoginTextField(
             label: 'Password',
             hintText: 'Enter your password',
             icon: Icons.lock_outline,
             obscureText: true,
+            controller: authController.loginPasswordCtrl,
           ),
           const SizedBox(height: 12),
-          LoginRememberRow(
-            rememberMe: _rememberMe,
-            onRememberChanged: (v) => setState(() => _rememberMe = v),
+          Obx(
+            () => LoginRememberRow(
+              rememberMe: rememberMe.value,
+              onRememberChanged: (value) => rememberMe.value = value,
+            ),
           ),
           const SizedBox(height: 20),
-          LoginButton(
-            onPressed: () {
-              // TODO: handle login
-            },
+          Obx(
+            () => LoginButton(
+              onPressed: authController.isLoading.value
+                  ? null
+                  : () => authController.login(),
+              isLoading: authController.isLoading.value,
+            ),
           ),
         ],
       ),

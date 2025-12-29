@@ -6,6 +6,7 @@ class LoginTextField extends StatelessWidget {
   final String hintText;
   final IconData icon;
   final bool obscureText;
+  final TextEditingController? controller;
 
   const LoginTextField({
     super.key,
@@ -13,6 +14,7 @@ class LoginTextField extends StatelessWidget {
     required this.hintText,
     required this.icon,
     this.obscureText = false,
+    this.controller,
   });
 
   @override
@@ -31,6 +33,7 @@ class LoginTextField extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         TextField(
+          controller: controller,
           obscureText: obscureText,
           decoration: InputDecoration(
             hintText: hintText,

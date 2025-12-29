@@ -1,7 +1,11 @@
 import 'package:bizreh_admin/features/auth/views/login_view.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:bizreh_admin/utils/storageService/storage_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await StorageService.init();
   runApp(const MyApp());
 }
 
@@ -10,6 +14,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: LoginView(), debugShowCheckedModeBanner: true);
+    return GetMaterialApp(
+      home: const LoginView(),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }
