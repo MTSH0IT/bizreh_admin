@@ -11,4 +11,12 @@ class ApiEndpoint {
   static const String createBrand = "/admin/brand";
   static String updateBrand(int id) => "/admin/brand/$id";
   static String deleteBrand(int id) => "/admin/brand/$id";
+
+  // Super Categories
+  static const String getSuperCategories = "/admin/category/super-categories";
+  static const String createSuperCategory = "/admin/category/super-categories";
+  static String updateSuperCategory(int id) =>
+      "/admin/category/super-categories/$id";
+  static String deleteSuperCategory(int id) =>
+      "/admin/category/super-categories/$id";
 }

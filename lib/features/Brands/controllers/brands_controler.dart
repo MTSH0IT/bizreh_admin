@@ -111,6 +111,7 @@ class BrandsController extends GetxController {
 
       clearForm();
       //showMassage('Brand updated successfully', true);
+      //Get.back();
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in updateBrand: ${e.message}');
@@ -127,7 +128,7 @@ class BrandsController extends GetxController {
       isDeleting.value = true;
 
       await _brandsService.deleteBrand(brandId);
-      brands.removeWhere((brand) => brand.id == brandId);
+      getBrands(); // Refresh data from server
 
       showMassage('Brand deleted successfully', true);
       log('Successfully deleted brand with ID: $brandId');

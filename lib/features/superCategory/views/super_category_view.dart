@@ -1,19 +1,21 @@
-import 'package:bizreh_admin/features/Brands/controllers/brands_controler.dart';
-import 'package:bizreh_admin/features/Brands/models/brands_model.dart';
-import 'package:bizreh_admin/features/Brands/views/widgets/brands_data_table.dart';
-import 'package:bizreh_admin/features/Brands/views/widgets/brand_form_dialog.dart';
+import 'package:bizreh_admin/features/superCategory/controllers/super_category_controller.dart';
+import 'package:bizreh_admin/features/SuperCategory/models/super_category_model.dart';
+import 'package:bizreh_admin/features/superCategory/views/widgets/super_category_form_dialog.dart';
+import 'package:bizreh_admin/features/superCategory/views/widgets/super_category_data_table.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
 import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class BrandsView extends StatelessWidget {
-  const BrandsView({super.key});
+class SuperCategoryView extends StatelessWidget {
+  const SuperCategoryView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final BrandsController controller = Get.put(BrandsController());
+    final SuperCategoryController controller = Get.put(
+      SuperCategoryController(),
+    );
     final theme = Theme.of(context);
 
     return ConstrainedBox(
@@ -22,21 +24,21 @@ class BrandsView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Brands',
+            'Super Categories',
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.w800,
             ),
           ),
           const SizedBox(height: 16),
           SearchField(
-            hintText: 'Search brands...',
+            hintText: 'Search super categories...',
             onChanged: (v) => controller.setSearchQuery(v),
           ),
           const SizedBox(height: 12),
           ToolbarRow(
             onAdd: () => _openCreateDialog(context, controller),
-            onRefresh: controller.getBrands,
-            addText: 'Add Brand',
+            onRefresh: controller.getSuperCategories,
+            addText: 'Add Super Category',
             refreshText: 'Refresh',
           ),
           const SizedBox(height: 16),
@@ -45,12 +47,14 @@ class BrandsView extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
 
-            final filtered = controller.filteredBrands;
+            final filtered = controller.filteredSuperCategories;
 
-            return BrandsDataTable(
+            return SuperCategoryDataTable(
               rows: filtered,
-              onEdit: (brand) => _openEditDialog(context, controller, brand),
-              onDelete: (brand) => _confirmDelete(context, controller, brand),
+              onEdit: (superCategory) =>
+                  _openEditDialog(context, controller, superCategory),
+              onDelete: (superCategory) =>
+                  _confirmDelete(context, controller, superCategory),
             );
           }),
         ],
@@ -58,41 +62,44 @@ class BrandsView extends StatelessWidget {
     );
   }
 
-  void _openCreateDialog(BuildContext context, BrandsController controller) {
+  void _openCreateDialog(
+    BuildContext context,
+    SuperCategoryController controller,
+  ) {
     controller.clearForm();
     showDialog<void>(
       context: context,
-      builder: (_) => BrandFormDialog(controller: controller),
+      builder: (_) => SuperCategoryFormDialog(controller: controller),
     );
   }
 
   void _openEditDialog(
     BuildContext context,
-    BrandsController controller,
-    BrandsModel brand,
+    SuperCategoryController controller,
+    SuperCategoryModel superCategory,
   ) {
-    controller.setBrandForEdit(brand);
+    controller.setSuperCategoryForEdit(superCategory);
     showDialog<void>(
       context: context,
-      builder: (_) => BrandFormDialog(controller: controller),
+      builder: (_) => SuperCategoryFormDialog(controller: controller),
     );
   }
 
   Future<void> _confirmDelete(
     BuildContext context,
-    BrandsController controller,
-    BrandsModel brand,
+    SuperCategoryController controller,
+    SuperCategoryModel superCategory,
   ) async {
-    final id = brand.id;
+    final id = superCategory.id;
     if (id == null) return;
 
     final ok = await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Delete Brand'),
+          title: const Text('Delete Super Category'),
           content: Text(
-            'Are you sure you want to delete "${brand.title ?? '-'}"?',
+            'Are you sure you want to delete "${superCategory.title ?? '-'}"?',
           ),
           actions: [
             TextButton(
@@ -115,6 +122,6 @@ class BrandsView extends StatelessWidget {
     );
 
     if (ok != true) return;
-    await controller.deleteBrand(id);
+    await controller.deleteSuperCategory(id);
   }
 }

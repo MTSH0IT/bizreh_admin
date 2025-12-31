@@ -1,0 +1,74 @@
+import 'package:bizreh_admin/features/SuperCategory/models/super_category_model.dart';
+import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
+import 'package:flutter/material.dart';
+
+class SuperCategoryDataTable extends StatelessWidget {
+  final List<SuperCategoryModel> rows;
+  final Function(SuperCategoryModel) onEdit;
+  final Function(SuperCategoryModel) onDelete;
+
+  const SuperCategoryDataTable({
+    super.key,
+    required this.rows,
+    required this.onEdit,
+    required this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DataTableWidget<SuperCategoryModel>(
+      rows: rows,
+      emptyMessage: 'No super categories found',
+      onEdit: onEdit,
+      onDelete: onDelete,
+      columns: const [
+        DataColumn(
+          label: Text('Image', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        DataColumn(
+          label: Text('Title', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        DataColumn(
+          label: Text(
+            'Arabic Title',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        DataColumn(
+          label: Text(
+            'Position',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        DataColumn(
+          label: Text(
+            'Created At',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+      ],
+      buildCells: (superCategory, index) {
+        return [
+          DataCell(
+            DataTableImageCell(
+              imageUrl: superCategory.image,
+              width: 50,
+              height: 50,
+              borderRadius: 8,
+            ),
+          ),
+          DataCell(DataTableTextCell(text: superCategory.title)),
+          DataCell(DataTableTextCell(text: superCategory.arTitle)),
+          DataCell(DataTableNumberCell(number: superCategory.position)),
+          DataCell(
+            DataTableDateCell(
+              date: superCategory.createdAt,
+              format:
+                  '${superCategory.createdAt?.day}/${superCategory.createdAt?.month}/${superCategory.createdAt?.year}',
+            ),
+          ),
+        ];
+      },
+    );
+  }
+}
