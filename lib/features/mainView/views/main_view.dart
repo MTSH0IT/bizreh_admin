@@ -1,3 +1,4 @@
+import 'package:bizreh_admin/features/Brands/views/brands_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bizreh_admin/features/mainView/views/widgets/admin_sidebar.dart';
 
@@ -9,7 +10,7 @@ class Mainview extends StatefulWidget {
 }
 
 class _MainviewState extends State<Mainview> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +51,14 @@ class _MainviewState extends State<Mainview> {
       case 1:
         return const _PlaceholderPage(title: 'Users');
       case 2:
-        return const _PlaceholderPage(title: 'Products');
+        return const BrandsView();
       case 3:
-        return const _PlaceholderPage(title: 'Orders');
+        return const _PlaceholderPage(title: 'Categories');
       case 4:
+        return const _PlaceholderPage(title: 'Products');
+      case 5:
+        return const _PlaceholderPage(title: 'Orders');
+      case 6:
         return const _PlaceholderPage(title: 'Settings');
       default:
         return const _PlaceholderPage(title: 'Page');

@@ -25,6 +25,14 @@ class AdminSidebar extends StatelessWidget {
       const AdminSidebarItemData(title: 'Dashboard', icon: Icons.home_outlined),
       const AdminSidebarItemData(title: 'Users', icon: Icons.group_outlined),
       const AdminSidebarItemData(
+        title: 'Brands',
+        icon: Icons.local_offer_outlined,
+      ),
+      const AdminSidebarItemData(
+        title: 'Categories',
+        icon: Icons.category_outlined,
+      ),
+      const AdminSidebarItemData(
         title: 'Products',
         icon: Icons.inventory_2_outlined,
       ),
