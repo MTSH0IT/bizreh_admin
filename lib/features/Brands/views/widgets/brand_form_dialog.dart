@@ -1,9 +1,9 @@
 import 'package:bizreh_admin/features/Brands/controllers/brands_controler.dart';
 import 'dart:io';
+import 'package:bizreh_admin/utils/func/image_picker_helper.dart';
 import 'package:bizreh_admin/utils/widgets/image_network.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 
 class BrandFormDialog extends StatelessWidget {
@@ -50,92 +50,79 @@ class BrandFormDialog extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      'Image',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    if (path.isNotEmpty) ...[
-                      SizedBox(
-                        height: 120,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.file(
-                            File(path),
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return const ColoredBox(
-                                color: Color(0xFFF3F4F6),
-                                child: Center(
-                                  child: Icon(Icons.broken_image_outlined),
-                                ),
-                              );
-                            },
+                    const SizedBox(height: 12),
+                    if (hasExisting && path.isEmpty)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Current Image:',
+                            style: TextStyle(fontWeight: FontWeight.w500),
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                    ] else if (hasExisting) ...[
-                      SizedBox(
-                        height: 120,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: ImageNetwork(image: existingImage),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 12,
-                            ),
+                          const SizedBox(height: 8),
+                          Container(
+                            height: 120,
+                            width: double.infinity,
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                color: const Color(0xFFE5E7EB),
-                              ),
-                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Text(
-                              path.isEmpty
-                                  ? (isEditing
-                                        ? (hasExisting
-                                              ? 'Keeping current image'
-                                              : 'No image')
-                                        : 'Please select an image')
-                                  : path.split(Platform.pathSeparator).last,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: ImageNetwork(image: existingImage),
                             ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        OutlinedButton(
-                          onPressed: () async {
-                            final ImagePicker picker = ImagePicker();
-                            final XFile? image = await picker.pickImage(
-                              source: ImageSource.gallery,
-                              imageQuality: 80,
-                            );
-                            if (image != null) {
-                              controller.setImagePath(image.path);
-                            }
-                          },
-                          child: Text(path.isEmpty ? 'Choose' : 'Change'),
-                        ),
-                        if (path.isNotEmpty) ...[
-                          const SizedBox(width: 8),
-                          IconButton(
-                            onPressed: () => controller.setImagePath(''),
-                            icon: const Icon(Icons.clear),
                           ),
                         ],
-                      ],
+                      ),
+                    if (path.isNotEmpty)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Selected Image:',
+                            style: TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(height: 8),
+                          Container(
+                            height: 120,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.file(
+                                File(path),
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const ColoredBox(
+                                      color: Color(0xFFF3F4F6),
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.broken_image_outlined,
+                                        ),
+                                      ),
+                                    ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    const SizedBox(height: 12),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        await pickImageAndSetPath(
+                          onPathSelected: controller.setImagePath,
+                          imageQuality: 80,
+                        );
+                      },
+                      icon: const Icon(Icons.image),
+                      label: Text(
+                        hasExisting && path.isEmpty
+                            ? 'Change Image'
+                            : 'Select Image',
+                      ),
                     ),
                   ],
                 );
@@ -159,14 +146,18 @@ class BrandFormDialog extends StatelessWidget {
             onPressed: busy
                 ? null
                 : () async {
-                    if (controller.isEditing) {
-                      await controller.updateBrand();
-                    } else {
-                      await controller.createBrand();
-                    }
-                    if (!controller.isCreating.value &&
-                        !controller.isUpdating.value) {
-                      Get.back();
+                    try {
+                      if (controller.isEditing) {
+                        await controller.updateBrand();
+                      } else {
+                        await controller.createBrand();
+                      }
+                      // Close dialog after successful operation
+                      if (context.mounted) {
+                        Get.back();
+                      }
+                    } catch (e) {
+                      // Don't close dialog on error, let user see the error message
                     }
                   },
             child: busy

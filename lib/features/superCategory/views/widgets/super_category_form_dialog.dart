@@ -1,9 +1,9 @@
 import 'package:bizreh_admin/features/superCategory/controllers/super_category_controller.dart';
 import 'dart:io';
+import 'package:bizreh_admin/utils/func/image_picker_helper.dart';
 import 'package:bizreh_admin/utils/widgets/image_network.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 
 class SuperCategoryFormDialog extends StatelessWidget {
@@ -100,13 +100,9 @@ class SuperCategoryFormDialog extends StatelessWidget {
                     const SizedBox(height: 12),
                     ElevatedButton.icon(
                       onPressed: () async {
-                        final picker = ImagePicker();
-                        final pickedFile = await picker.pickImage(
-                          source: ImageSource.gallery,
+                        await pickImageAndSetPath(
+                          onPathSelected: controller.setImagePath,
                         );
-                        if (pickedFile != null) {
-                          controller.setImagePath(pickedFile.path);
-                        }
                       },
                       icon: const Icon(Icons.image),
                       label: Text(

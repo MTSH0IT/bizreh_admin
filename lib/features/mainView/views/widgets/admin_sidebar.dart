@@ -29,16 +29,16 @@ class AdminSidebar extends StatelessWidget {
         icon: Icons.local_offer_outlined,
       ),
       const AdminSidebarItemData(
+        title: 'Super Categories',
+        icon: Icons.category_outlined,
+      ),
+      const AdminSidebarItemData(
         title: 'Categories',
         icon: Icons.category_outlined,
       ),
       const AdminSidebarItemData(
-        title: 'Products',
-        icon: Icons.inventory_2_outlined,
-      ),
-      const AdminSidebarItemData(
-        title: 'Orders',
-        icon: Icons.receipt_long_outlined,
+        title: 'Sup Category',
+        icon: Icons.category_outlined,
       ),
       const AdminSidebarItemData(
         title: 'Settings',

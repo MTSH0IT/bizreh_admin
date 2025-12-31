@@ -4,7 +4,8 @@ import 'package:bizreh_admin/features/Brands/views/widgets/brands_data_table.dar
 import 'package:bizreh_admin/features/Brands/views/widgets/brand_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
 import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
-import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
+import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
+import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -59,10 +60,9 @@ class BrandsView extends StatelessWidget {
   }
 
   void _openCreateDialog(BuildContext context, BrandsController controller) {
-    controller.clearForm();
-    showDialog<void>(
-      context: context,
-      builder: (_) => BrandFormDialog(controller: controller),
+    openFormDialog<void>(
+      onBeforeOpen: controller.clearForm,
+      dialogBuilder: (_) => BrandFormDialog(controller: controller),
     );
   }
 
@@ -71,10 +71,9 @@ class BrandsView extends StatelessWidget {
     BrandsController controller,
     BrandsModel brand,
   ) {
-    controller.setBrandForEdit(brand);
-    showDialog<void>(
-      context: context,
-      builder: (_) => BrandFormDialog(controller: controller),
+    openFormDialog<void>(
+      onBeforeOpen: () => controller.setBrandForEdit(brand),
+      dialogBuilder: (_) => BrandFormDialog(controller: controller),
     );
   }
 
@@ -86,35 +85,13 @@ class BrandsView extends StatelessWidget {
     final id = brand.id;
     if (id == null) return;
 
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Delete Brand'),
-          content: Text(
-            'Are you sure you want to delete "${brand.title ?? '-'}"?',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
-            ),
-            Obx(() {
-              return ElevatedButton(
-                onPressed: controller.isDeleting.value
-                    ? null
-                    : () => Navigator.of(context).pop(true),
-                child: controller.isDeleting.value
-                    ? const BuildProgressIndicator()
-                    : const Text('Delete'),
-              );
-            }),
-          ],
-        );
-      },
+    final ok = await showConfirmDeleteDialog(
+      title: 'Delete Brand',
+      message: 'Are you sure you want to delete "${brand.title ?? '-'}"?',
+      isLoading: controller.isDeleting,
     );
 
-    if (ok != true) return;
+    if (!ok) return;
     await controller.deleteBrand(id);
   }
 }

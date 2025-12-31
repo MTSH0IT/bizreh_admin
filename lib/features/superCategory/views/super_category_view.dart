@@ -4,7 +4,8 @@ import 'package:bizreh_admin/features/superCategory/views/widgets/super_category
 import 'package:bizreh_admin/features/superCategory/views/widgets/super_category_data_table.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
 import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
-import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
+import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
+import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -66,10 +67,9 @@ class SuperCategoryView extends StatelessWidget {
     BuildContext context,
     SuperCategoryController controller,
   ) {
-    controller.clearForm();
-    showDialog<void>(
-      context: context,
-      builder: (_) => SuperCategoryFormDialog(controller: controller),
+    openFormDialog<void>(
+      onBeforeOpen: controller.clearForm,
+      dialogBuilder: (_) => SuperCategoryFormDialog(controller: controller),
     );
   }
 
@@ -78,10 +78,9 @@ class SuperCategoryView extends StatelessWidget {
     SuperCategoryController controller,
     SuperCategoryModel superCategory,
   ) {
-    controller.setSuperCategoryForEdit(superCategory);
-    showDialog<void>(
-      context: context,
-      builder: (_) => SuperCategoryFormDialog(controller: controller),
+    openFormDialog<void>(
+      onBeforeOpen: () => controller.setSuperCategoryForEdit(superCategory),
+      dialogBuilder: (_) => SuperCategoryFormDialog(controller: controller),
     );
   }
 
@@ -93,35 +92,14 @@ class SuperCategoryView extends StatelessWidget {
     final id = superCategory.id;
     if (id == null) return;
 
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Delete Super Category'),
-          content: Text(
-            'Are you sure you want to delete "${superCategory.title ?? '-'}"?',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
-            ),
-            Obx(() {
-              return ElevatedButton(
-                onPressed: controller.isDeleting.value
-                    ? null
-                    : () => Navigator.of(context).pop(true),
-                child: controller.isDeleting.value
-                    ? const BuildProgressIndicator()
-                    : const Text('Delete'),
-              );
-            }),
-          ],
-        );
-      },
+    final ok = await showConfirmDeleteDialog(
+      title: 'Delete Super Category',
+      message:
+          'Are you sure you want to delete "${superCategory.title ?? '-'}"?',
+      isLoading: controller.isDeleting,
     );
 
-    if (ok != true) return;
+    if (!ok) return;
     await controller.deleteSuperCategory(id);
   }
 }
