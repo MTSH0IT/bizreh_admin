@@ -19,4 +19,10 @@ class ApiEndpoint {
       "/admin/category/super-categories/$id";
   static String deleteSuperCategory(int id) =>
       "/admin/category/super-categories/$id";
+
+  // Categories
+  static String getCategories(int id) => "/admin/category/categories/$id";
+  static const String createCategory = "/admin/category/categories";
+  static String updateCategory(int id) => "/admin/category/categories/$id";
+  static String deleteCategory(int id) => "/admin/category/categories/$id";
 }
