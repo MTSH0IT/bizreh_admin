@@ -92,13 +92,7 @@ class SuperCategoryDataTable extends StatelessWidget {
               ),
             ),
           ),
-          DataCell(
-            DataTableDateCell(
-              date: superCategory.createdAt,
-              format:
-                  '${superCategory.createdAt?.day}/${superCategory.createdAt?.month}/${superCategory.createdAt?.year}',
-            ),
-          ),
+          DataCell(DataTableDateCell(date: superCategory.createdAt)),
         ];
       },
     );

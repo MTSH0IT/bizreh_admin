@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bizreh_admin/features/mainView/controllers/main_nav_controller.dart';
+import 'package:bizreh_admin/features/profile/views/profile_view.dart';
 import 'package:get/get.dart';
 
 class AdminTopBar extends StatelessWidget {
@@ -67,10 +68,18 @@ class AdminTopBar extends StatelessWidget {
             icon: const Icon(Icons.notifications_none_rounded),
           ),
           const SizedBox(width: 12),
-          const CircleAvatar(
-            radius: 18,
-            backgroundColor: Color(0xFFE5E7EB),
-            child: Icon(Icons.person, color: Color(0xFF374151)),
+          InkWell(
+            onTap: () {
+              nav.resetTo(
+                const MainNavEntry(title: 'Profile', page: ProfileView()),
+              );
+            },
+            borderRadius: BorderRadius.circular(999),
+            child: const CircleAvatar(
+              radius: 18,
+              backgroundColor: Color(0xFFE5E7EB),
+              child: Icon(Icons.person, color: Color(0xFF374151)),
+            ),
           ),
         ],
       ),

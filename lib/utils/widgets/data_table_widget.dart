@@ -1,4 +1,5 @@
 import 'package:bizreh_admin/utils/widgets/image_network.dart';
+import 'package:bizreh_admin/utils/func/date_format.dart';
 import 'package:flutter/material.dart';
 
 // Generic data table widget that can be used for any entity
@@ -154,16 +155,11 @@ class DataTableDateCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (date == null) {
-      return const Text('-');
-    }
-
     String formattedDate;
     if (format != null) {
       formattedDate = format!;
     } else {
-      String two(int v) => v.toString().padLeft(2, '0');
-      formattedDate = '${date!.year}-${two(date!.month)}-${two(date!.day)}';
+      formattedDate = formatDate(date);
     }
 
     return Text(
