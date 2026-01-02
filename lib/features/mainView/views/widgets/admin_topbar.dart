@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:bizreh_admin/features/mainView/controllers/main_nav_controller.dart';
+import 'package:get/get.dart';
 
 class AdminTopBar extends StatelessWidget {
   final String hintText;
@@ -8,6 +10,7 @@ class AdminTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final MainNavController nav = Get.find<MainNavController>();
 
     return Container(
       height: 72,
@@ -15,12 +18,35 @@ class AdminTopBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Row(
         children: [
-          Text(
-            'Admin Panel',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
+          Obx(() {
+            final titles = nav.stack.map((e) => e.title).toList();
+            final breadcrumb = titles.join(' / ');
+
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (nav.canPop) ...[
+                  IconButton(
+                    onPressed: nav.pop,
+                    icon: const Icon(Icons.arrow_back),
+                    tooltip: 'Back',
+                  ),
+                  const SizedBox(width: 6),
+                ],
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 420),
+                  child: Text(
+                    breadcrumb.isEmpty ? 'Admin Panel' : breadcrumb,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }),
           const Spacer(),
           SizedBox(
             width: 260,

@@ -33,14 +33,6 @@ class AdminSidebar extends StatelessWidget {
         icon: Icons.category_outlined,
       ),
       const AdminSidebarItemData(
-        title: 'Categories',
-        icon: Icons.category_outlined,
-      ),
-      const AdminSidebarItemData(
-        title: 'Sup Category',
-        icon: Icons.category_outlined,
-      ),
-      const AdminSidebarItemData(
         title: 'Products',
         icon: Icons.inventory_2_outlined,
       ),

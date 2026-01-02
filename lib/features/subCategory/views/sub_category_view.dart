@@ -1,4 +1,3 @@
-import 'package:bizreh_admin/features/category/controllers/category_controller.dart';
 import 'package:bizreh_admin/features/subCategory/controllers/sub_category_controler.dart';
 import 'package:bizreh_admin/features/subCategory/models/sub_category_model.dart';
 import 'package:bizreh_admin/features/subCategory/views/widgets/sub_category_data_table.dart';
@@ -11,15 +10,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SubCategoryView extends StatelessWidget {
-  const SubCategoryView({super.key});
+  final int? categoryId;
+  final String? categoryTitle;
+
+  const SubCategoryView({super.key, this.categoryId, this.categoryTitle});
 
   @override
   Widget build(BuildContext context) {
     final SubCategoryController subController = Get.put(
       SubCategoryController(),
     );
-    final CategoryController categoryController = Get.put(CategoryController());
     final theme = Theme.of(context);
+
+    if (categoryId != null &&
+        subController.selectedCategoryId.value != categoryId) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        subController.getSubCategories(categoryId!);
+      });
+    }
 
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 1100),
@@ -27,43 +35,13 @@ class SubCategoryView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Sub Categories',
+            categoryTitle != null
+                ? 'Sub Categories for "$categoryTitle"'
+                : 'Sub Categories',
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.w800,
             ),
           ),
-          const SizedBox(height: 16),
-          // شريط الكاتيجوريز في الأعلى
-          Obx(() {
-            final categories = categoryController.categories;
-            final selectedId = subController.selectedCategoryId.value;
-
-            if (categories.isEmpty) {
-              return const Text('No categories found');
-            }
-
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: categories.map((c) {
-                  final id = c.id;
-                  if (id == null) return const SizedBox.shrink();
-                  final selected = id == selectedId;
-
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: ChoiceChip(
-                      label: Text(c.title ?? '-'),
-                      selected: selected,
-                      onSelected: (_) {
-                        subController.getSubCategories(id);
-                      },
-                    ),
-                  );
-                }).toList(),
-              ),
-            );
-          }),
           const SizedBox(height: 16),
           SearchField(
             hintText: 'Search sub categories...',
@@ -73,8 +51,8 @@ class SubCategoryView extends StatelessWidget {
           ToolbarRow(
             onAdd: () => _openCreateDialog(context, subController),
             onRefresh: () {
-              final id = subController.selectedCategoryId.value;
-              if (id != 0) {
+              final id = categoryId;
+              if (id != null) {
                 subController.getSubCategories(id);
               }
             },
@@ -91,8 +69,10 @@ class SubCategoryView extends StatelessWidget {
 
             return SubCategoryDataTable(
               rows: rows,
-              onEdit: (sub) => _openEditDialog(context, sub, subController),
-              onDelete: (sub) => _confirmDelete(context, sub, subController),
+              onEdit: (subCategory) =>
+                  _openEditDialog(context, subController, subCategory),
+              onDelete: (subCategory) =>
+                  _confirmDelete(context, subController, subCategory),
             );
           }),
         ],
@@ -112,8 +92,8 @@ class SubCategoryView extends StatelessWidget {
 
   void _openEditDialog(
     BuildContext context,
-    SubCategoryModel subCategory,
     SubCategoryController controller,
+    SubCategoryModel subCategory,
   ) {
     openFormDialog<void>(
       onBeforeOpen: () => controller.setSubCategoryForEdit(subCategory),
@@ -123,8 +103,8 @@ class SubCategoryView extends StatelessWidget {
 
   Future<void> _confirmDelete(
     BuildContext context,
-    SubCategoryModel subCategory,
     SubCategoryController controller,
+    SubCategoryModel subCategory,
   ) async {
     final id = subCategory.id;
     if (id == null) return;

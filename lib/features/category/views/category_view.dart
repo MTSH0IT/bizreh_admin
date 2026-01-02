@@ -2,7 +2,6 @@ import 'package:bizreh_admin/features/category/controllers/category_controller.d
 import 'package:bizreh_admin/features/category/models/category_model.dart';
 import 'package:bizreh_admin/features/category/views/widgets/category_data_table.dart';
 import 'package:bizreh_admin/features/category/views/widgets/category_form_dialog.dart';
-import 'package:bizreh_admin/features/superCategory/controllers/super_category_controller.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
@@ -12,15 +11,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CategoryView extends StatelessWidget {
-  const CategoryView({super.key});
+  final int? superCategoryId;
+  final String? superCategoryTitle;
+
+  const CategoryView({
+    super.key,
+    this.superCategoryId,
+    this.superCategoryTitle,
+  });
 
   @override
   Widget build(BuildContext context) {
     final CategoryController categoryController = Get.put(CategoryController());
-    final SuperCategoryController superCategoryController = Get.put(
-      SuperCategoryController(),
-    );
     final theme = Theme.of(context);
+
+    if (superCategoryId != null &&
+        categoryController.selectedSuperCategoryId.value != superCategoryId) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        categoryController.getCategories(superCategoryId!);
+      });
+    }
 
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 1100),
@@ -28,42 +38,13 @@ class CategoryView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Categories',
+            superCategoryTitle != null
+                ? 'Categories for "$superCategoryTitle"'
+                : 'Categories',
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.w800,
             ),
           ),
-          const SizedBox(height: 16),
-          Obx(() {
-            final supers = superCategoryController.superCategories;
-            final selectedId = categoryController.selectedSuperCategoryId.value;
-
-            if (supers.isEmpty) {
-              return const Text('No super categories found');
-            }
-
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: supers.map((sc) {
-                  final id = sc.id;
-                  if (id == null) return const SizedBox.shrink();
-                  final selected = id == selectedId;
-
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: ChoiceChip(
-                      label: Text(sc.title ?? '-'),
-                      selected: selected,
-                      onSelected: (_) {
-                        categoryController.getCategories(id);
-                      },
-                    ),
-                  );
-                }).toList(),
-              ),
-            );
-          }),
           const SizedBox(height: 16),
           SearchField(
             hintText: 'Search categories...',
@@ -73,8 +54,8 @@ class CategoryView extends StatelessWidget {
           ToolbarRow(
             onAdd: () => _openCreateDialog(context, categoryController),
             onRefresh: () {
-              final id = categoryController.selectedSuperCategoryId.value;
-              if (id != 0) {
+              final id = superCategoryId;
+              if (id != null) {
                 categoryController.getCategories(id);
               }
             },

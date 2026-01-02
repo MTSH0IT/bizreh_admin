@@ -1,6 +1,9 @@
 import 'package:bizreh_admin/features/SuperCategory/models/super_category_model.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:bizreh_admin/features/category/views/category_view.dart';
+import 'package:bizreh_admin/features/mainView/controllers/main_nav_controller.dart';
+import 'package:get/get.dart';
 
 class SuperCategoryDataTable extends StatelessWidget {
   final List<SuperCategoryModel> rows;
@@ -42,6 +45,12 @@ class SuperCategoryDataTable extends StatelessWidget {
         ),
         DataColumn(
           label: Text(
+            'Categories',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        DataColumn(
+          label: Text(
             'Created At',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
@@ -60,6 +69,29 @@ class SuperCategoryDataTable extends StatelessWidget {
           DataCell(DataTableTextCell(text: superCategory.title)),
           DataCell(DataTableTextCell(text: superCategory.arTitle)),
           DataCell(DataTableNumberCell(number: superCategory.position)),
+          DataCell(
+            ElevatedButton.icon(
+              onPressed: () {
+                Get.find<MainNavController>().push(
+                  MainNavEntry(
+                    title: superCategory.title ?? 'Categories',
+                    page: CategoryView(
+                      superCategoryId: superCategory.id,
+                      superCategoryTitle: superCategory.title,
+                    ),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.category_outlined, size: 16),
+              label: const Text('Categories'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+              ),
+            ),
+          ),
           DataCell(
             DataTableDateCell(
               date: superCategory.createdAt,

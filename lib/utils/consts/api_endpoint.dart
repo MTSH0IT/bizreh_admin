@@ -40,4 +40,7 @@ class ApiEndpoint {
   static String createProducts = "/admin/product";
   static String deleteProducts(int id) => "/admin/product/$id";
   static String updateProducts(int id) => "/admin/product/$id";
+
+  //profile
+  static String getProfile = "/admin/profile";
 }

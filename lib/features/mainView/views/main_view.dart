@@ -1,10 +1,11 @@
 import 'package:bizreh_admin/features/Brands/views/brands_view.dart';
-import 'package:bizreh_admin/features/category/views/category_view.dart';
-import 'package:bizreh_admin/features/subCategory/views/sub_category_view.dart';
+import 'package:bizreh_admin/features/mainView/views/widgets/admin_topbar.dart';
 import 'package:bizreh_admin/features/superCategory/views/super_category_view.dart';
 import 'package:bizreh_admin/features/products/views/products_view.dart';
+import 'package:bizreh_admin/features/mainView/controllers/main_nav_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:bizreh_admin/features/mainView/views/widgets/admin_sidebar.dart';
+import 'package:get/get.dart';
 
 class Mainview extends StatefulWidget {
   const Mainview({super.key});
@@ -15,6 +16,13 @@ class Mainview extends StatefulWidget {
 
 class _MainviewState extends State<Mainview> {
   int _selectedIndex = 0;
+  late final MainNavController _nav = Get.put(MainNavController());
+  @override
+  void initState() {
+    super.initState();
+
+    _nav.resetTo(_buildRootEntry(_selectedIndex));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +33,20 @@ class _MainviewState extends State<Mainview> {
           children: [
             AdminSidebar(
               selectedIndex: _selectedIndex,
-              onSelect: (i) => setState(() => _selectedIndex = i),
+              onSelect: (i) {
+                setState(() => _selectedIndex = i);
+                _nav.resetTo(_buildRootEntry(i));
+              },
             ),
             Expanded(
               child: Column(
                 children: [
-                  //const AdminTopBar(),
+                  const AdminTopBar(),
                   Expanded(
                     child: SingleChildScrollView(
                       child: Padding(
                         padding: const EdgeInsets.all(24),
-                        child: _buildPage(),
+                        child: Obx(() => _nav.current),
                       ),
                     ),
                   ),
@@ -48,26 +59,37 @@ class _MainviewState extends State<Mainview> {
     );
   }
 
-  Widget _buildPage() {
-    switch (_selectedIndex) {
+  MainNavEntry _buildRootEntry(int selectedIndex) {
+    switch (selectedIndex) {
       case 0:
-        return const _PlaceholderPage(title: 'Dashboard');
+        return const MainNavEntry(
+          title: 'Dashboard',
+          page: _PlaceholderPage(title: 'Dashboard'),
+        );
       case 1:
-        return const _PlaceholderPage(title: 'Users');
+        return const MainNavEntry(
+          title: 'Users',
+          page: _PlaceholderPage(title: 'Users'),
+        );
       case 2:
-        return const BrandsView();
+        return const MainNavEntry(title: 'Brands', page: BrandsView());
       case 3:
-        return const SuperCategoryView();
+        return const MainNavEntry(
+          title: 'Super Categories',
+          page: SuperCategoryView(),
+        );
       case 4:
-        return const CategoryView();
+        return const MainNavEntry(title: 'Products', page: ProductsView());
       case 5:
-        return const SubCategoryView();
-      case 6:
-        return const ProductsView();
-      case 7:
-        return const _PlaceholderPage(title: 'Settings');
+        return const MainNavEntry(
+          title: 'Settings',
+          page: _PlaceholderPage(title: 'Settings'),
+        );
       default:
-        return const _PlaceholderPage(title: 'Page');
+        return const MainNavEntry(
+          title: 'Page',
+          page: _PlaceholderPage(title: 'Page'),
+        );
     }
   }
 }
