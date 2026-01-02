@@ -15,20 +15,12 @@ class BrandsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BrandsController controller = Get.put(BrandsController());
-    final theme = Theme.of(context);
 
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 1100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Brands',
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 16),
           SearchField(
             hintText: 'Search brands...',
             onChanged: (v) => controller.setSearchQuery(v),

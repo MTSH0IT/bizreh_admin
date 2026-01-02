@@ -9,7 +9,6 @@ class AdminTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final MainNavController nav = Get.find<MainNavController>();
 
     return Container(
@@ -39,9 +38,7 @@ class AdminTopBar extends StatelessWidget {
                     breadcrumb.isEmpty ? 'Admin Panel' : breadcrumb,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: const TextStyle(fontWeight: FontWeight.w700),
                   ),
                 ),
               ],

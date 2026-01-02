@@ -24,8 +24,6 @@ class DataTableWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     if (rows.isEmpty) {
       return Container(
         width: double.infinity,
@@ -38,9 +36,7 @@ class DataTableWidget<T> extends StatelessWidget {
         child: Center(
           child: Text(
             emptyMessage ?? 'No data available',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.grey[600],
-            ),
+            style: const TextStyle(color: Colors.grey),
           ),
         ),
       );
@@ -158,8 +154,6 @@ class DataTableDateCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     if (date == null) {
       return const Text('-');
     }
@@ -174,9 +168,7 @@ class DataTableDateCell extends StatelessWidget {
 
     return Text(
       formattedDate,
-      style: theme.textTheme.bodySmall?.copyWith(
-        color: const Color(0xFF6B7280),
-      ),
+      style: const TextStyle(color: Color(0xFF6B7280)),
     );
   }
 }

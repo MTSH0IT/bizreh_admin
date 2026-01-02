@@ -23,7 +23,6 @@ class CategoryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CategoryController categoryController = Get.put(CategoryController());
-    final theme = Theme.of(context);
 
     if (superCategoryId != null &&
         categoryController.selectedSuperCategoryId.value != superCategoryId) {
@@ -37,15 +36,6 @@ class CategoryView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            superCategoryTitle != null
-                ? 'Categories for "$superCategoryTitle"'
-                : 'Categories',
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 16),
           SearchField(
             hintText: 'Search categories...',
             onChanged: categoryController.setSearchQuery,

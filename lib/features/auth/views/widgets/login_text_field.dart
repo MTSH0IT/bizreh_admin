@@ -19,16 +19,14 @@ class LoginTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: theme.textTheme.bodyMedium?.copyWith(
+          style: const TextStyle(
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF4B5563),
+            color: Color(0xFF4B5563),
           ),
         ),
         const SizedBox(height: 6),

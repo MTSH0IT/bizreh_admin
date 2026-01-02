@@ -17,20 +17,12 @@ class SuperCategoryView extends StatelessWidget {
     final SuperCategoryController controller = Get.put(
       SuperCategoryController(),
     );
-    final theme = Theme.of(context);
 
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 1100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Super Categories',
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 16),
           SearchField(
             hintText: 'Search super categories...',
             onChanged: (v) => controller.setSearchQuery(v),

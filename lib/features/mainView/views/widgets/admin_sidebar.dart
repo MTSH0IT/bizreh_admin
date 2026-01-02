@@ -42,8 +42,6 @@ class AdminSidebar extends StatelessWidget {
       ),
     ];
 
-    final theme = Theme.of(context);
-
     return Container(
       width: width,
       color: Colors.white,
@@ -55,9 +53,7 @@ class AdminSidebar extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               'Admin Panel',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.w700),
             ),
           ),
           const SizedBox(height: 16),
@@ -97,7 +93,7 @@ class AdminSidebar extends StatelessWidget {
                         Expanded(
                           child: Text(
                             item.title,
-                            style: theme.textTheme.bodyMedium?.copyWith(
+                            style: TextStyle(
                               fontWeight: selected
                                   ? FontWeight.w600
                                   : FontWeight.w500,

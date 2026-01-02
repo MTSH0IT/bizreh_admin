@@ -101,8 +101,6 @@ class _PlaceholderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -111,12 +109,7 @@ class _PlaceholderPage extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE5E7EB)),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Text(
-        title,
-        style: theme.textTheme.headlineSmall?.copyWith(
-          fontWeight: FontWeight.w800,
-        ),
-      ),
+      child: Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
     );
   }
 }

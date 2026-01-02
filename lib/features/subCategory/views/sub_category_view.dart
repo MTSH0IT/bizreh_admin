@@ -20,7 +20,6 @@ class SubCategoryView extends StatelessWidget {
     final SubCategoryController subController = Get.put(
       SubCategoryController(),
     );
-    final theme = Theme.of(context);
 
     if (categoryId != null &&
         subController.selectedCategoryId.value != categoryId) {
@@ -34,15 +33,6 @@ class SubCategoryView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            categoryTitle != null
-                ? 'Sub Categories for "$categoryTitle"'
-                : 'Sub Categories',
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 16),
           SearchField(
             hintText: 'Search sub categories...',
             onChanged: subController.setSearchQuery,
