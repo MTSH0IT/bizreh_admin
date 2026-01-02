@@ -2,6 +2,7 @@ import 'package:bizreh_admin/features/Brands/views/brands_view.dart';
 import 'package:bizreh_admin/features/category/views/category_view.dart';
 import 'package:bizreh_admin/features/subCategory/views/sub_category_view.dart';
 import 'package:bizreh_admin/features/superCategory/views/super_category_view.dart';
+import 'package:bizreh_admin/features/products/views/products_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bizreh_admin/features/mainView/views/widgets/admin_sidebar.dart';
 
@@ -62,6 +63,8 @@ class _MainviewState extends State<Mainview> {
       case 5:
         return const SubCategoryView();
       case 6:
+        return const ProductsView();
+      case 7:
         return const _PlaceholderPage(title: 'Settings');
       default:
         return const _PlaceholderPage(title: 'Page');
