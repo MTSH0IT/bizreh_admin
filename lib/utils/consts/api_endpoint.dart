@@ -34,6 +34,7 @@ class ApiEndpoint {
       "/admin/category/sub-categories/$id";
   static String deleteSubCategory(int id) =>
       "/admin/category/sub-categories/$id";
+  static const String getAllSubCategory = "/admin/category/sub-categories";
 
   // products
   static String getProducts = "/admin/product";

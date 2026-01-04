@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bizreh_admin/features/subCategory/models/all_sub_category_model.dart';
 import 'package:bizreh_admin/features/subCategory/models/sub_category_model.dart';
 import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
@@ -154,6 +155,37 @@ class SubCategoryService {
       throw Exception(e.message);
     } catch (e) {
       log('subCategory service catch deleteSubCategory : ${e.toString()}');
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<AllSubCategoryModel>> getAllSubCategories() async {
+    try {
+      final response = await _dioClient.get(ApiEndpoint.getAllSubCategory);
+      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+        final List list = (json['sub_categories'] as List?) ?? <dynamic>[];
+        return list
+            .map((e) => AllSubCategoryModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      });
+
+      if (apiResponse.success && apiResponse.data != null) {
+        return apiResponse.data as List<AllSubCategoryModel>;
+      } else {
+        throw Exception(apiResponse.message ?? 'Something went wrong');
+      }
+    } on DioException catch (e) {
+      final err = e.error;
+      if (err is AppException) {
+        log(
+          'subCategory service AppException getSubCategories : ${err.message}${err.statusCode}',
+        );
+        throw err;
+      }
+      log('subCategory service DioException getSubCategories : ${e.message}');
+      throw Exception(e.message);
+    } catch (e) {
+      log('subCategory service catch getSubCategories : ${e.toString()}');
       throw Exception(e.toString());
     }
   }

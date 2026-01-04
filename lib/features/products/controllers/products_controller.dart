@@ -1,14 +1,20 @@
 import 'dart:developer';
 
+import 'package:bizreh_admin/features/Brands/models/brands_model.dart';
 import 'package:bizreh_admin/features/products/models/product_model.dart';
+import 'package:bizreh_admin/features/subCategory/models/all_sub_category_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
+import 'package:bizreh_admin/services/brands_service.dart';
 import 'package:bizreh_admin/services/products_service.dart';
+import 'package:bizreh_admin/services/sub_category_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProductsController extends GetxController {
   final ProductsService _productsService = ProductsService();
+  final BrandsService _brandsService = BrandsService();
+  final SubCategoryService _subCategoryService = SubCategoryService();
 
   // بيانات
   final RxList<ProductModel> products = <ProductModel>[].obs;
@@ -16,6 +22,12 @@ class ProductsController extends GetxController {
   final RxBool isCreating = false.obs;
   final RxBool isUpdating = false.obs;
   final RxBool isDeleting = false.obs;
+
+  // بيانات مساعدة للفورم
+  final RxList<BrandsModel> brands = <BrandsModel>[].obs;
+  final RxList<AllSubCategoryModel> allSubCategories =
+      <AllSubCategoryModel>[].obs;
+  final RxBool isMetaLoading = false.obs;
 
   // فورم
   final TextEditingController titleController = TextEditingController();
@@ -35,6 +47,35 @@ class ProductsController extends GetxController {
 
   // البحث
   final RxString searchQuery = ''.obs;
+
+  @override
+  void onInit() {
+    getProducts();
+    getFormMeta();
+    super.onInit();
+  }
+
+  Future<void> getFormMeta() async {
+    try {
+      isMetaLoading.value = true;
+
+      final results = await Future.wait([
+        _brandsService.getBrands(),
+        _subCategoryService.getAllSubCategories(),
+      ]);
+
+      brands.assignAll(results[0] as List<BrandsModel>);
+      allSubCategories.assignAll(results[1] as List<AllSubCategoryModel>);
+    } on AppException catch (e) {
+      showMassage(e.message, false);
+      log('AppException in getFormMeta: ${e.message}');
+    } catch (e) {
+      showMassage('Failed to load brands/sub categories', false);
+      log('Error in getFormMeta: $e');
+    } finally {
+      isMetaLoading.value = false;
+    }
+  }
 
   @override
   void onClose() {

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bizreh_admin/features/products/controllers/products_controller.dart';
 import 'package:bizreh_admin/utils/func/image_picker_helper.dart';
 import 'package:bizreh_admin/utils/widgets/image_network.dart';
+import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -46,28 +47,71 @@ class ProductFormDialog extends StatelessWidget {
                 controller: controller.arDescriptionController,
                 maxLines: 3,
               ),
-              LabeledTextField(
-                label: 'Brand ID',
-                hint: 'Enter brand ID',
-                controller: TextEditingController(
-                  text: controller.selectedBrandId.value.toString(),
-                ),
-                keyboardType: TextInputType.number,
-                onChanged: (v) {
-                  controller.selectedBrandId.value = int.tryParse(v) ?? 0;
-                },
-              ),
-              LabeledTextField(
-                label: 'Sub Category ID',
-                hint: 'Enter sub category ID',
-                controller: TextEditingController(
-                  text: controller.selectedSubCategoryId.value.toString(),
-                ),
-                keyboardType: TextInputType.number,
-                onChanged: (v) {
-                  controller.selectedSubCategoryId.value = int.tryParse(v) ?? 0;
-                },
-              ),
+              const SizedBox(height: 12),
+              Obx(() {
+                final loading = controller.isMetaLoading.value;
+                final items = controller.brands
+                    .where((b) => b.id != null)
+                    .map(
+                      (b) => DropdownMenuItem<int>(
+                        value: b.id!,
+                        child: Text(b.title ?? b.arTitle ?? 'Brand #${b.id!}'),
+                      ),
+                    )
+                    .toList();
+
+                final selected = controller.selectedBrandId.value == 0
+                    ? null
+                    : controller.selectedBrandId.value;
+
+                return LoadingDropdownFormField2<int>(
+                  isLoading: loading,
+                  items: items,
+                  value: selected,
+                  labelText: 'Brand',
+                  hintText: 'Select brand',
+                  enableSearch: true,
+                  searchHintText: 'Search brand...',
+                  onChanged: (v) {
+                    controller.selectedBrandId.value = v ?? 0;
+                  },
+                );
+              }),
+              const SizedBox(height: 12),
+              Obx(() {
+                final loading = controller.isMetaLoading.value;
+                final items = controller.allSubCategories
+                    .where((s) => s.id != null)
+                    .map((s) {
+                      final title = s.title ?? s.arTitle ?? 'Sub #${s.id!}';
+                      final parent = s.categoryTitle ?? s.categoryArTitle;
+                      final text = parent == null || parent.isEmpty
+                          ? title
+                          : '$title - $parent';
+                      return DropdownMenuItem<int>(
+                        value: s.id!,
+                        child: Text(text),
+                      );
+                    })
+                    .toList();
+
+                final selected = controller.selectedSubCategoryId.value == 0
+                    ? null
+                    : controller.selectedSubCategoryId.value;
+
+                return LoadingDropdownFormField2<int>(
+                  isLoading: loading,
+                  items: items,
+                  value: selected,
+                  labelText: 'Sub Category',
+                  hintText: 'Select sub category',
+                  enableSearch: true,
+                  searchHintText: 'Search sub category...',
+                  onChanged: (v) {
+                    controller.selectedSubCategoryId.value = v ?? 0;
+                  },
+                );
+              }),
               LabeledTextField(
                 label: 'Position',
                 hint: 'Enter position',

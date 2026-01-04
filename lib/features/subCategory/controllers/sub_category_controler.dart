@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/subCategory/models/sub_category_model.dart';
+import 'package:bizreh_admin/features/subCategory/models/all_sub_category_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/sub_category_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
@@ -12,6 +13,8 @@ class SubCategoryController extends GetxController {
 
   // بيانات
   final RxList<SubCategoryModel> subCategories = <SubCategoryModel>[].obs;
+  final RxList<AllSubCategoryModel> allSubCategories =
+      <AllSubCategoryModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxBool isCreating = false.obs;
   final RxBool isUpdating = false.obs;
@@ -38,6 +41,24 @@ class SubCategoryController extends GetxController {
     arTitleController.dispose();
     positionController.dispose();
     super.onClose();
+  }
+
+  // تحميل كل الـ SubCategories
+  Future<void> getAllSubCategories() async {
+    try {
+      isLoading.value = true;
+
+      final fetched = await _subCategoryService.getAllSubCategories();
+      allSubCategories.assignAll(fetched);
+    } on AppException catch (e) {
+      showMassage(e.message, false);
+      log('AppException in getAllSubCategories: ${e.message}');
+    } catch (e) {
+      showMassage('Failed to load all sub categories', false);
+      log('Error in getAllSubCategories: $e');
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   // تحميل الـ SubCategories الخاصة بـ Category معين
@@ -190,6 +211,17 @@ class SubCategoryController extends GetxController {
 
   void setSearchQuery(String query) {
     searchQuery.value = query;
+  }
+
+  List<AllSubCategoryModel> get filteredAllSubCategories {
+    final q = searchQuery.value.trim().toLowerCase();
+    if (q.isEmpty) return allSubCategories.toList();
+
+    return allSubCategories.where((c) {
+      final title = (c.title ?? '').toLowerCase();
+      final arTitle = (c.arTitle ?? '').toLowerCase();
+      return title.contains(q) || arTitle.contains(q);
+    }).toList();
   }
 
   List<SubCategoryModel> get filteredSubCategories {
