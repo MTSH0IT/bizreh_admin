@@ -36,11 +36,22 @@ class ApiEndpoint {
       "/admin/category/sub-categories/$id";
   static const String getAllSubCategory = "/admin/category/sub-categories";
 
-  // products
+  // Products
   static String getProducts = "/admin/product";
   static String createProducts = "/admin/product";
   static String deleteProducts(int id) => "/admin/product/$id";
   static String updateProducts(int id) => "/admin/product/$id";
+
+  // Products option
+  static String createProductOption = "/admin/product/option";
+  static String updateProductOption(int id) => "/admin/product/option/$id";
+  static String deleteProductOption(int id) => "/admin/product/option/$id";
+
+  // Driver
+  static String getDrivers = "/admin/driver";
+  static String createDriver = "/admin/driver";
+  static String changeDriverStatus(int id) => "/admin/driver/$id/status";
+  static String deleteDriver(int id) => "/admin/driver/$id";
 
   //profile
   static String getProfile = "/admin/profile";

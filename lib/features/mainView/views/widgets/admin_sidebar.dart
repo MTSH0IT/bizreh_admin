@@ -17,7 +17,7 @@ class AdminSidebar extends StatelessWidget {
     required this.onSelect,
   });
 
-  static const double width = 240;
+  static const double width = 200;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +35,10 @@ class AdminSidebar extends StatelessWidget {
       const AdminSidebarItemData(
         title: 'Products',
         icon: Icons.inventory_2_outlined,
+      ),
+      const AdminSidebarItemData(
+        title: 'Drivers',
+        icon: Icons.local_shipping_outlined,
       ),
       const AdminSidebarItemData(
         title: 'Settings',
