@@ -83,9 +83,9 @@ class _MainviewState extends State<Mainview> {
       case 4:
         return const MainNavEntry(title: 'Products', page: ProductsView());
       case 5:
-        return const MainNavEntry(title: 'Drivers', page: DriversView());
-      case 6:
         return const MainNavEntry(title: 'Packagings', page: PackagingsView());
+      case 6:
+        return const MainNavEntry(title: 'Drivers', page: DriversView());
       case 7:
         return const MainNavEntry(
           title: 'Settings',

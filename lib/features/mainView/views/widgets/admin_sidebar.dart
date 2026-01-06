@@ -37,12 +37,12 @@ class AdminSidebar extends StatelessWidget {
         icon: Icons.inventory_2_outlined,
       ),
       const AdminSidebarItemData(
-        title: 'Drivers',
-        icon: Icons.local_shipping_outlined,
-      ),
-      const AdminSidebarItemData(
         title: 'Packagings',
         icon: Icons.all_inbox_outlined,
+      ),
+      const AdminSidebarItemData(
+        title: 'Drivers',
+        icon: Icons.local_shipping_outlined,
       ),
       const AdminSidebarItemData(
         title: 'Settings',

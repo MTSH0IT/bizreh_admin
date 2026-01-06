@@ -6,24 +6,38 @@ import 'package:flutter/material.dart';
 class OptionsPackagingMatrixTable extends StatelessWidget {
   final List<Option> options;
   final List<PackageModel> packagings;
+  final void Function(
+    Option option,
+    PackageModel packaging,
+    int? mappingId,
+    int? price,
+    int? stock,
+  )?
+  onCellTap;
 
   const OptionsPackagingMatrixTable({
     super.key,
     required this.options,
     required this.packagings,
+    this.onCellTap,
   });
 
-  ({int? price, int? stock}) _cell(Option option, int packagingTypeId) {
+  ({int? id, int? price, int? stock}) _cell(
+    Option option,
+    int packagingTypeId,
+  ) {
     final list = option.packaging;
-    if (list == null || list.isEmpty) return (price: null, stock: null);
+    if (list == null || list.isEmpty) {
+      return (id: null, price: null, stock: null);
+    }
 
     for (final p in list) {
       if (p.packagingTypeId == packagingTypeId) {
-        return (price: p.pricePerUnit, stock: p.stockQuantity);
+        return (id: p.id, price: p.pricePerUnit, stock: p.stockQuantity);
       }
     }
 
-    return (price: null, stock: null);
+    return (id: null, price: null, stock: null);
   }
 
   @override
@@ -114,6 +128,15 @@ class OptionsPackagingMatrixTable extends StatelessWidget {
                         ),
                       ],
                     ),
+                    onTap: onCellTap == null
+                        ? null
+                        : () => onCellTap!(
+                            opt,
+                            pkg,
+                            result.id,
+                            result.price,
+                            result.stock,
+                          ),
                   );
                 }),
               ];
