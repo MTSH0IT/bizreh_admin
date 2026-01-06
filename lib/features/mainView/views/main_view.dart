@@ -1,6 +1,7 @@
 import 'package:bizreh_admin/features/Brands/views/brands_view.dart';
 import 'package:bizreh_admin/features/Driver/views/drivers_view.dart';
 import 'package:bizreh_admin/features/mainView/views/widgets/admin_topbar.dart';
+import 'package:bizreh_admin/features/packaging/views/packagings_view.dart';
 import 'package:bizreh_admin/features/superCategory/views/super_category_view.dart';
 import 'package:bizreh_admin/features/products/views/products_view.dart';
 import 'package:bizreh_admin/features/mainView/controllers/main_nav_controller.dart';
@@ -84,6 +85,8 @@ class _MainviewState extends State<Mainview> {
       case 5:
         return const MainNavEntry(title: 'Drivers', page: DriversView());
       case 6:
+        return const MainNavEntry(title: 'Packagings', page: PackagingsView());
+      case 7:
         return const MainNavEntry(
           title: 'Settings',
           page: _PlaceholderPage(title: 'Settings'),

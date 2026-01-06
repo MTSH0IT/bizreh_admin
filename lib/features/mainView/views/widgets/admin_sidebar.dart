@@ -41,6 +41,10 @@ class AdminSidebar extends StatelessWidget {
         icon: Icons.local_shipping_outlined,
       ),
       const AdminSidebarItemData(
+        title: 'Packagings',
+        icon: Icons.all_inbox_outlined,
+      ),
+      const AdminSidebarItemData(
         title: 'Settings',
         icon: Icons.settings_outlined,
       ),
