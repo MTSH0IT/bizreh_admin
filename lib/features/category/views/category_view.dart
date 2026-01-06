@@ -12,13 +12,8 @@ import 'package:get/get.dart';
 
 class CategoryView extends StatelessWidget {
   final int? superCategoryId;
-  final String? superCategoryTitle;
 
-  const CategoryView({
-    super.key,
-    this.superCategoryId,
-    this.superCategoryTitle,
-  });
+  const CategoryView({super.key, this.superCategoryId});
 
   @override
   Widget build(BuildContext context) {

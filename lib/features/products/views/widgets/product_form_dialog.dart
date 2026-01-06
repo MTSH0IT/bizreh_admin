@@ -1,8 +1,6 @@
-import 'dart:io';
-
 import 'package:bizreh_admin/features/products/controllers/products_controller.dart';
-import 'package:bizreh_admin/utils/func/image_picker_helper.dart';
-import 'package:bizreh_admin/utils/widgets/image_network.dart';
+import 'package:bizreh_admin/utils/widgets/form_dialog_actions.dart';
+import 'package:bizreh_admin/utils/widgets/form_image_picker_section.dart';
 import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:flutter/material.dart';
@@ -139,121 +137,36 @@ class ProductFormDialog extends StatelessWidget {
                 );
               }),
               const SizedBox(height: 12),
-              Obx(() {
-                final path = controller.selectedImagePath.value;
-                final existingImage = controller.currentProduct?.image;
-                final hasExisting =
-                    isEditing &&
-                    existingImage != null &&
-                    existingImage.isNotEmpty;
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: 12),
-                    if (hasExisting && path.isEmpty)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Current Image:',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(height: 8),
-                          Container(
-                            height: 120,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: ImageNetwork(image: existingImage),
-                            ),
-                          ),
-                        ],
-                      ),
-                    if (path.isNotEmpty)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Selected Image:',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(height: 8),
-                          Container(
-                            height: 120,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.file(File(path), fit: BoxFit.cover),
-                            ),
-                          ),
-                        ],
-                      ),
-                    const SizedBox(height: 12),
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        await pickImageAndSetPath(
-                          onPathSelected: controller.setImagePath,
-                          imageQuality: 80,
-                        );
-                      },
-                      icon: const Icon(Icons.image),
-                      label: Text(
-                        hasExisting && path.isEmpty
-                            ? 'Change Image'
-                            : 'Select Image',
-                      ),
-                    ),
-                  ],
-                );
-              }),
+              FormImagePickerSection(
+                selectedImagePath: controller.selectedImagePath,
+                existingImageUrl: controller.currentProduct?.image,
+                isEditing: isEditing,
+                onPathSelected: controller.setImagePath,
+              ),
             ],
           ),
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () {
+        FormDialogActions(
+          onCancel: () {
             controller.clearForm();
             Get.back();
           },
-          child: const Text('Cancel'),
+          onSubmit: () async {
+            if (controller.isEditing) {
+              await controller.updateProduct();
+            } else {
+              await controller.createProduct();
+            }
+            if (context.mounted) {
+              Get.back();
+            }
+          },
+          isBusy: () =>
+              controller.isCreating.value || controller.isUpdating.value,
+          submitText: isEditing ? 'Update' : 'Create',
         ),
-        Obx(() {
-          final busy =
-              controller.isCreating.value || controller.isUpdating.value;
-          return ElevatedButton(
-            onPressed: busy
-                ? null
-                : () async {
-                    try {
-                      if (controller.isEditing) {
-                        await controller.updateProduct();
-                      } else {
-                        await controller.createProduct();
-                      }
-                      if (context.mounted) {
-                        Get.back();
-                      }
-                    } catch (_) {}
-                  },
-            child: busy
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : Text(isEditing ? 'Update' : 'Create'),
-          );
-        }),
       ],
     );
   }

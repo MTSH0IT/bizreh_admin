@@ -6,12 +6,14 @@ class ProductsDataTable extends StatelessWidget {
   final List<ProductModel> rows;
   final ValueChanged<ProductModel>? onEdit;
   final ValueChanged<ProductModel>? onDelete;
+  final ValueChanged<ProductModel>? onOptions;
 
   const ProductsDataTable({
     super.key,
     required this.rows,
     this.onEdit,
     this.onDelete,
+    this.onOptions,
   });
 
   @override
@@ -55,6 +57,9 @@ class ProductsDataTable extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
+        DataColumn(
+          label: Text('Options', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
       ],
       buildCells: (product, index) {
         return [
@@ -71,6 +76,19 @@ class ProductsDataTable extends StatelessWidget {
             ),
           ),
           DataCell(DataTableDateCell(date: product.createdAt)),
+          DataCell(
+            IconButton(
+              onPressed: onOptions == null ? null : () => onOptions!(product),
+              icon: const Icon(Icons.tune, size: 16),
+
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+              ),
+            ),
+          ),
         ];
       },
     );

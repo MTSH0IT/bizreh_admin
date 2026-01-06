@@ -2,6 +2,8 @@ import 'package:bizreh_admin/features/products/controllers/products_controller.d
 import 'package:bizreh_admin/features/products/models/product_model.dart';
 import 'package:bizreh_admin/features/products/views/widgets/products_data_table.dart';
 import 'package:bizreh_admin/features/products/views/widgets/product_form_dialog.dart';
+import 'package:bizreh_admin/features/option_packaging/views/option_packaging_view.dart';
+import 'package:bizreh_admin/features/mainView/controllers/main_nav_controller.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
@@ -15,6 +17,7 @@ class ProductsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProductsController controller = Get.put(ProductsController());
+    final MainNavController nav = Get.find<MainNavController>();
 
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 1100),
@@ -46,6 +49,7 @@ class ProductsView extends StatelessWidget {
                   _openEditDialog(context, controller, product),
               onDelete: (product) =>
                   _confirmDelete(context, controller, product),
+              onOptions: (product) => _openOptionsPage(nav, product),
             );
           }),
         ],
@@ -87,5 +91,14 @@ class ProductsView extends StatelessWidget {
 
     if (!ok) return;
     await controller.deleteProduct(id);
+  }
+
+  void _openOptionsPage(MainNavController nav, ProductModel product) {
+    nav.push(
+      MainNavEntry(
+        title: 'Options',
+        page: OptionPackagingView(product: product),
+      ),
+    );
   }
 }

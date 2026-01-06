@@ -75,10 +75,7 @@ class SuperCategoryDataTable extends StatelessWidget {
                 Get.find<MainNavController>().push(
                   MainNavEntry(
                     title: superCategory.title ?? 'Categories',
-                    page: CategoryView(
-                      superCategoryId: superCategory.id,
-                      superCategoryTitle: superCategory.title,
-                    ),
+                    page: CategoryView(superCategoryId: superCategory.id),
                   ),
                 );
               },
