@@ -1,9 +1,9 @@
 import 'package:bizreh_admin/features/products/controllers/products_controller.dart';
-import 'package:bizreh_admin/features/products/models/product_model.dart';
+import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
 import 'package:bizreh_admin/features/products/views/widgets/products_data_table.dart';
 import 'package:bizreh_admin/features/products/views/widgets/product_form_dialog.dart';
-import 'package:bizreh_admin/features/option_packaging/views/option_packaging_view.dart';
 import 'package:bizreh_admin/features/mainView/controllers/main_nav_controller.dart';
+import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
@@ -38,7 +38,7 @@ class ProductsView extends StatelessWidget {
           const SizedBox(height: 16),
           Obx(() {
             if (controller.isLoading.value) {
-              return const Center(child: CircularProgressIndicator());
+              return const BuildProgressIndicator();
             }
 
             final filtered = controller.filteredProducts;
@@ -94,11 +94,11 @@ class ProductsView extends StatelessWidget {
   }
 
   void _openOptionsPage(MainNavController nav, ProductModel product) {
-    nav.push(
-      MainNavEntry(
-        title: 'Options',
-        page: OptionPackagingView(product: product),
-      ),
-    );
+    // nav.push(
+    //   MainNavEntry(
+    //     title: 'Options',
+    //     page: OptionPackagingView(product: product),
+    //   ),
+    // );
   }
 }

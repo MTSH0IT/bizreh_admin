@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/Brands/models/brands_model.dart';
-import 'package:bizreh_admin/features/products/models/product_model.dart';
+import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
 import 'package:bizreh_admin/features/subCategory/models/all_sub_category_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/brands_service.dart';

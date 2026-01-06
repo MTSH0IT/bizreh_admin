@@ -1,4 +1,4 @@
-import 'package:bizreh_admin/features/products/models/product_model.dart';
+import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
 

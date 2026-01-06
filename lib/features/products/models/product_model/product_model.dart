@@ -1,3 +1,5 @@
+import 'option.dart';
+
 class ProductModel {
   int? id;
   String? title;
@@ -13,7 +15,7 @@ class ProductModel {
   String? arBrandName;
   String? subCategoryName;
   String? arSubCategoryName;
-  List<dynamic>? options;
+  List<Option>? options;
 
   ProductModel({
     this.id,
@@ -55,7 +57,9 @@ class ProductModel {
     arBrandName: json['ar_brand_name'] as String?,
     subCategoryName: json['sub_category_name'] as String?,
     arSubCategoryName: json['ar_sub_category_name'] as String?,
-    options: json['options'] as List<dynamic>?,
+    options: (json['options'] as List<dynamic>?)
+        ?.map((e) => Option.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -73,6 +77,6 @@ class ProductModel {
     'ar_brand_name': arBrandName,
     'sub_category_name': subCategoryName,
     'ar_sub_category_name': arSubCategoryName,
-    'options': options,
+    'options': options?.map((e) => e.toJson()).toList(),
   };
 }

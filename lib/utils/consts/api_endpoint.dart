@@ -47,6 +47,13 @@ class ApiEndpoint {
   static String updateProductOption(int id) => "/admin/product/option/$id";
   static String deleteProductOption(int id) => "/admin/product/option/$id";
 
+  // Option-Packaging
+  static String createOptionPackaging = "/admin/product/option-packaging";
+  static String updateOptionPackaging(int id) =>
+      "/admin/product/option-packaging/$id";
+  static String deleteOptionPackaging(int id) =>
+      "/admin/product/option-packaging/$id";
+
   // Packagings
   static String getPackagings = "/admin/product/packagings";
   static String createPackaging = "/admin/product/packaging";
