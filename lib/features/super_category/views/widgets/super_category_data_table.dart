@@ -2,7 +2,7 @@ import 'package:bizreh_admin/features/SuperCategory/models/super_category_model.
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:bizreh_admin/features/category/views/category_view.dart';
-import 'package:bizreh_admin/features/mainView/controllers/main_nav_controller.dart';
+import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:get/get.dart';
 
 class SuperCategoryDataTable extends StatelessWidget {

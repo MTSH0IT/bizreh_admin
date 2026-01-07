@@ -60,6 +60,12 @@ class ApiEndpoint {
   static String updatePackaging(int id) => "/admin/product/packaging/$id";
   static String deletePackaging(int id) => "/admin/product/packaging/$id";
 
+  // Product Top Selling
+  static String getTopSellingProducts = "/admin/product/top-selling";
+  static String createTopSellingProduct = "/admin/product/top-selling";
+  static String deleteTopSellingProduct(int id) =>
+      "/admin/product/top-selling/$id";
+
   // Driver
   static String getDrivers = "/admin/driver";
   static String createDriver = "/admin/driver";

@@ -1,8 +1,8 @@
 import 'package:bizreh_admin/features/category/models/category_model.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:bizreh_admin/features/subCategory/views/sub_category_view.dart';
-import 'package:bizreh_admin/features/mainView/controllers/main_nav_controller.dart';
+import 'package:bizreh_admin/features/sub_category/views/sub_category_view.dart';
+import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:get/get.dart';
 
 class CategoryDataTable extends StatelessWidget {

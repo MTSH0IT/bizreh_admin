@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:bizreh_admin/features/subCategory/models/all_sub_category_model.dart';
-import 'package:bizreh_admin/features/subCategory/models/sub_category_model.dart';
+import 'package:bizreh_admin/features/sub_category/models/all_sub_category_model.dart';
+import 'package:bizreh_admin/features/sub_category/models/sub_category_model.dart';
 import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';

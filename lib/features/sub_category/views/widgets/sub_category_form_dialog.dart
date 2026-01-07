@@ -1,21 +1,21 @@
-import 'package:bizreh_admin/features/superCategory/controllers/super_category_controller.dart';
+import 'package:bizreh_admin/features/sub_category/controllers/sub_category_controler.dart';
 import 'package:bizreh_admin/utils/widgets/form_dialog_actions.dart';
 import 'package:bizreh_admin/utils/widgets/form_image_picker_section.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SuperCategoryFormDialog extends StatelessWidget {
-  final SuperCategoryController controller;
+class SubCategoryFormDialog extends StatelessWidget {
+  final SubCategoryController controller;
 
-  const SuperCategoryFormDialog({super.key, required this.controller});
+  const SubCategoryFormDialog({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     final isEditing = controller.isEditing;
 
     return AlertDialog(
-      title: Text(isEditing ? 'Edit Super Category' : 'Create Super Category'),
+      title: Text(isEditing ? 'Edit Sub Category' : 'Create Sub Category'),
       content: SizedBox(
         width: 520,
         child: SingleChildScrollView(
@@ -24,12 +24,12 @@ class SuperCategoryFormDialog extends StatelessWidget {
             children: [
               LabeledTextField(
                 label: 'Title',
-                hint: 'Enter super category title',
+                hint: 'Enter sub category title',
                 controller: controller.titleController,
               ),
               LabeledTextField(
                 label: 'Arabic Title',
-                hint: 'Enter Arabic super category title',
+                hint: 'Enter Arabic sub category title',
                 controller: controller.arTitleController,
               ),
               LabeledTextField(
@@ -40,7 +40,7 @@ class SuperCategoryFormDialog extends StatelessWidget {
               ),
               FormImagePickerSection(
                 selectedImagePath: controller.selectedImagePath,
-                existingImageUrl: controller.currentSuperCategory?.image,
+                existingImageUrl: controller.currentSubCategory?.image,
                 isEditing: isEditing,
                 onPathSelected: controller.setImagePath,
               ),
@@ -50,12 +50,15 @@ class SuperCategoryFormDialog extends StatelessWidget {
       ),
       actions: [
         FormDialogActions(
-          onCancel: () => Get.back(),
+          onCancel: () {
+            controller.clearForm();
+            Get.back();
+          },
           onSubmit: () async {
             if (controller.isEditing) {
-              await controller.updateSuperCategory();
+              await controller.updateSubCategory();
             } else {
-              await controller.createSuperCategory();
+              await controller.createSubCategory();
             }
             if (context.mounted) {
               Get.back();

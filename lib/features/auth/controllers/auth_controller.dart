@@ -2,7 +2,7 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/auth/models/auth_response.dart';
-import 'package:bizreh_admin/features/mainView/views/main_view.dart';
+import 'package:bizreh_admin/features/main_view/views/main_view.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/auth_service.dart';
 import 'package:bizreh_admin/utils/consts/const_key.dart';

@@ -1,4 +1,4 @@
-import 'package:bizreh_admin/features/subCategory/models/sub_category_model.dart';
+import 'package:bizreh_admin/features/sub_category/models/sub_category_model.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
 

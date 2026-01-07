@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:bizreh_admin/features/subCategory/models/sub_category_model.dart';
-import 'package:bizreh_admin/features/subCategory/models/all_sub_category_model.dart';
+import 'package:bizreh_admin/features/sub_category/models/sub_category_model.dart';
+import 'package:bizreh_admin/features/sub_category/models/all_sub_category_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/sub_category_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';

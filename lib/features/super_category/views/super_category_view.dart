@@ -1,7 +1,7 @@
-import 'package:bizreh_admin/features/superCategory/controllers/super_category_controller.dart';
+import 'package:bizreh_admin/features/super_category/controllers/super_category_controller.dart';
 import 'package:bizreh_admin/features/SuperCategory/models/super_category_model.dart';
-import 'package:bizreh_admin/features/superCategory/views/widgets/super_category_form_dialog.dart';
-import 'package:bizreh_admin/features/superCategory/views/widgets/super_category_data_table.dart';
+import 'package:bizreh_admin/features/super_category/views/widgets/super_category_form_dialog.dart';
+import 'package:bizreh_admin/features/super_category/views/widgets/super_category_data_table.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
 import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';

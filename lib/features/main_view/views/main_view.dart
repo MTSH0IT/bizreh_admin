@@ -1,12 +1,12 @@
 import 'package:bizreh_admin/features/Brands/views/brands_view.dart';
 import 'package:bizreh_admin/features/Driver/views/drivers_view.dart';
-import 'package:bizreh_admin/features/mainView/views/widgets/admin_topbar.dart';
+import 'package:bizreh_admin/features/main_view/views/widgets/admin_topbar.dart';
 import 'package:bizreh_admin/features/packaging/views/packagings_view.dart';
-import 'package:bizreh_admin/features/superCategory/views/super_category_view.dart';
+import 'package:bizreh_admin/features/super_category/views/super_category_view.dart';
 import 'package:bizreh_admin/features/products/views/products_view.dart';
-import 'package:bizreh_admin/features/mainView/controllers/main_nav_controller.dart';
+import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:bizreh_admin/features/mainView/views/widgets/admin_sidebar.dart';
+import 'package:bizreh_admin/features/main_view/views/widgets/admin_sidebar.dart';
 import 'package:get/get.dart';
 
 class Mainview extends StatefulWidget {

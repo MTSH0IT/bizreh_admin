@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bizreh_admin/features/mainView/controllers/main_nav_controller.dart';
+import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:bizreh_admin/features/profile/views/profile_view.dart';
 import 'package:get/get.dart';
 
