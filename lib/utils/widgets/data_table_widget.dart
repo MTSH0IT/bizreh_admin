@@ -1,3 +1,4 @@
+import 'package:bizreh_admin/utils/consts/colors.dart';
 import 'package:bizreh_admin/utils/widgets/image_network.dart';
 import 'package:bizreh_admin/utils/func/date_format.dart';
 import 'package:flutter/material.dart';
@@ -78,21 +79,21 @@ class DataTableWidget<T> extends StatelessWidget {
                   if (showActions && (onEdit != null || onDelete != null))
                     DataCell(
                       Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           if (onEdit != null)
-                            TextButton(
+                            IconButton(
                               onPressed: () => onEdit!(item),
-                              child: const Text('Edit'),
+                              icon: const Icon(Icons.edit, size: 16),
+                              color: kprimaryColor,
+                              tooltip: 'Edit',
                             ),
-                          if (onEdit != null && onDelete != null)
-                            const SizedBox(width: 8),
                           if (onDelete != null)
-                            TextButton(
+                            IconButton(
                               onPressed: () => onDelete!(item),
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.red,
-                              ),
-                              child: const Text('Delete'),
+                              icon: const Icon(Icons.delete_outline, size: 16),
+                              color: Colors.red,
+                              tooltip: 'Delete',
                             ),
                         ],
                       ),

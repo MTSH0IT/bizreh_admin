@@ -17,7 +17,7 @@ class ProductTopSellingDataTable extends StatelessWidget {
     return DataTableWidget<ProductModel>(
       rows: rows,
       emptyMessage: 'No top selling products found',
-      showActions: false,
+      onDelete: onRemove,
       columns: const [
         DataColumn(
           label: Text('Image', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -37,9 +37,6 @@ class ProductTopSellingDataTable extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        DataColumn(
-          label: Text('Remove', style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
       ],
       buildCells: (product, index) {
         return [
@@ -49,13 +46,6 @@ class ProductTopSellingDataTable extends StatelessWidget {
           DataCell(DataTableTextCell(text: product.title)),
           DataCell(DataTableTextCell(text: product.arTitle)),
           DataCell(DataTableDateCell(date: product.createdAt)),
-          DataCell(
-            TextButton(
-              onPressed: onRemove == null ? null : () => onRemove!(product),
-              style: TextButton.styleFrom(foregroundColor: Colors.red),
-              child: const Text('Remove'),
-            ),
-          ),
         ];
       },
     );

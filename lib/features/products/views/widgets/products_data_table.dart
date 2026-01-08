@@ -1,4 +1,5 @@
 import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
+import 'package:bizreh_admin/utils/consts/colors.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -25,8 +26,8 @@ class ProductsDataTable extends StatelessWidget {
     return DataTableWidget<ProductModel>(
       rows: rows,
       emptyMessage: 'No products found',
-      onEdit: onEdit,
-      onDelete: onDelete,
+      // نستخدم عمود Actions مخصص بدل العمود الافتراضي لتقليل عرض الجدول
+      showActions: false,
       columns: const [
         DataColumn(
           label: Text('Image', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -65,7 +66,7 @@ class ProductsDataTable extends StatelessWidget {
           label: Text('Top', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         DataColumn(
-          label: Text('Options', style: TextStyle(fontWeight: FontWeight.bold)),
+          label: Text('Actions', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
       ],
       buildCells: (product, index) {
@@ -97,16 +98,29 @@ class ProductsDataTable extends StatelessWidget {
             ),
           ),
           DataCell(
-            IconButton(
-              onPressed: onOptions == null ? null : () => onOptions!(product),
-              icon: const Icon(Icons.tune, size: 16),
-
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  onPressed: onEdit == null ? null : () => onEdit!(product),
+                  icon: const Icon(Icons.edit, size: 16),
+                  color: kprimaryColor,
+                  tooltip: 'Edit',
                 ),
-              ),
+                IconButton(
+                  onPressed: onDelete == null ? null : () => onDelete!(product),
+                  icon: const Icon(Icons.delete_outline, size: 16),
+                  color: Colors.red,
+                  tooltip: 'Delete',
+                ),
+                IconButton(
+                  onPressed: onOptions == null
+                      ? null
+                      : () => onOptions!(product),
+                  icon: const Icon(Icons.tune, size: 16),
+                  tooltip: 'Options',
+                ),
+              ],
             ),
           ),
         ];
