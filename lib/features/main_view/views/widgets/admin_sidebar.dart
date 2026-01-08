@@ -36,6 +36,7 @@ class AdminSidebar extends StatelessWidget {
         title: 'Products',
         icon: Icons.inventory_2_outlined,
       ),
+      const AdminSidebarItemData(title: 'Top Selling', icon: Icons.star_border),
       const AdminSidebarItemData(
         title: 'Packagings',
         icon: Icons.all_inbox_outlined,

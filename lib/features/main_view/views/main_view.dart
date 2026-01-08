@@ -4,6 +4,7 @@ import 'package:bizreh_admin/features/main_view/views/widgets/admin_topbar.dart'
 import 'package:bizreh_admin/features/packaging/views/packagings_view.dart';
 import 'package:bizreh_admin/features/super_category/views/super_category_view.dart';
 import 'package:bizreh_admin/features/products/views/products_view.dart';
+import 'package:bizreh_admin/features/product_top_silling/views/product_top_selling_view.dart';
 import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:bizreh_admin/features/main_view/views/widgets/admin_sidebar.dart';
@@ -83,10 +84,15 @@ class _MainviewState extends State<Mainview> {
       case 4:
         return const MainNavEntry(title: 'Products', page: ProductsView());
       case 5:
-        return const MainNavEntry(title: 'Packagings', page: PackagingsView());
+        return const MainNavEntry(
+          title: 'Top Selling',
+          page: ProductTopSellingView(),
+        );
       case 6:
-        return const MainNavEntry(title: 'Drivers', page: DriversView());
+        return const MainNavEntry(title: 'Packagings', page: PackagingsView());
       case 7:
+        return const MainNavEntry(title: 'Drivers', page: DriversView());
+      case 8:
         return const MainNavEntry(
           title: 'Settings',
           page: _PlaceholderPage(title: 'Settings'),

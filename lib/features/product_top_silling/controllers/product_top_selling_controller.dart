@@ -15,10 +15,31 @@ class ProductTopSellingController extends GetxController {
   final RxBool isAdding = false.obs;
   final RxBool isDeleting = false.obs;
 
+  final RxString searchQuery = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
     getTopSellingProducts();
+  }
+
+  bool isTopSelling(int? productId) {
+    if (productId == null) return false;
+    for (final p in products) {
+      if (p.id == productId) return true;
+    }
+    return false;
+  }
+
+  Future<void> toggleTopSelling(ProductModel product) async {
+    final id = product.id;
+    if (id == null) return;
+
+    if (isTopSelling(id)) {
+      await removeTopSelling(product);
+    } else {
+      await addTopSelling(product);
+    }
   }
 
   Future<void> getTopSellingProducts() async {
@@ -75,5 +96,20 @@ class ProductTopSellingController extends GetxController {
     } finally {
       isDeleting.value = false;
     }
+  }
+
+  void setSearchQuery(String q) {
+    searchQuery.value = q;
+  }
+
+  List<ProductModel> get filteredProducts {
+    final q = searchQuery.value.trim().toLowerCase();
+    if (q.isEmpty) return products.toList();
+
+    return products.where((p) {
+      final t = (p.title ?? '').toLowerCase();
+      final at = (p.arTitle ?? '').toLowerCase();
+      return t.contains(q) || at.contains(q);
+    }).toList();
   }
 }

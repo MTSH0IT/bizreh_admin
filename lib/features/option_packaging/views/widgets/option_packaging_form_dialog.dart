@@ -1,6 +1,6 @@
 import 'package:bizreh_admin/features/option_packaging/controllers/option_packaging_controller.dart';
 import 'package:bizreh_admin/features/packaging/models/package_model.dart'
-    as packageModel;
+    as package_model;
 import 'package:bizreh_admin/features/products/models/product_model/option.dart';
 import 'package:bizreh_admin/utils/widgets/form_dialog_actions.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 class OptionPackagingFormDialog extends StatefulWidget {
   final OptionPackagingController controller;
   final Option option;
-  final packageModel.PackageModel packaging;
+  final package_model.PackageModel packaging;
   final int? mappingId;
   final int? initialPrice;
   final int? initialStock;

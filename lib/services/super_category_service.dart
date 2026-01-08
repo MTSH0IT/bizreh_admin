@@ -1,6 +1,6 @@
 import 'dart:developer';
+import 'package:bizreh_admin/features/super_category/models/super_category_model.dart';
 import 'package:dio/dio.dart';
-import 'package:bizreh_admin/features/SuperCategory/models/super_category_model.dart';
 import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';

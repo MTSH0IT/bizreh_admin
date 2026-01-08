@@ -15,7 +15,6 @@ class ProductTopSellingService {
       final response = await _dioClient.get(ApiEndpoint.getTopSellingProducts);
 
       final apiResponse = ApiResponse.fromJson(response.data, (json) {
-        // "data" في الـApiResponse تحتوي على كائن به "products": [...]
         final List list = (json['products'] as List?) ?? <dynamic>[];
         return list
             .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))

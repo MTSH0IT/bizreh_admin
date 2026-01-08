@@ -9,6 +9,7 @@ class Option {
   int? stockQuantity;
   DateTime? createdAt;
   List<Packaging>? packaging;
+  List<dynamic>? images;
 
   Option({
     this.id,
@@ -19,11 +20,12 @@ class Option {
     this.stockQuantity,
     this.createdAt,
     this.packaging,
+    this.images,
   });
 
   @override
   String toString() {
-    return 'Option(id: $id, productId: $productId, optionName: $optionName, arOptionName: $arOptionName, optionSku: $optionSku, stockQuantity: $stockQuantity, createdAt: $createdAt, packaging: $packaging)';
+    return 'Option(id: $id, productId: $productId, optionName: $optionName, arOptionName: $arOptionName, optionSku: $optionSku, stockQuantity: $stockQuantity, createdAt: $createdAt, packaging: $packaging, images: $images)';
   }
 
   factory Option.fromJson(Map<String, dynamic> json) => Option(
@@ -39,6 +41,7 @@ class Option {
     packaging: (json['packaging'] as List<dynamic>?)
         ?.map((e) => Packaging.fromJson(e as Map<String, dynamic>))
         .toList(),
+    images: json['images'] as List<dynamic>?,
   );
 
   Map<String, dynamic> toJson() => {
@@ -50,5 +53,6 @@ class Option {
     'stock_quantity': stockQuantity,
     'created_at': createdAt?.toIso8601String(),
     'packaging': packaging?.map((e) => e.toJson()).toList(),
+    'images': images,
   };
 }

@@ -1,4 +1,5 @@
 import 'package:bizreh_admin/features/products/controllers/products_controller.dart';
+import 'package:bizreh_admin/features/product_top_silling/controllers/product_top_selling_controller.dart';
 import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
 import 'package:bizreh_admin/features/products/views/widgets/products_data_table.dart';
 import 'package:bizreh_admin/features/products/views/widgets/product_form_dialog.dart';
@@ -18,6 +19,9 @@ class ProductsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProductsController controller = Get.put(ProductsController());
+    final ProductTopSellingController topSellingController = Get.put(
+      ProductTopSellingController(),
+    );
     final MainNavController nav = Get.find<MainNavController>();
 
     return ConstrainedBox(
@@ -51,6 +55,9 @@ class ProductsView extends StatelessWidget {
               onDelete: (product) =>
                   _confirmDelete(context, controller, product),
               onOptions: (product) => _openOptionsPage(nav, product),
+              isTopSelling: (p) => topSellingController.isTopSelling(p.id),
+              onToggleTopSelling: (p) =>
+                  _confirmToggleTopSelling(context, topSellingController, p),
             );
           }),
         ],
@@ -101,5 +108,33 @@ class ProductsView extends StatelessWidget {
         page: OptionPackagingView(product: product),
       ),
     );
+  }
+
+  Future<void> _confirmToggleTopSelling(
+    BuildContext context,
+    ProductTopSellingController controller,
+    ProductModel product,
+  ) async {
+    final id = product.id;
+    if (id == null) return;
+
+    final isInList = controller.isTopSelling(id);
+
+    final ok = await showConfirmDeleteDialog(
+      title: isInList ? 'Remove Top Selling' : 'Add Top Selling',
+      message: isInList
+          ? 'Remove "${product.title ?? '-'}" from top selling?'
+          : 'Add "${product.title ?? '-'}" to top selling?',
+      isLoading: isInList ? controller.isDeleting : controller.isAdding,
+      confirmText: isInList ? 'Remove' : 'Add',
+    );
+
+    if (!ok) return;
+
+    if (isInList) {
+      await controller.removeTopSelling(product);
+    } else {
+      await controller.addTopSelling(product);
+    }
   }
 }

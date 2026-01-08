@@ -2,7 +2,7 @@ import 'package:bizreh_admin/features/option_packaging/controllers/option_packag
 import 'package:bizreh_admin/features/option_packaging/controllers/product_options_controller.dart';
 import 'package:bizreh_admin/features/packaging/controllers/packaging_controller.dart';
 import 'package:bizreh_admin/features/packaging/models/package_model.dart'
-    as packageModel;
+    as package_model;
 import 'package:bizreh_admin/features/products/models/product_model/option.dart';
 import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
@@ -120,7 +120,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
                 onCellTap:
                     (
                       Option opt,
-                      packageModel.PackageModel pkg,
+                      package_model.PackageModel pkg,
                       int? mappingId,
                       int? price,
                       int? stock,
@@ -166,7 +166,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
   Future<void> _openMatrixCellDialog(
     BuildContext context,
     Option option,
-    packageModel.PackageModel packaging,
+    package_model.PackageModel packaging,
     int? mappingId,
     int? currentPrice,
     int? currentStock,

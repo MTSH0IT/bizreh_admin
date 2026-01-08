@@ -1,7 +1,7 @@
 import 'dart:developer';
+import 'package:bizreh_admin/features/super_category/models/super_category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:bizreh_admin/features/SuperCategory/models/super_category_model.dart';
 import 'package:bizreh_admin/services/super_category_service.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';

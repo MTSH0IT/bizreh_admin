@@ -7,6 +7,8 @@ class ProductsDataTable extends StatelessWidget {
   final ValueChanged<ProductModel>? onEdit;
   final ValueChanged<ProductModel>? onDelete;
   final ValueChanged<ProductModel>? onOptions;
+  final bool Function(ProductModel product)? isTopSelling;
+  final ValueChanged<ProductModel>? onToggleTopSelling;
 
   const ProductsDataTable({
     super.key,
@@ -14,6 +16,8 @@ class ProductsDataTable extends StatelessWidget {
     this.onEdit,
     this.onDelete,
     this.onOptions,
+    this.isTopSelling,
+    this.onToggleTopSelling,
   });
 
   @override
@@ -58,10 +62,14 @@ class ProductsDataTable extends StatelessWidget {
           ),
         ),
         DataColumn(
+          label: Text('Top', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        DataColumn(
           label: Text('Options', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
       ],
       buildCells: (product, index) {
+        final starred = isTopSelling?.call(product) == true;
         return [
           DataCell(
             DataTableImageCell(imageUrl: product.image, width: 54, height: 54),
@@ -76,6 +84,18 @@ class ProductsDataTable extends StatelessWidget {
             ),
           ),
           DataCell(DataTableDateCell(date: product.createdAt)),
+          DataCell(
+            IconButton(
+              onPressed: onToggleTopSelling == null
+                  ? null
+                  : () => onToggleTopSelling!(product),
+              icon: Icon(
+                starred ? Icons.star : Icons.star_border,
+                size: 18,
+                color: starred ? Colors.amber[700] : null,
+              ),
+            ),
+          ),
           DataCell(
             IconButton(
               onPressed: onOptions == null ? null : () => onOptions!(product),

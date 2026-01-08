@@ -1,4 +1,4 @@
-import 'package:bizreh_admin/features/SuperCategory/models/super_category_model.dart';
+import 'package:bizreh_admin/features/super_category/models/super_category_model.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:bizreh_admin/features/category/views/category_view.dart';
