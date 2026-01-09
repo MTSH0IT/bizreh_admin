@@ -12,6 +12,9 @@ class DataTableWidget<T> extends StatelessWidget {
   final Function(T item)? onDelete;
   final bool showActions;
   final String? emptyMessage;
+  final double headingRowHeight;
+  final double dataRowMinHeight;
+  final double dataRowMaxHeight;
 
   const DataTableWidget({
     super.key,
@@ -22,6 +25,9 @@ class DataTableWidget<T> extends StatelessWidget {
     this.onDelete,
     this.showActions = true,
     this.emptyMessage,
+    this.headingRowHeight = 52,
+    this.dataRowMinHeight = 60,
+    this.dataRowMaxHeight = 72,
   });
 
   @override
@@ -55,9 +61,9 @@ class DataTableWidget<T> extends StatelessWidget {
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: DataTable(
-            headingRowHeight: 52,
-            dataRowMinHeight: 60,
-            dataRowMaxHeight: 72,
+            headingRowHeight: headingRowHeight,
+            dataRowMinHeight: dataRowMinHeight,
+            dataRowMaxHeight: dataRowMaxHeight,
             columns: [
               ...columns,
               if (showActions && (onEdit != null || onDelete != null))

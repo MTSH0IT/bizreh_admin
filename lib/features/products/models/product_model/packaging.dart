@@ -1,3 +1,5 @@
+import 'color_family.dart';
+
 class Packaging {
   int? id;
   int? packagingTypeId;
@@ -5,7 +7,7 @@ class Packaging {
   int? stockQuantity;
   String? packagingTitle;
   String? arPackagingTitle;
-  List<dynamic>? colorFamilies;
+  List<ColorFamily>? colorFamilies;
 
   Packaging({
     this.id,
@@ -17,11 +19,6 @@ class Packaging {
     this.colorFamilies,
   });
 
-  @override
-  String toString() {
-    return 'Packaging(id: $id, packagingTypeId: $packagingTypeId, pricePerUnit: $pricePerUnit, stockQuantity: $stockQuantity, packagingTitle: $packagingTitle, arPackagingTitle: $arPackagingTitle, colorFamilies: $colorFamilies)';
-  }
-
   factory Packaging.fromJson(Map<String, dynamic> json) => Packaging(
     id: json['id'] as int?,
     packagingTypeId: json['packaging_type_id'] as int?,
@@ -29,7 +26,9 @@ class Packaging {
     stockQuantity: json['stock_quantity'] as int?,
     packagingTitle: json['packaging_title'] as String?,
     arPackagingTitle: json['ar_packaging_title'] as String?,
-    colorFamilies: json['color_families'] as List<dynamic>?,
+    colorFamilies: (json['color_families'] as List<dynamic>?)
+        ?.map((e) => ColorFamily.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -39,6 +38,6 @@ class Packaging {
     'stock_quantity': stockQuantity,
     'packaging_title': packagingTitle,
     'ar_packaging_title': arPackagingTitle,
-    'color_families': colorFamilies,
+    'color_families': colorFamilies?.map((e) => e.toJson()).toList(),
   };
 }

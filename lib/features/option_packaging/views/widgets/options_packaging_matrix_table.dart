@@ -1,5 +1,8 @@
 import 'package:bizreh_admin/features/packaging/models/package_model.dart';
+import 'package:bizreh_admin/features/products/models/product_model/color_family.dart';
 import 'package:bizreh_admin/features/products/models/product_model/option.dart';
+import 'package:bizreh_admin/utils/func/color_degree.dart';
+import 'package:bizreh_admin/utils/widgets/color_dot.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -22,22 +25,27 @@ class OptionsPackagingMatrixTable extends StatelessWidget {
     this.onCellTap,
   });
 
-  ({int? id, int? price, int? stock}) _cell(
+  ({int? id, int? price, int? stock, List<ColorFamily>? colors}) _cell(
     Option option,
     int packagingTypeId,
   ) {
     final list = option.packaging;
     if (list == null || list.isEmpty) {
-      return (id: null, price: null, stock: null);
+      return (id: null, price: null, stock: null, colors: null);
     }
 
     for (final p in list) {
       if (p.packagingTypeId == packagingTypeId) {
-        return (id: p.id, price: p.pricePerUnit, stock: p.stockQuantity);
+        return (
+          id: p.id,
+          price: p.pricePerUnit,
+          stock: p.stockQuantity,
+          colors: p.colorFamilies,
+        );
       }
     }
 
-    return (id: null, price: null, stock: null);
+    return (id: null, price: null, stock: null, colors: null);
   }
 
   @override
@@ -126,6 +134,32 @@ class OptionsPackagingMatrixTable extends StatelessWidget {
                             color: Color(0xFF374151),
                           ),
                         ),
+                        if (result.colors != null && result.colors!.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: result.colors!
+                                    .map(
+                                      (c) => Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: 6,
+                                        ),
+                                        child: ColorDot(
+                                          size: 18,
+                                          color: parseColorDegree(
+                                            c.colorDegree,
+                                          ),
+                                          selected: false,
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                     onTap: onCellTap == null

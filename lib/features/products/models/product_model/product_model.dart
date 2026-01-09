@@ -15,10 +15,6 @@ class ProductModel {
   String? arBrandName;
   String? subCategoryName;
   String? arSubCategoryName;
-  String? categoryName;
-  String? arCategoryName;
-  String? superCategoryName;
-  String? arSuperCategoryName;
   List<Option>? options;
 
   ProductModel({
@@ -36,17 +32,8 @@ class ProductModel {
     this.arBrandName,
     this.subCategoryName,
     this.arSubCategoryName,
-    this.categoryName,
-    this.arCategoryName,
-    this.superCategoryName,
-    this.arSuperCategoryName,
     this.options,
   });
-
-  @override
-  String toString() {
-    return 'ProductModel(id: $id, title: $title, arTitle: $arTitle, description: $description, arDescription: $arDescription, image: $image, subCategoryId: $subCategoryId, brandId: $brandId, isActive: $isActive, createdAt: $createdAt, brandName: $brandName, arBrandName: $arBrandName, subCategoryName: $subCategoryName, arSubCategoryName: $arSubCategoryName, categoryName: $categoryName, arCategoryName: $arCategoryName, superCategoryName: $superCategoryName, arSuperCategoryName: $arSuperCategoryName, options: $options)';
-  }
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
     id: json['id'] as int?,
@@ -65,10 +52,6 @@ class ProductModel {
     arBrandName: json['ar_brand_name'] as String?,
     subCategoryName: json['sub_category_name'] as String?,
     arSubCategoryName: json['ar_sub_category_name'] as String?,
-    categoryName: json['category_name'] as String?,
-    arCategoryName: json['ar_category_name'] as String?,
-    superCategoryName: json['super_category_name'] as String?,
-    arSuperCategoryName: json['ar_super_category_name'] as String?,
     options: (json['options'] as List<dynamic>?)
         ?.map((e) => Option.fromJson(e as Map<String, dynamic>))
         .toList(),
@@ -89,10 +72,6 @@ class ProductModel {
     'ar_brand_name': arBrandName,
     'sub_category_name': subCategoryName,
     'ar_sub_category_name': arSubCategoryName,
-    'category_name': categoryName,
-    'ar_category_name': arCategoryName,
-    'super_category_name': superCategoryName,
-    'ar_super_category_name': arSuperCategoryName,
     'options': options?.map((e) => e.toJson()).toList(),
   };
 }
