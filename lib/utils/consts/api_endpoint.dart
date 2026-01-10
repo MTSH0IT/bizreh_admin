@@ -79,6 +79,12 @@ class ApiEndpoint {
   //profile
   static String getProfile = "/admin/profile";
 
+  // Address - Cities
+  static const String getCities = "/admin/address/cities";
+  static const String createCity = "/admin/address/city";
+  static String updateCity(int id) => "/admin/address/city/$id";
+  static String deleteCity(int id) => "/admin/address/city/$id";
+
   // Users
   static const String getUsers = "/admin/user";
   static const String createUser = "/admin/user";

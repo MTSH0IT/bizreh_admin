@@ -46,6 +46,10 @@ class AdminSidebar extends StatelessWidget {
         icon: Icons.local_shipping_outlined,
       ),
       const AdminSidebarItemData(
+        title: 'Cities',
+        icon: Icons.location_city_outlined,
+      ),
+      const AdminSidebarItemData(
         title: 'Settings',
         icon: Icons.settings_outlined,
       ),
