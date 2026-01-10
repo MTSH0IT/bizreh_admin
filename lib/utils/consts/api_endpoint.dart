@@ -78,4 +78,11 @@ class ApiEndpoint {
 
   //profile
   static String getProfile = "/admin/profile";
+
+  // Users
+  static const String getUsers = "/admin/user";
+  static const String createUser = "/admin/user";
+  static String updateUser(int id) => "/admin/user/$id";
+  static String deleteUser(int id) => "/admin/user/$id";
+  static String changeUserStatus(int id) => "/admin/user/$id/status";
 }

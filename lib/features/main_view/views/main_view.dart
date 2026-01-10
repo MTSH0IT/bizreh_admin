@@ -6,6 +6,7 @@ import 'package:bizreh_admin/features/super_category/views/super_category_view.d
 import 'package:bizreh_admin/features/products/views/products_view.dart';
 import 'package:bizreh_admin/features/product_top_silling/views/product_top_selling_view.dart';
 import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
+import 'package:bizreh_admin/features/users/views/users_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bizreh_admin/features/main_view/views/widgets/admin_sidebar.dart';
 import 'package:get/get.dart';
@@ -70,10 +71,7 @@ class _MainviewState extends State<Mainview> {
           page: _PlaceholderPage(title: 'Dashboard'),
         );
       case 1:
-        return const MainNavEntry(
-          title: 'Users',
-          page: _PlaceholderPage(title: 'Users'),
-        );
+        return const MainNavEntry(title: 'Users', page: UsersView());
       case 2:
         return const MainNavEntry(title: 'Brands', page: BrandsView());
       case 3:
