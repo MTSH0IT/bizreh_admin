@@ -22,6 +22,7 @@ class ApiEndpoint {
 
   // Categories
   static String getCategories(int id) => "/admin/category/categories/$id";
+  static const String getAllCategories = "/admin/category/categories";
   static const String createCategory = "/admin/category/categories";
   static String updateCategory(int id) => "/admin/category/categories/$id";
   static String deleteCategory(int id) => "/admin/category/categories/$id";

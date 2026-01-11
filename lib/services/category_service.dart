@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bizreh_admin/features/all_category/models/all_category_model.dart';
 import 'package:bizreh_admin/features/category/models/category_model.dart';
 import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
@@ -9,6 +10,37 @@ import 'package:dio/dio.dart';
 
 class CategoryService {
   final DioClient _dioClient = DioClient();
+
+  Future<List<AllCategoryModel>> getAllCategories() async {
+    try {
+      final response = await _dioClient.get(ApiEndpoint.getAllCategories);
+
+      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+        final List list = (json['sub_categories'] as List?) ?? <dynamic>[];
+        return list
+            .map((e) => AllCategoryModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      });
+
+      if (apiResponse.success && apiResponse.data != null) {
+        return apiResponse.data as List<AllCategoryModel>;
+      }
+      throw Exception(apiResponse.message ?? 'Something went wrong');
+    } on DioException catch (e) {
+      final err = e.error;
+      if (err is AppException) {
+        log(
+          'category service AppException getAllCategories : ${err.message}${err.statusCode}',
+        );
+        throw err;
+      }
+      log('category service DioException getAllCategories : ${e.message}');
+      throw Exception(e.message);
+    } catch (e) {
+      log('category service catch getAllCategories : ${e.toString()}');
+      throw Exception(e.toString());
+    }
+  }
 
   Future<List<CategoryModel>> getCategories(int superCategoryId) async {
     try {
