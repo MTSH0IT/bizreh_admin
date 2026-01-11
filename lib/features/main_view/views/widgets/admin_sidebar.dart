@@ -50,6 +50,10 @@ class AdminSidebar extends StatelessWidget {
         icon: Icons.location_city_outlined,
       ),
       const AdminSidebarItemData(
+        title: 'Suppliers',
+        icon: Icons.store_outlined,
+      ),
+      const AdminSidebarItemData(
         title: 'Settings',
         icon: Icons.settings_outlined,
       ),

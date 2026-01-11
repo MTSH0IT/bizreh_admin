@@ -8,6 +8,7 @@ import 'package:bizreh_admin/features/product_top_silling/views/product_top_sell
 import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:bizreh_admin/features/users/views/users_view.dart';
 import 'package:bizreh_admin/features/cities/views/cities_view.dart';
+import 'package:bizreh_admin/features/suppliers/views/suppliers_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bizreh_admin/features/main_view/views/widgets/admin_sidebar.dart';
 import 'package:get/get.dart';
@@ -94,6 +95,8 @@ class _MainviewState extends State<Mainview> {
       case 8:
         return const MainNavEntry(title: 'Cities', page: CitiesView());
       case 9:
+        return const MainNavEntry(title: 'Suppliers', page: SuppliersView());
+      case 10:
         return const MainNavEntry(
           title: 'Settings',
           page: _PlaceholderPage(title: 'Settings'),

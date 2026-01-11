@@ -85,6 +85,12 @@ class ApiEndpoint {
   static String updateCity(int id) => "/admin/address/city/$id";
   static String deleteCity(int id) => "/admin/address/city/$id";
 
+  // Suppliers
+  static const String getSuppliers = "/admin/supplier";
+  static const String createSupplier = "/admin/supplier";
+  static String updateSupplier(int id) => "/admin/supplier/$id";
+  static String deleteSupplier(int id) => "/admin/supplier/$id";
+
   // Users
   static const String getUsers = "/admin/user";
   static const String createUser = "/admin/user";
