@@ -77,6 +77,10 @@ class ApiEndpoint {
   static String changeDriverStatus(int id) => "/admin/driver/$id/status";
   static String deleteDriver(int id) => "/admin/driver/$id";
 
+  // Orders
+  static const String getOrders = "/admin/order";
+  static String assignOrderDriver(int id) => "/admin/order/$id/assign";
+
   //profile
   static String getProfile = "/admin/profile";
 

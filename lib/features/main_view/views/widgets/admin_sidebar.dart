@@ -58,6 +58,10 @@ class AdminSidebar extends StatelessWidget {
         icon: Icons.store_outlined,
       ),
       const AdminSidebarItemData(
+        title: 'Orders',
+        icon: Icons.shopping_cart_outlined,
+      ),
+      const AdminSidebarItemData(
         title: 'Settings',
         icon: Icons.settings_outlined,
       ),
