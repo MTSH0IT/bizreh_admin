@@ -1,4 +1,4 @@
-import 'packaging.dart';
+import 'packaging_option.dart';
 
 class Option {
   int? id;
@@ -8,7 +8,7 @@ class Option {
   String? optionSku;
   int? stockQuantity;
   DateTime? createdAt;
-  List<Packaging>? packaging;
+  List<PackagingOption>? packagingOptions;
 
   Option({
     this.id,
@@ -18,8 +18,13 @@ class Option {
     this.optionSku,
     this.stockQuantity,
     this.createdAt,
-    this.packaging,
+    this.packagingOptions,
   });
+
+  @override
+  String toString() {
+    return 'Option(id: $id, productId: $productId, optionName: $optionName, arOptionName: $arOptionName, optionSku: $optionSku, stockQuantity: $stockQuantity, createdAt: $createdAt, packagingOptions: $packagingOptions)';
+  }
 
   factory Option.fromJson(Map<String, dynamic> json) => Option(
     id: json['id'] as int?,
@@ -31,8 +36,8 @@ class Option {
     createdAt: json['created_at'] == null
         ? null
         : DateTime.parse(json['created_at'] as String),
-    packaging: (json['packaging'] as List<dynamic>?)
-        ?.map((e) => Packaging.fromJson(e as Map<String, dynamic>))
+    packagingOptions: (json['packaging_options'] as List<dynamic>?)
+        ?.map((e) => PackagingOption.fromJson(e as Map<String, dynamic>))
         .toList(),
   );
 
@@ -44,6 +49,6 @@ class Option {
     'option_sku': optionSku,
     'stock_quantity': stockQuantity,
     'created_at': createdAt?.toIso8601String(),
-    'packaging': packaging?.map((e) => e.toJson()).toList(),
+    'packaging_options': packagingOptions?.map((e) => e.toJson()).toList(),
   };
 }

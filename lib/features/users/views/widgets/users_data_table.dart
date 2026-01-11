@@ -9,6 +9,7 @@ class UsersDataTable extends StatelessWidget {
   final void Function(UserModel user, int isActive)? onToggleActive;
   final ValueChanged<UserModel>? onEdit;
   final ValueChanged<UserModel>? onDelete;
+  final ValueChanged<UserModel>? onSendNotification;
 
   const UsersDataTable({
     super.key,
@@ -17,6 +18,7 @@ class UsersDataTable extends StatelessWidget {
     this.onToggleActive,
     this.onEdit,
     this.onDelete,
+    this.onSendNotification,
   });
 
   @override
@@ -49,6 +51,12 @@ class UsersDataTable extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
+        DataColumn(
+          label: Text(
+            'Notification',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
       ],
       buildCells: (user, index) {
         final name = '${user.firstName ?? '-'} ${user.lastName ?? ''}'.trim();
@@ -71,6 +79,15 @@ class UsersDataTable extends StatelessWidget {
             }),
           ),
           DataCell(DataTableDateCell(date: user.createdAt)),
+          DataCell(
+            IconButton(
+              icon: const Icon(Icons.notifications),
+              tooltip: 'Send notification',
+              onPressed: onSendNotification == null
+                  ? null
+                  : () => onSendNotification!(user),
+            ),
+          ),
         ];
       },
     );

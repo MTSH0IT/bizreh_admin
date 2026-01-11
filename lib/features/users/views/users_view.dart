@@ -2,6 +2,8 @@ import 'package:bizreh_admin/features/users/controllers/users_controller.dart';
 import 'package:bizreh_admin/features/users/models/user_model.dart';
 import 'package:bizreh_admin/features/users/views/widgets/user_form_dialog.dart';
 import 'package:bizreh_admin/features/users/views/widgets/users_data_table.dart';
+import 'package:bizreh_admin/features/users/views/widgets/user_notification_dialog.dart';
+import 'package:bizreh_admin/features/users/views/widgets/user_notification_all_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
@@ -31,6 +33,13 @@ class UsersView extends StatelessWidget {
             onRefresh: controller.getUsers,
             addText: 'Add User',
             refreshText: 'Refresh',
+            extraActions: [
+              ElevatedButton.icon(
+                onPressed: () => _openNotificationDialogForAll(controller),
+                icon: const Icon(Icons.notifications_active),
+                label: const Text('Send message to all'),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           Obx(() {
@@ -50,6 +59,11 @@ class UsersView extends StatelessWidget {
               },
               onEdit: (user) => _openEditDialog(controller, user),
               onDelete: (user) => _confirmDelete(controller, user),
+              onSendNotification: (user) {
+                final id = user.id;
+                if (id == null) return;
+                _openNotificationDialogForUser(controller, id);
+              },
             );
           }),
         ],
@@ -87,5 +101,20 @@ class UsersView extends StatelessWidget {
 
     if (!ok) return;
     await controller.deleteUser(id);
+  }
+
+  void _openNotificationDialogForUser(UsersController controller, int userId) {
+    openFormDialog<void>(
+      onBeforeOpen: controller.clearNotificationForm,
+      dialogBuilder: (_) =>
+          UserNotificationDialog(controller: controller, userId: userId),
+    );
+  }
+
+  void _openNotificationDialogForAll(UsersController controller) {
+    openFormDialog<void>(
+      onBeforeOpen: controller.clearNotificationForm,
+      dialogBuilder: (_) => UserNotificationAllDialog(controller: controller),
+    );
   }
 }

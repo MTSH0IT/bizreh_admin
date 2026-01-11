@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bizreh_admin/features/users/models/user_model.dart';
 import 'package:bizreh_admin/services/users_service.dart';
+import 'package:bizreh_admin/services/notification_service.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 
 class UsersController extends GetxController {
   final UsersService _usersService = UsersService();
+  final NotificationService _notificationService = NotificationService();
 
   final RxList<UserModel> users = <UserModel>[].obs;
   final RxBool isLoading = false.obs;
@@ -15,12 +17,18 @@ class UsersController extends GetxController {
   final RxBool isUpdating = false.obs;
   final RxBool isUpdatingStatus = false.obs;
   final RxBool isDeleting = false.obs;
+  final RxBool isSendingNotification = false.obs;
+  final RxBool isSendingAllNotification = false.obs;
 
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController notificationTitleController =
+      TextEditingController();
+  final TextEditingController notificationMessageController =
+      TextEditingController();
 
   final Rx<UserModel?> selectedUser = Rx<UserModel?>(null);
 
@@ -39,6 +47,8 @@ class UsersController extends GetxController {
     emailController.dispose();
     phoneController.dispose();
     passwordController.dispose();
+    notificationTitleController.dispose();
+    notificationMessageController.dispose();
     super.onClose();
   }
 
@@ -160,6 +170,60 @@ class UsersController extends GetxController {
     }
   }
 
+  Future<void> sendNotificationToUser(int userId) async {
+    final title = notificationTitleController.text.trim();
+    final message = notificationMessageController.text.trim();
+    if (title.isEmpty || message.isEmpty) {
+      showMassage('Please enter title and message', false);
+      return;
+    }
+
+    try {
+      isSendingNotification.value = true;
+      await _notificationService.sendToUser(
+        userId: userId,
+        title: title,
+        message: message,
+      );
+      showMassage('Notification sent successfully', true);
+      clearNotificationForm();
+      Get.back();
+    } on AppException catch (e) {
+      showMassage(e.message, false);
+      log('AppException in sendNotificationToUser: ${e.message}');
+    } catch (e) {
+      showMassage('Failed to send notification', false);
+      log('Error in sendNotificationToUser: $e');
+    } finally {
+      isSendingNotification.value = false;
+    }
+  }
+
+  Future<void> sendNotificationToAllUsers() async {
+    final title = notificationTitleController.text.trim();
+    final message = notificationMessageController.text.trim();
+    if (title.isEmpty || message.isEmpty) {
+      showMassage('Please enter title and message', false);
+      return;
+    }
+
+    try {
+      isSendingAllNotification.value = true;
+      await _notificationService.sendToAllUsers(title: title, message: message);
+      showMassage('Notification sent to all users successfully', true);
+      clearNotificationForm();
+      Get.back();
+    } on AppException catch (e) {
+      showMassage(e.message, false);
+      log('AppException in sendNotificationToAllUsers: ${e.message}');
+    } catch (e) {
+      showMassage('Failed to send notification to all users', false);
+      log('Error in sendNotificationToAllUsers: $e');
+    } finally {
+      isSendingAllNotification.value = false;
+    }
+  }
+
   bool _validateForm({required bool requirePassword}) {
     if (firstNameController.text.trim().isEmpty) {
       showMassage('Please enter first name', false);
@@ -198,6 +262,11 @@ class UsersController extends GetxController {
     phoneController.clear();
     passwordController.clear();
     selectedUser.value = null;
+  }
+
+  void clearNotificationForm() {
+    notificationTitleController.clear();
+    notificationMessageController.clear();
   }
 
   void setUserForEdit(UserModel user) {

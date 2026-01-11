@@ -102,4 +102,8 @@ class ApiEndpoint {
   static String updateUser(int id) => "/admin/user/$id";
   static String deleteUser(int id) => "/admin/user/$id";
   static String changeUserStatus(int id) => "/admin/user/$id/status";
+
+  // Notifications
+  static const String sendNotification = "/admin/notifications/send";
+  static const String sendNotificationAll = "/admin/notifications/sendAll";
 }

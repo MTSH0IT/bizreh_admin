@@ -35,6 +35,11 @@ class ProductModel {
     this.options,
   });
 
+  @override
+  String toString() {
+    return 'ProductModel(id: $id, title: $title, arTitle: $arTitle, description: $description, arDescription: $arDescription, image: $image, subCategoryId: $subCategoryId, brandId: $brandId, isActive: $isActive, createdAt: $createdAt, brandName: $brandName, arBrandName: $arBrandName, subCategoryName: $subCategoryName, arSubCategoryName: $arSubCategoryName, options: $options)';
+  }
+
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
     id: json['id'] as int?,
     title: json['title'] as String?,

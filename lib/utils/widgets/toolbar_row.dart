@@ -7,6 +7,7 @@ class ToolbarRow extends StatelessWidget {
   final String? refreshText;
   final IconData? addIcon;
   final IconData? refreshIcon;
+  final List<Widget>? extraActions;
 
   const ToolbarRow({
     super.key,
@@ -16,6 +17,7 @@ class ToolbarRow extends StatelessWidget {
     this.refreshText,
     this.addIcon,
     this.refreshIcon,
+    this.extraActions,
   });
 
   @override
@@ -35,6 +37,10 @@ class ToolbarRow extends StatelessWidget {
             icon: Icon(refreshIcon ?? Icons.refresh),
             label: Text(refreshText ?? 'Refresh'),
           ),
+        if (extraActions != null && extraActions!.isNotEmpty) ...[
+          const SizedBox(width: 12),
+          ...extraActions!,
+        ],
       ],
     );
   }
