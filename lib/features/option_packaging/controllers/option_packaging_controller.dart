@@ -1,15 +1,48 @@
 import 'dart:developer';
 
+import 'package:bizreh_admin/features/color_family/models/color_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
+import 'package:bizreh_admin/services/color_servise.dart';
 import 'package:bizreh_admin/services/option_packaging_servise.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:get/get.dart';
 
 class OptionPackagingController extends GetxController {
   final OptionPackagingService _service = OptionPackagingService();
+  final ColorService _colorService = ColorService();
 
   final RxBool isSaving = false.obs;
   final RxBool isDeleting = false.obs;
+
+  final RxList<ColorModel> colors = <ColorModel>[].obs;
+  final RxBool isColorsLoading = false.obs;
+  final RxInt selectedColorId = 0.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadColors();
+  }
+
+  Future<void> loadColors() async {
+    try {
+      isColorsLoading.value = true;
+      final data = await _colorService.getColorFamilies();
+      colors.assignAll(data);
+    } on AppException catch (e) {
+      showMassage(e.message, false);
+      log('AppException in loadColors: ${e.message}');
+    } catch (e) {
+      showMassage('Failed to load colors', false);
+      log('Error in loadColors: $e');
+    } finally {
+      isColorsLoading.value = false;
+    }
+  }
+
+  void setSelectedColorId(int? id) {
+    selectedColorId.value = id ?? 0;
+  }
 
   Future<void> saveMapping({
     int? mappingId,
@@ -17,6 +50,7 @@ class OptionPackagingController extends GetxController {
     required int packagingId,
     required num pricePerUnit,
     required int stockQuantity,
+    required int colorId,
   }) async {
     try {
       isSaving.value = true;
@@ -27,6 +61,7 @@ class OptionPackagingController extends GetxController {
           packagingId: packagingId,
           pricePerUnit: pricePerUnit,
           stockQuantity: stockQuantity,
+          colorId: colorId,
         );
         showMassage('Mapping created successfully', true);
       } else {
@@ -36,6 +71,7 @@ class OptionPackagingController extends GetxController {
           packagingId: packagingId,
           pricePerUnit: pricePerUnit,
           stockQuantity: stockQuantity,
+          colorId: colorId,
         );
         showMassage('Mapping updated successfully', true);
       }

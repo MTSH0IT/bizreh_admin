@@ -34,6 +34,9 @@ class ColorFamilyDataTable extends StatelessWidget {
           ),
         ),
         DataColumn(
+          label: Text('Color', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        DataColumn(
           label: Text('Degree', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         DataColumn(
@@ -50,6 +53,8 @@ class ColorFamilyDataTable extends StatelessWidget {
           DataCell(
             ColorDot(color: parseColorDegree(c.colorDegree), selected: false),
           ),
+          DataCell(DataTableTextCell(text: c.colorDegree)),
+
           DataCell(DataTableDateCell(date: c.createdAt)),
         ];
       },

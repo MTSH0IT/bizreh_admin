@@ -123,6 +123,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
                       int? mappingId,
                       int? price,
                       int? stock,
+                      int? colorId,
                     ) {
                       _openMatrixCellDialog(
                         context,
@@ -131,6 +132,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
                         mappingId,
                         price,
                         stock,
+                        colorId,
                       );
                     },
               );
@@ -169,6 +171,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
     int? mappingId,
     int? currentPrice,
     int? currentStock,
+    int? currentColorId,
   ) async {
     openFormDialog<void>(
       dialogBuilder: (_) => OptionPackagingFormDialog(
@@ -178,6 +181,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
         mappingId: mappingId,
         initialPrice: currentPrice,
         initialStock: currentStock,
+        initialColorId: currentColorId,
         onSaved: () async {
           await optionsController.reloadFromServer();
         },

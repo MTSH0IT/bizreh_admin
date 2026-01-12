@@ -14,6 +14,7 @@ class OptionsPackagingMatrixTable extends StatelessWidget {
     int? mappingId,
     int? price,
     int? stock,
+    int? colorId,
   )?
   onCellTap;
 
@@ -24,13 +25,19 @@ class OptionsPackagingMatrixTable extends StatelessWidget {
     this.onCellTap,
   });
 
-  ({int? id, int? price, int? stock, String? colorDegree}) _cell(
+  ({int? id, int? price, int? stock, int? colorId, String? colorDegree}) _cell(
     Option option,
     int packagingId,
   ) {
     final list = option.packagingOptions;
     if (list == null || list.isEmpty) {
-      return (id: null, price: null, stock: null, colorDegree: null);
+      return (
+        id: null,
+        price: null,
+        stock: null,
+        colorId: null,
+        colorDegree: null,
+      );
     }
 
     for (final p in list) {
@@ -39,12 +46,19 @@ class OptionsPackagingMatrixTable extends StatelessWidget {
           id: p.id,
           price: p.pricePerUnit,
           stock: p.stockQuantity,
+          colorId: p.color?.id,
           colorDegree: p.color?.degree,
         );
       }
     }
 
-    return (id: null, price: null, stock: null, colorDegree: null);
+    return (
+      id: null,
+      price: null,
+      stock: null,
+      colorId: null,
+      colorDegree: null,
+    );
   }
 
   @override
@@ -152,6 +166,7 @@ class OptionsPackagingMatrixTable extends StatelessWidget {
                             result.id,
                             result.price,
                             result.stock,
+                            result.colorId,
                           ),
                   );
                 }),

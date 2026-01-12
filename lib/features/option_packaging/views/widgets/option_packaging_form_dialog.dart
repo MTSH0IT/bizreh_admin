@@ -2,9 +2,12 @@ import 'package:bizreh_admin/features/option_packaging/controllers/option_packag
 import 'package:bizreh_admin/features/packaging/models/package_model.dart'
     as package_model;
 import 'package:bizreh_admin/features/products/models/product_model/option.dart';
+import 'package:bizreh_admin/utils/func/color_degree.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
+import 'package:bizreh_admin/utils/widgets/color_dot.dart';
 import 'package:bizreh_admin/utils/widgets/form_dialog_actions.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
+import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +18,7 @@ class OptionPackagingFormDialog extends StatefulWidget {
   final int? mappingId;
   final int? initialPrice;
   final int? initialStock;
+  final int? initialColorId;
   final Future<void> Function()? onSaved;
 
   const OptionPackagingFormDialog({
@@ -25,6 +29,7 @@ class OptionPackagingFormDialog extends StatefulWidget {
     this.mappingId,
     this.initialPrice,
     this.initialStock,
+    this.initialColorId,
     this.onSaved,
   });
 
@@ -46,6 +51,19 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
     _stockController = TextEditingController(
       text: widget.initialStock?.toString() ?? '',
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final currentColorId = widget.initialColorId;
+      if (currentColorId != null && currentColorId > 0) {
+        widget.controller.setSelectedColorId(currentColorId);
+      } else {
+        widget.controller.setSelectedColorId(0);
+      }
+      if (widget.controller.colors.isEmpty &&
+          !widget.controller.isColorsLoading.value) {
+        widget.controller.loadColors();
+      }
+    });
   }
 
   @override
@@ -82,6 +100,51 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
               controller: _stockController,
               keyboardType: TextInputType.number,
             ),
+            const SizedBox(height: 12),
+            Obx(() {
+              final loading = widget.controller.isColorsLoading.value;
+              final items = widget.controller.colors
+                  .where((c) => c.id != null)
+                  .map(
+                    (c) => DropdownMenuItem<int>(
+                      value: c.id!,
+                      child: Row(
+                        children: [
+                          ColorDot(
+                            size: 18,
+                            color: parseColorDegree(c.colorDegree),
+                            selected: false,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              c.name ?? c.arName ?? 'Color #${c.id!}',
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList();
+
+              final selected = widget.controller.selectedColorId.value == 0
+                  ? null
+                  : widget.controller.selectedColorId.value;
+
+              return LoadingDropdownFormField2<int>(
+                isLoading: loading,
+                items: items,
+                value: selected,
+                labelText: 'Color',
+                hintText: 'Select color',
+                enableSearch: true,
+                searchHintText: 'Search color...',
+                onChanged: (v) {
+                  widget.controller.setSelectedColorId(v);
+                },
+              );
+            }),
           ],
         ),
       ),
@@ -117,7 +180,12 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
           onSubmit: () async {
             final price = num.tryParse(_priceController.text.trim());
             final stock = int.tryParse(_stockController.text.trim());
+            final colorId = widget.controller.selectedColorId.value;
+
             if (price == null || stock == null) {
+              return;
+            }
+            if (colorId == 0) {
               return;
             }
 
@@ -127,6 +195,7 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
               packagingId: widget.packaging.id!,
               pricePerUnit: price,
               stockQuantity: stock,
+              colorId: colorId,
             );
 
             if (widget.onSaved != null) {

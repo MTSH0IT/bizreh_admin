@@ -14,6 +14,7 @@ class OptionPackagingService {
     required int packagingId,
     required num pricePerUnit,
     required int stockQuantity,
+    required int colorId,
   }) async {
     try {
       final response = await _dioClient.post(
@@ -23,6 +24,7 @@ class OptionPackagingService {
           'packaging_id': packagingId,
           'price_per_unit': pricePerUnit,
           'stock_quantity': stockQuantity,
+          'color_id': colorId,
         },
       );
 
@@ -58,6 +60,7 @@ class OptionPackagingService {
     required int packagingId,
     required num pricePerUnit,
     required int stockQuantity,
+    required int colorId,
   }) async {
     try {
       final response = await _dioClient.put(
@@ -67,6 +70,7 @@ class OptionPackagingService {
           'packaging_id': packagingId,
           'price_per_unit': pricePerUnit,
           'stock_quantity': stockQuantity,
+          'color_id': colorId,
         },
       );
 
