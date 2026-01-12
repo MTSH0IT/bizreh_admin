@@ -1,20 +1,27 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/Driver/models/driver_model.dart';
+import 'package:bizreh_admin/features/suppliers/models/supplier_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/driver_service.dart';
+import 'package:bizreh_admin/services/suppliers_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DriversController extends GetxController {
   final DriverService _driverService = DriverService();
+  final SuppliersService _suppliersService = SuppliersService();
 
   final RxList<DriverModel> drivers = <DriverModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxBool isCreating = false.obs;
   final RxBool isUpdatingStatus = false.obs;
   final RxBool isDeleting = false.obs;
+
+  final RxList<SupplierModel> suppliers = <SupplierModel>[].obs;
+  final RxBool isSuppliersLoading = false.obs;
+  final RxInt selectedSupplierId = 0.obs;
 
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -32,6 +39,27 @@ class DriversController extends GetxController {
   void onInit() {
     super.onInit();
     getDrivers();
+  }
+
+  Future<void> loadSuppliersIfNeeded() async {
+    if (suppliers.isNotEmpty) return;
+    await loadSuppliers();
+  }
+
+  Future<void> loadSuppliers() async {
+    try {
+      isSuppliersLoading.value = true;
+      final list = await _suppliersService.getSuppliers();
+      suppliers.assignAll(list);
+    } on AppException catch (e) {
+      showMassage(e.message, false);
+      log('AppException in loadSuppliers: ${e.message}');
+    } catch (e) {
+      showMassage('Failed to load suppliers', false);
+      log('Error in loadSuppliers: $e');
+    } finally {
+      isSuppliersLoading.value = false;
+    }
   }
 
   @override
@@ -77,7 +105,7 @@ class DriversController extends GetxController {
         password: passwordController.text,
         vehicleNumber: vehicleNumberController.text.trim(),
         licenseNumber: licenseNumberController.text.trim(),
-        supplierId: int.tryParse(supplierIdController.text.trim()) ?? 0,
+        supplierId: selectedSupplierId.value,
         isActive: selectedIsActive.value,
       );
 
@@ -166,9 +194,9 @@ class DriversController extends GetxController {
       return false;
     }
 
-    final supplierId = int.tryParse(supplierIdController.text.trim()) ?? 0;
+    final supplierId = selectedSupplierId.value;
     if (supplierId == 0) {
-      showMassage('Please enter supplier id', false);
+      showMassage('Please select supplier', false);
       return false;
     }
 
@@ -184,6 +212,7 @@ class DriversController extends GetxController {
     vehicleNumberController.clear();
     licenseNumberController.clear();
     supplierIdController.clear();
+    selectedSupplierId.value = 0;
     selectedIsActive.value = 1;
   }
 

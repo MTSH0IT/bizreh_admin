@@ -88,7 +88,6 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
             const SizedBox(height: 16),
             Obx(() {
               final rows = optionsController.options.toList();
-              optionsController.options.length;
 
               return OptionsDataTable(
                 rows: rows,

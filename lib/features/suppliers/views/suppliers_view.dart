@@ -2,6 +2,7 @@ import 'package:bizreh_admin/features/suppliers/controllers/suppliers_controller
 import 'package:bizreh_admin/features/suppliers/models/supplier_model.dart';
 import 'package:bizreh_admin/features/suppliers/views/widgets/supplier_form_dialog.dart';
 import 'package:bizreh_admin/features/suppliers/views/widgets/suppliers_data_table.dart';
+import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
@@ -35,7 +36,7 @@ class SuppliersView extends StatelessWidget {
           const SizedBox(height: 16),
           Obx(() {
             if (controller.isLoading.value) {
-              return const Center(child: CircularProgressIndicator());
+              return const BuildProgressIndicator();
             }
 
             final rows = controller.filteredSuppliers;

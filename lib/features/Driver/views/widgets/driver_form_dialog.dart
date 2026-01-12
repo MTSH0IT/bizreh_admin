@@ -1,5 +1,7 @@
 import 'package:bizreh_admin/features/Driver/controllers/drivers_controller.dart';
+import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
+import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -56,12 +58,46 @@ class DriverFormDialog extends StatelessWidget {
                 hint: 'Enter license number',
                 controller: controller.licenseNumberController,
               ),
-              LabeledTextField(
-                label: 'Supplier ID',
-                hint: 'Enter supplier id',
-                controller: controller.supplierIdController,
-                keyboardType: TextInputType.number,
-              ),
+              Obx(() {
+                final loading = controller.isSuppliersLoading.value;
+                final items = controller.suppliers
+                    .where((s) => s.id != null)
+                    .map(
+                      (s) => DropdownMenuItem<int>(
+                        value: s.id!,
+                        child: Text(
+                          '${s.firstName ?? ''} ${s.lastName ?? ''}'
+                                  .trim()
+                                  .isEmpty
+                              ? 'Supplier #${s.id!}'
+                              : '${s.firstName ?? ''} ${s.lastName ?? ''}'
+                                    .trim(),
+                        ),
+                      ),
+                    )
+                    .toList();
+
+                final selected = controller.selectedSupplierId.value == 0
+                    ? null
+                    : controller.selectedSupplierId.value;
+
+                return LoadingDropdownFormField2<int>(
+                  isLoading: loading,
+                  items: items,
+                  value: selected,
+                  labelText: 'Supplier',
+                  hintText: 'Select supplier',
+                  enableSearch: true,
+                  searchHintText: 'Search supplier...',
+                  onChanged: (v) {
+                    final id = v ?? 0;
+                    controller.selectedSupplierId.value = id;
+                    controller.supplierIdController.text = id == 0
+                        ? ''
+                        : id.toString();
+                  },
+                );
+              }),
               const SizedBox(height: 12),
               Obx(() {
                 final isActive = controller.selectedIsActive.value == 1;
@@ -108,10 +144,10 @@ class DriverFormDialog extends StatelessWidget {
                     } catch (_) {}
                   },
             child: busy
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                ? const BuildProgressIndicator(
+                    size: 18,
+                    strokeWidth: 2,
+                    centered: false,
                   )
                 : const Text('Create'),
           );

@@ -1,4 +1,5 @@
 import 'package:bizreh_admin/features/orders/controllers/orders_controller.dart';
+import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -70,10 +71,10 @@ class AssignDriverDialog extends StatelessWidget {
                     }
                   },
             child: busy
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                ? const BuildProgressIndicator(
+                    size: 18,
+                    strokeWidth: 2,
+                    centered: false,
                   )
                 : const Text('Assign'),
           );

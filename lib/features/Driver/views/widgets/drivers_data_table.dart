@@ -1,4 +1,5 @@
 import 'package:bizreh_admin/features/Driver/models/driver_model.dart';
+import 'package:bizreh_admin/utils/widgets/active_switch.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -69,11 +70,10 @@ class DriversDataTable extends StatelessWidget {
           DataCell(
             Obx(() {
               final disabled = isUpdatingStatus?.value == true;
-              return Switch(
+              return ActiveSwitch(
                 value: active,
-                onChanged: disabled
-                    ? null
-                    : (v) => onToggleActive?.call(driver, v ? 1 : 0),
+                disabled: disabled,
+                onChanged: (v) => onToggleActive?.call(driver, v ? 1 : 0),
               );
             }),
           ),

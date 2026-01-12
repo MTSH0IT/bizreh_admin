@@ -2,6 +2,7 @@ import 'package:bizreh_admin/features/Brands/controllers/brands_controler.dart';
 import 'package:bizreh_admin/features/Brands/models/brands_model.dart';
 import 'package:bizreh_admin/features/Brands/views/widgets/brands_data_table.dart';
 import 'package:bizreh_admin/features/Brands/views/widgets/brand_form_dialog.dart';
+import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
 import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
@@ -35,7 +36,7 @@ class BrandsView extends StatelessWidget {
           const SizedBox(height: 16),
           Obx(() {
             if (controller.isLoading.value) {
-              return const Center(child: CircularProgressIndicator());
+              return const BuildProgressIndicator();
             }
 
             final filtered = controller.filteredBrands;

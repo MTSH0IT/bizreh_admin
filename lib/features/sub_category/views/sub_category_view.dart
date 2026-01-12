@@ -2,6 +2,7 @@ import 'package:bizreh_admin/features/sub_category/controllers/sub_category_cont
 import 'package:bizreh_admin/features/sub_category/models/sub_category_model.dart';
 import 'package:bizreh_admin/features/sub_category/views/widgets/sub_category_data_table.dart';
 import 'package:bizreh_admin/features/sub_category/views/widgets/sub_category_form_dialog.dart';
+import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
@@ -52,7 +53,7 @@ class SubCategoryView extends StatelessWidget {
           const SizedBox(height: 16),
           Obx(() {
             if (subController.isLoading.value) {
-              return const Center(child: CircularProgressIndicator());
+              return const BuildProgressIndicator();
             }
 
             final rows = subController.filteredSubCategories;

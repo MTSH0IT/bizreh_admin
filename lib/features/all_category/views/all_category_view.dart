@@ -1,5 +1,6 @@
 import 'package:bizreh_admin/features/all_category/controllers/all_category_controller.dart';
 import 'package:bizreh_admin/features/all_category/views/widgets/all_category_data_table.dart';
+import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
 import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class AllCategoryView extends StatelessWidget {
           const SizedBox(height: 16),
           Obx(() {
             if (controller.isLoading.value) {
-              return const Center(child: CircularProgressIndicator());
+              return const BuildProgressIndicator();
             }
 
             final rows = controller.filteredAllCategories;

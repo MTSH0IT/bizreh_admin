@@ -1,4 +1,5 @@
 import 'package:bizreh_admin/features/users/controllers/users_controller.dart';
+import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -113,10 +114,10 @@ class UserFormDialog extends StatelessWidget {
                             }
                           },
                     child: isLoading
-                        ? const SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(strokeWidth: 2),
+                        ? const BuildProgressIndicator(
+                            size: 16,
+                            strokeWidth: 2,
+                            centered: false,
                           )
                         : Text(controller.isEditing ? 'Update' : 'Create'),
                   );

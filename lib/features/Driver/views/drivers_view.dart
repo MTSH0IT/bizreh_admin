@@ -2,6 +2,7 @@ import 'package:bizreh_admin/features/Driver/controllers/drivers_controller.dart
 import 'package:bizreh_admin/features/Driver/models/driver_model.dart';
 import 'package:bizreh_admin/features/Driver/views/widgets/driver_form_dialog.dart';
 import 'package:bizreh_admin/features/Driver/views/widgets/drivers_data_table.dart';
+import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
@@ -35,7 +36,7 @@ class DriversView extends StatelessWidget {
           const SizedBox(height: 16),
           Obx(() {
             if (controller.isLoading.value) {
-              return const Center(child: CircularProgressIndicator());
+              return const BuildProgressIndicator();
             }
 
             final rows = controller.filteredDrivers;
@@ -58,7 +59,10 @@ class DriversView extends StatelessWidget {
 
   void _openCreateDialog(BuildContext context, DriversController controller) {
     openFormDialog<void>(
-      onBeforeOpen: controller.clearForm,
+      onBeforeOpen: () {
+        controller.clearForm();
+        controller.loadSuppliersIfNeeded();
+      },
       dialogBuilder: (_) => DriverFormDialog(controller: controller),
     );
   }

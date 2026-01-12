@@ -4,6 +4,7 @@ import 'package:bizreh_admin/features/users/views/widgets/user_form_dialog.dart'
 import 'package:bizreh_admin/features/users/views/widgets/users_data_table.dart';
 import 'package:bizreh_admin/features/users/views/widgets/user_notification_dialog.dart';
 import 'package:bizreh_admin/features/users/views/widgets/user_notification_all_dialog.dart';
+import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
@@ -44,7 +45,7 @@ class UsersView extends StatelessWidget {
           const SizedBox(height: 16),
           Obx(() {
             if (controller.isLoading.value) {
-              return const Center(child: CircularProgressIndicator());
+              return const BuildProgressIndicator();
             }
 
             final filtered = controller.filteredUsers;

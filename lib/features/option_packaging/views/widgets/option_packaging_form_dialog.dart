@@ -2,6 +2,7 @@ import 'package:bizreh_admin/features/option_packaging/controllers/option_packag
 import 'package:bizreh_admin/features/packaging/models/package_model.dart'
     as package_model;
 import 'package:bizreh_admin/features/products/models/product_model/option.dart';
+import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/form_dialog_actions.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:flutter/material.dart';
@@ -101,10 +102,10 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
                     },
               style: TextButton.styleFrom(foregroundColor: Colors.red),
               child: widget.controller.isDeleting.value
-                  ? const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2),
+                  ? const BuildProgressIndicator(
+                      size: 16,
+                      strokeWidth: 2,
+                      centered: false,
                     )
                   : const Text('Delete'),
             );

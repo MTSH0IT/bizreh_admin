@@ -1,4 +1,5 @@
 import 'package:bizreh_admin/utils/consts/const_key.dart';
+import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +16,7 @@ class ImageNetwork extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: JsonKey.urlImageUploads + image,
-      placeholder: (context, url) =>
-          const Center(child: CircularProgressIndicator()),
+      placeholder: (context, url) => const BuildProgressIndicator(),
       errorWidget: (context, url, error) =>
           Icon(icon, size: 40, color: Colors.black54),
       fit: BoxFit.cover,
