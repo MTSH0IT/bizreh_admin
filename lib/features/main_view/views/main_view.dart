@@ -1,6 +1,7 @@
 import 'package:bizreh_admin/features/Brands/views/brands_view.dart';
 import 'package:bizreh_admin/features/Driver/views/drivers_view.dart';
 import 'package:bizreh_admin/features/all_category/views/all_category_view.dart';
+import 'package:bizreh_admin/features/color_family/views/color_family_view.dart';
 import 'package:bizreh_admin/features/main_view/views/widgets/admin_topbar.dart';
 import 'package:bizreh_admin/features/orders/views/orders_view.dart';
 import 'package:bizreh_admin/features/packaging/views/packagings_view.dart';
@@ -92,20 +93,25 @@ class _MainviewState extends State<Mainview> {
         return const MainNavEntry(title: 'Products', page: ProductsView());
       case 6:
         return const MainNavEntry(
+          title: 'Color Family',
+          page: ColorFamilyView(),
+        );
+      case 7:
+        return const MainNavEntry(
           title: 'Top Selling',
           page: ProductTopSellingView(),
         );
-      case 7:
-        return const MainNavEntry(title: 'Packagings', page: PackagingsView());
       case 8:
-        return const MainNavEntry(title: 'Drivers', page: DriversView());
+        return const MainNavEntry(title: 'Packagings', page: PackagingsView());
       case 9:
-        return const MainNavEntry(title: 'Cities', page: CitiesView());
+        return const MainNavEntry(title: 'Drivers', page: DriversView());
       case 10:
-        return const MainNavEntry(title: 'Suppliers', page: SuppliersView());
+        return const MainNavEntry(title: 'Cities', page: CitiesView());
       case 11:
-        return const MainNavEntry(title: 'Orders', page: OrdersView());
+        return const MainNavEntry(title: 'Suppliers', page: SuppliersView());
       case 12:
+        return const MainNavEntry(title: 'Orders', page: OrdersView());
+      case 13:
         return const MainNavEntry(
           title: 'Settings',
           page: _PlaceholderPage(title: 'Settings'),

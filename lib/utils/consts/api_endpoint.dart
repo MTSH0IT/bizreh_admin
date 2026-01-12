@@ -56,7 +56,9 @@ class ApiEndpoint {
       "/admin/product/option-packaging/$id";
 
   // Color Family
+  static String getColorFamily = "/admin/product/color-family";
   static String createColerFamily = "/admin/product/color-family";
+  static String updateColorFamily(int id) => "/admin/product/color-family/$id";
   static String deleteColerFamily(int id) => "/admin/product/color-family/$id";
 
   // Packagings

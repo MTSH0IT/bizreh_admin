@@ -40,6 +40,10 @@ class AdminSidebar extends StatelessWidget {
         title: 'Products',
         icon: Icons.inventory_2_outlined,
       ),
+      const AdminSidebarItemData(
+        title: 'Color Family',
+        icon: Icons.palette_outlined,
+      ),
       const AdminSidebarItemData(title: 'Top Selling', icon: Icons.star_border),
       const AdminSidebarItemData(
         title: 'Packagings',
