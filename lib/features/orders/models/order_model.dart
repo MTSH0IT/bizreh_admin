@@ -3,17 +3,17 @@ class OrderModel {
   String? orderNumber;
   int? userId;
   int? addressId;
-  dynamic driverId;
+  int? driverId;
   double? totalAmount;
   String? status;
   String? paymentStatus;
   DateTime? createdAt;
   DateTime? updatedAt;
-  dynamic supplierId;
+  int? supplierId;
   String? cityName;
   String? userName;
   String? userEmail;
-  dynamic driverName;
+  String? driverName;
   String? addressLine;
   String? note;
 
@@ -47,7 +47,7 @@ class OrderModel {
     orderNumber: json['order_number'] as String?,
     userId: json['user_id'] as int?,
     addressId: json['address_id'] as int?,
-    driverId: json['driver_id'] as dynamic,
+    driverId: json['driver_id'] as int?,
     totalAmount: (json['total_amount'] as num?)?.toDouble(),
     status: json['status'] as String?,
     paymentStatus: json['payment_status'] as String?,
@@ -57,11 +57,11 @@ class OrderModel {
     updatedAt: json['updated_at'] == null
         ? null
         : DateTime.parse(json['updated_at'] as String),
-    supplierId: json['supplier_id'] as dynamic,
+    supplierId: json['supplier_id'] as int?,
     cityName: json['city_name'] as String?,
     userName: json['user_name'] as String?,
     userEmail: json['user_email'] as String?,
-    driverName: json['driver_name'] as dynamic,
+    driverName: json['driver_name'] as String?,
     addressLine: json['address_line'] as String?,
     note: json['note'] as String?,
   );

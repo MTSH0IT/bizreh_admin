@@ -1,20 +1,26 @@
-import 'package:bizreh_admin/features/all_category/models/all_category_model.dart';
+import 'package:bizreh_admin/features/category/models/all_category_model.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
 
 class AllCategoryDataTable extends StatelessWidget {
   final List<AllCategoryModel> rows;
+  final ValueChanged<AllCategoryModel>? onEdit;
+  final ValueChanged<AllCategoryModel>? onDelete;
 
-  const AllCategoryDataTable({super.key, required this.rows});
+  const AllCategoryDataTable({
+    super.key,
+    required this.rows,
+    this.onEdit,
+    this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
     return DataTableWidget<AllCategoryModel>(
       rows: rows,
       emptyMessage: 'No categories found',
-      showActions: false,
-      onEdit: null,
-      onDelete: null,
+      onEdit: onEdit,
+      onDelete: onDelete,
       columns: const [
         DataColumn(
           label: Text('Image', style: TextStyle(fontWeight: FontWeight.bold)),

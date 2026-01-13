@@ -33,7 +33,11 @@ class AdminSidebar extends StatelessWidget {
         icon: Icons.category_outlined,
       ),
       const AdminSidebarItemData(
-        title: 'All Categories',
+        title: 'Categories',
+        icon: Icons.category_outlined,
+      ),
+      const AdminSidebarItemData(
+        title: 'Sub Categories',
         icon: Icons.category_outlined,
       ),
       const AdminSidebarItemData(
@@ -64,10 +68,6 @@ class AdminSidebar extends StatelessWidget {
       const AdminSidebarItemData(
         title: 'Orders',
         icon: Icons.shopping_cart_outlined,
-      ),
-      const AdminSidebarItemData(
-        title: 'Settings',
-        icon: Icons.settings_outlined,
       ),
     ];
 
