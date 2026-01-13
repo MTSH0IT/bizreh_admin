@@ -6,6 +6,7 @@ import 'package:bizreh_admin/features/discounts/views/discounts_view.dart';
 import 'package:bizreh_admin/features/main_view/views/widgets/admin_topbar.dart';
 import 'package:bizreh_admin/features/orders/views/orders_view.dart';
 import 'package:bizreh_admin/features/packaging/views/packagings_view.dart';
+import 'package:bizreh_admin/features/points/views/points_view.dart';
 import 'package:bizreh_admin/features/sub_category/views/all_sub_category_view.dart';
 import 'package:bizreh_admin/features/super_category/views/super_category_view.dart';
 import 'package:bizreh_admin/features/products/views/products_view.dart';
@@ -117,6 +118,8 @@ class _MainviewState extends State<Mainview> {
         return const MainNavEntry(title: 'Orders', page: OrdersView());
       case 14:
         return const MainNavEntry(title: 'Discounts', page: DiscountsView());
+      case 15:
+        return const MainNavEntry(title: 'Discounts', page: PointsView());
 
       default:
         return const MainNavEntry(

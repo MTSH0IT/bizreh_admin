@@ -73,6 +73,7 @@ class AdminSidebar extends StatelessWidget {
         title: 'Discounts',
         icon: Icons.percent_outlined,
       ),
+      const AdminSidebarItemData(title: 'Points', icon: Icons.point_of_sale),
     ];
 
     return Container(
