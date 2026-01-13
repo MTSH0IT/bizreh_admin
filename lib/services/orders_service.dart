@@ -15,8 +15,7 @@ class OrdersService {
       final response = await _dioClient.get(ApiEndpoint.getOrders);
 
       final apiResponse = ApiResponse.fromJson(response.data, (json) {
-        final wrapper = json['orders'];
-        final List list = (wrapper?['orders'] as List?) ?? <dynamic>[];
+        final List list = (json['orders'] as List?) ?? <dynamic>[];
         return list
             .map((e) => OrderModel.fromJson(e as Map<String, dynamic>))
             .toList();

@@ -64,8 +64,8 @@ class DataTableWidget<T> extends StatelessWidget {
             headingRowHeight: headingRowHeight,
             dataRowMinHeight: dataRowMinHeight,
             dataRowMaxHeight: dataRowMaxHeight,
-            columnSpacing: 32,
-            //horizontalMargin: 32,
+            columnSpacing: 12,
+            horizontalMargin: 32,
             columns: [
               ...columns,
               if (showActions && (onEdit != null || onDelete != null))

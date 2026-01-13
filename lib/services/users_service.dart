@@ -15,7 +15,7 @@ class UsersService {
       final response = await _dioClient.get(ApiEndpoint.getUsers);
 
       final apiResponse = ApiResponse.fromJson(response.data, (json) {
-        final List list = (json['users']['users'] as List?) ?? [];
+        final List list = (json['users'] as List?) ?? [];
         return list
             .map((e) => UserModel.fromJson(e as Map<String, dynamic>))
             .toList();
