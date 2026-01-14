@@ -31,9 +31,9 @@ class DiscountsDataTable extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        DataColumn(
-          label: Text('Type', style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
+        // DataColumn(
+        //   label: Text('Type', style: TextStyle(fontWeight: FontWeight.bold)),
+        // ),
         DataColumn(
           label: Text('Amount', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
@@ -81,7 +81,7 @@ class DiscountsDataTable extends StatelessWidget {
         return [
           DataCell(DataTableTextCell(text: d.title)),
           DataCell(DataTableTextCell(text: d.arTitle)),
-          DataCell(DataTableTextCell(text: d.type)),
+          //DataCell(DataTableTextCell(text: d.type)),
           DataCell(DataTableNumberCell(number: d.amount)),
           DataCell(DataTableTextCell(text: d.amountType)),
           DataCell(DataTableTextCell(text: d.minPurchaseAmount)),

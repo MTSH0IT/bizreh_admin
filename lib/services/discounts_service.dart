@@ -42,10 +42,24 @@ class DiscountsService {
   }
 
   Future<void> createDiscount({required Map<String, dynamic> body}) async {
+    log('discounts service createDiscount : $body');
     try {
       final response = await _dioClient.post(
         ApiEndpoint.createDiscount,
         data: body,
+        //  {
+        //   "title": "test",
+        //   "ar_title": "test",
+        //   "amount": 20,
+        //   "amount_type": "fixed",
+        //   "min_purchase_amount": 20,
+        //   "expration_date": "2026-1-14",
+        //   "role_type": "all",
+        //   "is_active": 1,
+        //   "product_ids": [],
+        //   "brand_ids": [],
+        //   "category_ids": [],
+        // },
       );
 
       final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);

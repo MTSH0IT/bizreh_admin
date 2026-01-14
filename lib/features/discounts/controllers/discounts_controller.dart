@@ -267,9 +267,9 @@ class DiscountsController extends GetxController {
       'min_purchase_amount':
           int.tryParse(minPurchaseAmountController.text.trim()) ??
           minPurchaseAmountController.text.trim(),
-      'expiration_date': expirationDateController.text.trim(),
+      'expration_date': expirationDateController.text.trim(),
       'role_type': selectedRoleType.value,
-      'is_active': selectedIsActive.value.toString(),
+      'is_active': selectedIsActive.value,
       'product_ids': selectedProductIds.toList(),
       'brand_ids': selectedBrandIds.toList(),
       'category_ids': categoryIds,
@@ -277,7 +277,7 @@ class DiscountsController extends GetxController {
   }
 
   Future<void> createDiscount() async {
-    if (!_validateForm()) return;
+    //if (!_validateForm()) return;
 
     try {
       isCreating.value = true;

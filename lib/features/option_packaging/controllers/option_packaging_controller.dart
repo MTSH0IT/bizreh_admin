@@ -63,6 +63,7 @@ class OptionPackagingController extends GetxController {
           stockQuantity: stockQuantity,
           colorId: colorId,
         );
+        Get.back();
         showMassage('Mapping created successfully', true);
       } else {
         await _service.updateOptionPackaging(
@@ -73,6 +74,7 @@ class OptionPackagingController extends GetxController {
           stockQuantity: stockQuantity,
           colorId: colorId,
         );
+        Get.back();
         showMassage('Mapping updated successfully', true);
       }
     } on AppException catch (e) {
@@ -90,6 +92,7 @@ class OptionPackagingController extends GetxController {
     try {
       isDeleting.value = true;
       await _service.deleteOptionPackaging(id);
+      Get.back();
       showMassage('Mapping deleted successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);

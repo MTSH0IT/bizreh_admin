@@ -161,7 +161,7 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
                       if (widget.onSaved != null) {
                         await widget.onSaved!();
                       }
-                      if (context.mounted) Get.back();
+                      // Get.back();
                     },
               style: TextButton.styleFrom(foregroundColor: Colors.red),
               child: widget.controller.isDeleting.value
@@ -202,7 +202,7 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
               await widget.onSaved!();
             }
 
-            if (context.mounted) Get.back();
+            // Get.back();
           },
           isBusy: () => widget.controller.isSaving.value,
           submitText: isEditing ? 'Update' : 'Create',
