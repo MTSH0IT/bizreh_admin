@@ -19,40 +19,37 @@ class AllCategoryView extends StatelessWidget {
       AllCategoryCrudController(),
     );
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchField(
-            hintText: 'Search categories...',
-            onChanged: controller.setSearchQuery,
-          ),
-          const SizedBox(height: 12),
-          ToolbarRow(
-            onAdd: () => _openCreateDialog(context, controller),
-            onRefresh: controller.getAllCategories,
-            addText: 'Add Category',
-            refreshText: 'Refresh',
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (controller.isLoading.value) {
-              return const BuildProgressIndicator();
-            }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SearchField(
+          hintText: 'Search categories...',
+          onChanged: controller.setSearchQuery,
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(
+          onAdd: () => _openCreateDialog(context, controller),
+          onRefresh: controller.getAllCategories,
+          addText: 'Add Category',
+          refreshText: 'Refresh',
+        ),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return const BuildProgressIndicator();
+          }
 
-            final rows = controller.filteredAllCategories;
+          final rows = controller.filteredAllCategories;
 
-            return AllCategoryDataTable(
-              rows: rows,
-              onEdit: (category) =>
-                  _openEditDialog(context, controller, category),
-              onDelete: (category) =>
-                  _confirmDelete(context, controller, category),
-            );
-          }),
-        ],
-      ),
+          return AllCategoryDataTable(
+            rows: rows,
+            onEdit: (category) =>
+                _openEditDialog(context, controller, category),
+            onDelete: (category) =>
+                _confirmDelete(context, controller, category),
+          );
+        }),
+      ],
     );
   }
 

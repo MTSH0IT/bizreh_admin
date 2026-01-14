@@ -19,56 +19,53 @@ class UsersView extends StatelessWidget {
   Widget build(BuildContext context) {
     final UsersController controller = Get.put(UsersController());
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchField(
-            hintText: 'Search users...',
-            onChanged: controller.setSearchQuery,
-          ),
-          const SizedBox(height: 12),
-          ToolbarRow(
-            onAdd: () => _openCreateDialog(controller),
-            onRefresh: controller.getUsers,
-            addText: 'Add User',
-            refreshText: 'Refresh',
-            extraActions: [
-              ElevatedButton.icon(
-                onPressed: () => _openNotificationDialogForAll(controller),
-                icon: const Icon(Icons.notifications_active),
-                label: const Text('Send message to all'),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (controller.isLoading.value) {
-              return const BuildProgressIndicator();
-            }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SearchField(
+          hintText: 'Search users...',
+          onChanged: controller.setSearchQuery,
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(
+          onAdd: () => _openCreateDialog(controller),
+          onRefresh: controller.getUsers,
+          addText: 'Add User',
+          refreshText: 'Refresh',
+          extraActions: [
+            ElevatedButton.icon(
+              onPressed: () => _openNotificationDialogForAll(controller),
+              icon: const Icon(Icons.notifications_active),
+              label: const Text('Send message to all'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return const BuildProgressIndicator();
+          }
 
-            final filtered = controller.filteredUsers;
+          final filtered = controller.filteredUsers;
 
-            return UsersDataTable(
-              rows: filtered,
-              isUpdatingStatus: controller.isUpdatingStatus,
-              onToggleActive: (user, isActive) {
-                final id = user.id;
-                if (id == null) return;
-                controller.changeStatus(userId: id, isActive: isActive);
-              },
-              onEdit: (user) => _openEditDialog(controller, user),
-              onDelete: (user) => _confirmDelete(controller, user),
-              onSendNotification: (user) {
-                final id = user.id;
-                if (id == null) return;
-                _openNotificationDialogForUser(controller, id);
-              },
-            );
-          }),
-        ],
-      ),
+          return UsersDataTable(
+            rows: filtered,
+            isUpdatingStatus: controller.isUpdatingStatus,
+            onToggleActive: (user, isActive) {
+              final id = user.id;
+              if (id == null) return;
+              controller.changeStatus(userId: id, isActive: isActive);
+            },
+            onEdit: (user) => _openEditDialog(controller, user),
+            onDelete: (user) => _confirmDelete(controller, user),
+            onSendNotification: (user) {
+              final id = user.id;
+              if (id == null) return;
+              _openNotificationDialogForUser(controller, id);
+            },
+          );
+        }),
+      ],
     );
   }
 

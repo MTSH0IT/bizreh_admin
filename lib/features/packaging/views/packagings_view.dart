@@ -17,38 +17,35 @@ class PackagingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final PackagingController controller = Get.put(PackagingController());
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchField(
-            hintText: 'Search packagings...',
-            onChanged: controller.setSearchQuery,
-          ),
-          const SizedBox(height: 12),
-          ToolbarRow(
-            onAdd: () => _openCreateDialog(context, controller),
-            onRefresh: controller.getPackagings,
-            addText: 'Add Packaging',
-            refreshText: 'Refresh',
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (controller.isLoading.value) {
-              return const BuildProgressIndicator();
-            }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SearchField(
+          hintText: 'Search packagings...',
+          onChanged: controller.setSearchQuery,
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(
+          onAdd: () => _openCreateDialog(context, controller),
+          onRefresh: controller.getPackagings,
+          addText: 'Add Packaging',
+          refreshText: 'Refresh',
+        ),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return const BuildProgressIndicator();
+          }
 
-            final rows = controller.filteredPackagings;
+          final rows = controller.filteredPackagings;
 
-            return PackagingsDataTable(
-              rows: rows,
-              onEdit: (p) => _openEditDialog(context, controller, p),
-              onDelete: (p) => _confirmDelete(context, controller, p),
-            );
-          }),
-        ],
-      ),
+          return PackagingsDataTable(
+            rows: rows,
+            onEdit: (p) => _openEditDialog(context, controller, p),
+            onDelete: (p) => _confirmDelete(context, controller, p),
+          );
+        }),
+      ],
     );
   }
 

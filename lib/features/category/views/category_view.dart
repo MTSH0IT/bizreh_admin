@@ -26,45 +26,42 @@ class CategoryView extends StatelessWidget {
       });
     }
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchField(
-            hintText: 'Search categories...',
-            onChanged: categoryController.setSearchQuery,
-          ),
-          const SizedBox(height: 12),
-          ToolbarRow(
-            onAdd: () => _openCreateDialog(context, categoryController),
-            onRefresh: () {
-              final id = superCategoryId;
-              if (id != null) {
-                categoryController.getCategories(id);
-              }
-            },
-            addText: 'Add Category',
-            refreshText: 'Refresh',
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (categoryController.isLoading.value) {
-              return const BuildProgressIndicator();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SearchField(
+          hintText: 'Search categories...',
+          onChanged: categoryController.setSearchQuery,
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(
+          onAdd: () => _openCreateDialog(context, categoryController),
+          onRefresh: () {
+            final id = superCategoryId;
+            if (id != null) {
+              categoryController.getCategories(id);
             }
+          },
+          addText: 'Add Category',
+          refreshText: 'Refresh',
+        ),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (categoryController.isLoading.value) {
+            return const BuildProgressIndicator();
+          }
 
-            final rows = categoryController.filteredCategories;
+          final rows = categoryController.filteredCategories;
 
-            return CategoryDataTable(
-              rows: rows,
-              onEdit: (category) =>
-                  _openEditDialog(context, category, categoryController),
-              onDelete: (category) =>
-                  _confirmDelete(context, category, categoryController),
-            );
-          }),
-        ],
-      ),
+          return CategoryDataTable(
+            rows: rows,
+            onEdit: (category) =>
+                _openEditDialog(context, category, categoryController),
+            onDelete: (category) =>
+                _confirmDelete(context, category, categoryController),
+          );
+        }),
+      ],
     );
   }
 

@@ -31,14 +31,11 @@ class PointsDataTable extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
+        // DataColumn(
+        //   label: Text('Type', style: TextStyle(fontWeight: FontWeight.bold)),
+        // ),
         DataColumn(
-          label: Text('Type', style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
-        DataColumn(
-          label: Text(
-            'Points Amount',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+          label: Text('Points', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         DataColumn(
           label: Text(
@@ -54,7 +51,7 @@ class PointsDataTable extends StatelessWidget {
         ),
         DataColumn(
           label: Text(
-            'Max / User',
+            'Max/User',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
@@ -90,7 +87,7 @@ class PointsDataTable extends StatelessWidget {
         return [
           DataCell(DataTableTextCell(text: p.title)),
           DataCell(DataTableTextCell(text: p.arTitle)),
-          DataCell(DataTableTextCell(text: p.type)),
+          //DataCell(DataTableTextCell(text: p.type)),
           DataCell(DataTableNumberCell(number: p.pointsAmount)),
           DataCell(DataTableTextCell(text: p.amountType)),
           DataCell(DataTableTextCell(text: p.minPurchaseAmount)),

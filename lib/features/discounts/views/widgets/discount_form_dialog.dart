@@ -82,10 +82,8 @@ class DiscountFormDialog extends StatelessWidget {
                     lastDate: DateTime(now.year + 2),
                   );
                   if (picked != null) {
-                    controller.expirationDateController.text = picked
-                        .toIso8601String()
-                        .split('T')
-                        .first;
+                    controller.expirationDateController.text =
+                        '${picked.year}-${picked.month}-${picked.day}';
                   }
                 },
               ),

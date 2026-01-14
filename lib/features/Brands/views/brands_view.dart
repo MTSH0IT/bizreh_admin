@@ -17,38 +17,35 @@ class BrandsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final BrandsController controller = Get.put(BrandsController());
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchField(
-            hintText: 'Search brands...',
-            onChanged: (v) => controller.setSearchQuery(v),
-          ),
-          const SizedBox(height: 12),
-          ToolbarRow(
-            onAdd: () => _openCreateDialog(context, controller),
-            onRefresh: controller.getBrands,
-            addText: 'Add Brand',
-            refreshText: 'Refresh',
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (controller.isLoading.value) {
-              return const BuildProgressIndicator();
-            }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SearchField(
+          hintText: 'Search brands...',
+          onChanged: (v) => controller.setSearchQuery(v),
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(
+          onAdd: () => _openCreateDialog(context, controller),
+          onRefresh: controller.getBrands,
+          addText: 'Add Brand',
+          refreshText: 'Refresh',
+        ),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return const BuildProgressIndicator();
+          }
 
-            final filtered = controller.filteredBrands;
+          final filtered = controller.filteredBrands;
 
-            return BrandsDataTable(
-              rows: filtered,
-              onEdit: (brand) => _openEditDialog(context, controller, brand),
-              onDelete: (brand) => _confirmDelete(context, controller, brand),
-            );
-          }),
-        ],
-      ),
+          return BrandsDataTable(
+            rows: filtered,
+            onEdit: (brand) => _openEditDialog(context, controller, brand),
+            onDelete: (brand) => _confirmDelete(context, controller, brand),
+          );
+        }),
+      ],
     );
   }
 

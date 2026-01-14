@@ -17,38 +17,35 @@ class SuppliersView extends StatelessWidget {
   Widget build(BuildContext context) {
     final SuppliersController controller = Get.put(SuppliersController());
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchField(
-            hintText: 'Search suppliers...',
-            onChanged: controller.setSearchQuery,
-          ),
-          const SizedBox(height: 12),
-          ToolbarRow(
-            onAdd: () => _openCreateDialog(controller),
-            onRefresh: controller.getSuppliers,
-            addText: 'Add Supplier',
-            refreshText: 'Refresh',
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (controller.isLoading.value) {
-              return const BuildProgressIndicator();
-            }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SearchField(
+          hintText: 'Search suppliers...',
+          onChanged: controller.setSearchQuery,
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(
+          onAdd: () => _openCreateDialog(controller),
+          onRefresh: controller.getSuppliers,
+          addText: 'Add Supplier',
+          refreshText: 'Refresh',
+        ),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return const BuildProgressIndicator();
+          }
 
-            final rows = controller.filteredSuppliers;
+          final rows = controller.filteredSuppliers;
 
-            return SuppliersDataTable(
-              rows: rows,
-              onEdit: (s) => _openEditDialog(controller, s),
-              onDelete: (s) => _confirmDelete(controller, s),
-            );
-          }),
-        ],
-      ),
+          return SuppliersDataTable(
+            rows: rows,
+            onEdit: (s) => _openEditDialog(controller, s),
+            onDelete: (s) => _confirmDelete(controller, s),
+          );
+        }),
+      ],
     );
   }
 

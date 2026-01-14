@@ -17,38 +17,35 @@ class ColorFamilyView extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorFamilyController controller = Get.put(ColorFamilyController());
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchField(
-            hintText: 'Search colors...',
-            onChanged: controller.setSearchQuery,
-          ),
-          const SizedBox(height: 12),
-          ToolbarRow(
-            onAdd: () => _openCreateDialog(controller),
-            onRefresh: controller.getColors,
-            addText: 'Add Color',
-            refreshText: 'Refresh',
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (controller.isLoading.value) {
-              return const BuildProgressIndicator();
-            }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SearchField(
+          hintText: 'Search colors...',
+          onChanged: controller.setSearchQuery,
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(
+          onAdd: () => _openCreateDialog(controller),
+          onRefresh: controller.getColors,
+          addText: 'Add Color',
+          refreshText: 'Refresh',
+        ),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return const BuildProgressIndicator();
+          }
 
-            final rows = controller.filteredColors;
+          final rows = controller.filteredColors;
 
-            return ColorFamilyDataTable(
-              rows: rows,
-              onEdit: (c) => _openEditDialog(controller, c),
-              onDelete: (c) => _confirmDelete(controller, c),
-            );
-          }),
-        ],
-      ),
+          return ColorFamilyDataTable(
+            rows: rows,
+            onEdit: (c) => _openEditDialog(controller, c),
+            onDelete: (c) => _confirmDelete(controller, c),
+          );
+        }),
+      ],
     );
   }
 

@@ -269,7 +269,7 @@ class DiscountsController extends GetxController {
           minPurchaseAmountController.text.trim(),
       'expiration_date': expirationDateController.text.trim(),
       'role_type': selectedRoleType.value,
-      'is_active': selectedIsActive.value,
+      'is_active': selectedIsActive.value.toString(),
       'product_ids': selectedProductIds.toList(),
       'brand_ids': selectedBrandIds.toList(),
       'category_ids': categoryIds,

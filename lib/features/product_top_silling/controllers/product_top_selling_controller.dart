@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bizreh_admin/features/products/controllers/products_controller.dart';
 import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/product_top_selling.dart';
@@ -66,6 +67,8 @@ class ProductTopSellingController extends GetxController {
       isAdding.value = true;
       await _service.addTopSellingProduct(productId: id);
       await getTopSellingProducts();
+      await Get.find<ProductsController>().getProducts();
+
       showMassage('Product added to top selling successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
@@ -86,6 +89,7 @@ class ProductTopSellingController extends GetxController {
       isDeleting.value = true;
       await _service.deleteTopSellingProduct(id);
       await getTopSellingProducts();
+      await Get.find<ProductsController>().getProducts();
       showMassage('Product removed from top selling', true);
     } on AppException catch (e) {
       showMassage(e.message, false);

@@ -17,38 +17,35 @@ class PointsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final PointsController controller = Get.put(PointsController());
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 2000),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchField(
-            hintText: 'Search points offers...',
-            onChanged: controller.setSearchQuery,
-          ),
-          const SizedBox(height: 12),
-          ToolbarRow(
-            onAdd: () => _openCreateDialog(context, controller),
-            onRefresh: controller.getPointsOffers,
-            addText: 'Add Points Offer',
-            refreshText: 'Refresh',
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (controller.isLoading.value) {
-              return const BuildProgressIndicator();
-            }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SearchField(
+          hintText: 'Search points offers...',
+          onChanged: controller.setSearchQuery,
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(
+          onAdd: () => _openCreateDialog(context, controller),
+          onRefresh: controller.getPointsOffers,
+          addText: 'Add Points Offer',
+          refreshText: 'Refresh',
+        ),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return const BuildProgressIndicator();
+          }
 
-            final rows = controller.filteredPointsOffers;
+          final rows = controller.filteredPointsOffers;
 
-            return PointsDataTable(
-              rows: rows,
-              onEdit: (p) => _openEditDialog(context, controller, p),
-              onDelete: (p) => _confirmDelete(context, controller, p),
-            );
-          }),
-        ],
-      ),
+          return PointsDataTable(
+            rows: rows,
+            onEdit: (p) => _openEditDialog(context, controller, p),
+            onDelete: (p) => _confirmDelete(context, controller, p),
+          );
+        }),
+      ],
     );
   }
 

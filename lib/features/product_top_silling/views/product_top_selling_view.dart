@@ -17,36 +17,32 @@ class ProductTopSellingView extends StatelessWidget {
       ProductTopSellingController(),
     );
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchField(
-            hintText: 'Search top selling products...',
-            onChanged: controller.setSearchQuery,
-          ),
-          const SizedBox(height: 12),
-          ToolbarRow(
-            onRefresh: controller.getTopSellingProducts,
-            refreshText: 'Refresh',
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (controller.isLoading.value) {
-              return const BuildProgressIndicator();
-            }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SearchField(
+          hintText: 'Search top selling products...',
+          onChanged: controller.setSearchQuery,
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(
+          onRefresh: controller.getTopSellingProducts,
+          refreshText: 'Refresh',
+        ),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return const BuildProgressIndicator();
+          }
 
-            final rows = controller.filteredProducts;
+          final rows = controller.filteredProducts;
 
-            return ProductTopSellingDataTable(
-              rows: rows,
-              onRemove: (product) =>
-                  _confirmRemove(context, controller, product),
-            );
-          }),
-        ],
-      ),
+          return ProductTopSellingDataTable(
+            rows: rows,
+            onRemove: (product) => _confirmRemove(context, controller, product),
+          );
+        }),
+      ],
     );
   }
 

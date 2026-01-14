@@ -11,80 +11,80 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     final ProfileController controller = Get.put(ProfileController());
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 700),
-      child: Obx(() {
-        if (controller.isLoading.value) {
-          return const BuildProgressIndicator();
-        }
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const BuildProgressIndicator();
+      }
 
-        final profile = controller.profile.value;
-        if (profile == null) {
-          return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  controller.errorMessage.value.isNotEmpty
-                      ? controller.errorMessage.value
-                      : 'لا توجد بيانات',
-                ),
-                const SizedBox(height: 12),
-                ElevatedButton.icon(
-                  onPressed: controller.getProfile,
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('إعادة المحاولة'),
-                ),
-              ],
-            ),
-          );
-        }
+      final profile = controller.profile.value;
+      if (profile == null) {
+        return Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                controller.errorMessage.value.isNotEmpty
+                    ? controller.errorMessage.value
+                    : 'لا توجد بيانات',
+              ),
+              const SizedBox(height: 12),
+              ElevatedButton.icon(
+                onPressed: controller.getProfile,
+                icon: const Icon(Icons.refresh),
+                label: const Text('إعادة المحاولة'),
+              ),
+            ],
+          ),
+        );
+      }
 
-        final fullName = [profile.firstName, profile.lastName]
-            .where((e) => (e ?? '').trim().isNotEmpty)
-            .map((e) => e!.trim())
-            .join(' ');
+      final fullName = [profile.firstName, profile.lastName]
+          .where((e) => (e ?? '').trim().isNotEmpty)
+          .map((e) => e!.trim())
+          .join(' ');
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const CircleAvatar(
-                  radius: 28,
-                  backgroundColor: Color(0xFFE5E7EB),
-                  child: Icon(Icons.person, color: Color(0xFF374151)),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        fullName.isEmpty ? 'User' : fullName,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const CircleAvatar(
+                radius: 28,
+                backgroundColor: Color(0xFFE5E7EB),
+                child: Icon(Icons.person, color: Color(0xFF374151)),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      fullName.isEmpty ? 'User' : fullName,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        profile.email ?? '-',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: const Color(0xFF6B7280),
-                        ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      profile.email ?? '-',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: const Color(0xFF6B7280),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                IconButton(
-                  onPressed: controller.getProfile,
-                  icon: const Icon(Icons.refresh),
-                  tooltip: 'Refresh',
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Card(
+              ),
+              IconButton(
+                onPressed: controller.getProfile,
+                icon: const Icon(Icons.refresh),
+                tooltip: 'Refresh',
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: 500,
+            child: Card(
               elevation: 0,
               color: const Color(0xFFF9FAFB),
               shape: RoundedRectangleBorder(
@@ -117,10 +117,10 @@ class ProfileView extends StatelessWidget {
                 ),
               ),
             ),
-          ],
-        );
-      }),
-    );
+          ),
+        ],
+      );
+    });
   }
 }
 
@@ -143,7 +143,7 @@ class _InfoRow extends StatelessWidget {
             ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 24),
         Expanded(
           child: Text(value, style: Theme.of(context).textTheme.bodyMedium),
         ),

@@ -24,44 +24,39 @@ class ProductsView extends StatelessWidget {
     );
     final MainNavController nav = Get.find<MainNavController>();
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchField(
-            hintText: 'Search products...',
-            onChanged: controller.setSearchQuery,
-          ),
-          const SizedBox(height: 12),
-          ToolbarRow(
-            onAdd: () => _openCreateDialog(context, controller),
-            onRefresh: controller.getProducts,
-            addText: 'Add Product',
-            refreshText: 'Refresh',
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (controller.isLoading.value) {
-              return const BuildProgressIndicator();
-            }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SearchField(
+          hintText: 'Search products...',
+          onChanged: controller.setSearchQuery,
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(
+          onAdd: () => _openCreateDialog(context, controller),
+          onRefresh: controller.getProducts,
+          addText: 'Add Product',
+          refreshText: 'Refresh',
+        ),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return const BuildProgressIndicator();
+          }
 
-            final filtered = controller.filteredProducts;
+          final filtered = controller.filteredProducts;
 
-            return ProductsDataTable(
-              rows: filtered,
-              onEdit: (product) =>
-                  _openEditDialog(context, controller, product),
-              onDelete: (product) =>
-                  _confirmDelete(context, controller, product),
-              onOptions: (product) => _openOptionsPage(nav, product),
-              isTopSelling: (p) => topSellingController.isTopSelling(p.id),
-              onToggleTopSelling: (p) =>
-                  _confirmToggleTopSelling(context, topSellingController, p),
-            );
-          }),
-        ],
-      ),
+          return ProductsDataTable(
+            rows: filtered,
+            onEdit: (product) => _openEditDialog(context, controller, product),
+            onDelete: (product) => _confirmDelete(context, controller, product),
+            onOptions: (product) => _openOptionsPage(nav, product),
+            isTopSelling: (p) => topSellingController.isTopSelling(p.id),
+            onToggleTopSelling: (p) =>
+                _confirmToggleTopSelling(context, topSellingController, p),
+          );
+        }),
+      ],
     );
   }
 

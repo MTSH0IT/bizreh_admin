@@ -14,43 +14,40 @@ class OrdersView extends StatelessWidget {
   Widget build(BuildContext context) {
     final OrdersController controller = Get.put(OrdersController());
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchField(
-            hintText: 'Search orders...',
-            onChanged: controller.setSearchQuery,
-          ),
-          const SizedBox(height: 12),
-          ToolbarRow(onRefresh: controller.getOrders, refreshText: 'Refresh'),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (controller.isLoading.value) {
-              return const BuildProgressIndicator();
-            }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SearchField(
+          hintText: 'Search orders...',
+          onChanged: controller.setSearchQuery,
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(onRefresh: controller.getOrders, refreshText: 'Refresh'),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return const BuildProgressIndicator();
+          }
 
-            final rows = controller.filteredOrders;
+          final rows = controller.filteredOrders;
 
-            return OrdersDataTable(
-              rows: rows,
-              onAssign: (order) async {
-                await controller.loadDriversIfNeeded();
-                if (context.mounted) {
-                  showDialog<void>(
-                    context: context,
-                    builder: (_) => AssignDriverDialog(
-                      controller: controller,
-                      orderId: order.id ?? 0,
-                    ),
-                  );
-                }
-              },
-            );
-          }),
-        ],
-      ),
+          return OrdersDataTable(
+            rows: rows,
+            onAssign: (order) async {
+              await controller.loadDriversIfNeeded();
+              if (context.mounted) {
+                showDialog<void>(
+                  context: context,
+                  builder: (_) => AssignDriverDialog(
+                    controller: controller,
+                    orderId: order.id ?? 0,
+                  ),
+                );
+              }
+            },
+          );
+        }),
+      ],
     );
   }
 }

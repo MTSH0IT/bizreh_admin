@@ -17,43 +17,40 @@ class DriversView extends StatelessWidget {
   Widget build(BuildContext context) {
     final DriversController controller = Get.put(DriversController());
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchField(
-            hintText: 'Search drivers...',
-            onChanged: controller.setSearchQuery,
-          ),
-          const SizedBox(height: 12),
-          ToolbarRow(
-            onAdd: () => _openCreateDialog(context, controller),
-            onRefresh: controller.getDrivers,
-            addText: 'Add Driver',
-            refreshText: 'Refresh',
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (controller.isLoading.value) {
-              return const BuildProgressIndicator();
-            }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SearchField(
+          hintText: 'Search drivers...',
+          onChanged: controller.setSearchQuery,
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(
+          onAdd: () => _openCreateDialog(context, controller),
+          onRefresh: controller.getDrivers,
+          addText: 'Add Driver',
+          refreshText: 'Refresh',
+        ),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return const BuildProgressIndicator();
+          }
 
-            final rows = controller.filteredDrivers;
+          final rows = controller.filteredDrivers;
 
-            return DriversDataTable(
-              rows: rows,
-              isUpdatingStatus: controller.isUpdatingStatus,
-              onToggleActive: (driver, isActive) {
-                final id = driver.driverId;
-                if (id == null) return;
-                controller.changeStatus(driverId: id, isActive: isActive);
-              },
-              onDelete: (driver) => _confirmDelete(context, controller, driver),
-            );
-          }),
-        ],
-      ),
+          return DriversDataTable(
+            rows: rows,
+            isUpdatingStatus: controller.isUpdatingStatus,
+            onToggleActive: (driver, isActive) {
+              final id = driver.driverId;
+              if (id == null) return;
+              controller.changeStatus(driverId: id, isActive: isActive);
+            },
+            onDelete: (driver) => _confirmDelete(context, controller, driver),
+          );
+        }),
+      ],
     );
   }
 

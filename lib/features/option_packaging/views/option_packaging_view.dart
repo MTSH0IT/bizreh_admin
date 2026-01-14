@@ -69,76 +69,73 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
         border: Border.all(color: const Color(0xFFE5E7EB)),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1100),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 12),
-            ToolbarRow(
-              onAdd: () => _openOptionFormDialog(context),
-              onRefresh: () async {
-                optionsController.loadFromProduct();
-                await optionsController.reloadFromServer();
-                await packagingController.getPackagings();
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 12),
+          ToolbarRow(
+            onAdd: () => _openOptionFormDialog(context),
+            onRefresh: () async {
+              optionsController.loadFromProduct();
+              await optionsController.reloadFromServer();
+              await packagingController.getPackagings();
+            },
+            addText: 'Add Option',
+            refreshText: 'Reload',
+          ),
+          const SizedBox(height: 16),
+          Obx(() {
+            final rows = optionsController.options.toList();
+
+            return OptionsDataTable(
+              rows: rows,
+              onEdit: (opt) {
+                optionsController.setOptionForEdit(opt);
+                _openOptionFormDialog(context);
               },
-              addText: 'Add Option',
-              refreshText: 'Reload',
-            ),
-            const SizedBox(height: 16),
-            Obx(() {
-              final rows = optionsController.options.toList();
+              onDelete: (opt) => _confirmDelete(context, opt),
+            );
+          }),
+          const SizedBox(height: 24),
+          const Text(
+            'Option × Packaging Matrix',
+            style: TextStyle(fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 12),
+          Obx(() {
+            if (packagingController.isLoading.value ||
+                optionsController.isReloading.value) {
+              return const BuildProgressIndicator();
+            }
 
-              return OptionsDataTable(
-                rows: rows,
-                onEdit: (opt) {
-                  optionsController.setOptionForEdit(opt);
-                  _openOptionFormDialog(context);
-                },
-                onDelete: (opt) => _confirmDelete(context, opt),
-              );
-            }),
-            const SizedBox(height: 24),
-            const Text(
-              'Option × Packaging Matrix',
-              style: TextStyle(fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 12),
-            Obx(() {
-              if (packagingController.isLoading.value ||
-                  optionsController.isReloading.value) {
-                return const BuildProgressIndicator();
-              }
+            final options = optionsController.options.toList();
+            final packagings = packagingController.packagings.toList();
 
-              final options = optionsController.options.toList();
-              final packagings = packagingController.packagings.toList();
-
-              return OptionsPackagingMatrixTable(
-                options: options,
-                packagings: packagings,
-                onCellTap:
-                    (
-                      Option opt,
-                      package_model.PackageModel pkg,
-                      int? mappingId,
-                      int? price,
-                      int? stock,
-                      int? colorId,
-                    ) {
-                      _openMatrixCellDialog(
-                        context,
-                        opt,
-                        pkg,
-                        mappingId,
-                        price,
-                        stock,
-                        colorId,
-                      );
-                    },
-              );
-            }),
-          ],
-        ),
+            return OptionsPackagingMatrixTable(
+              options: options,
+              packagings: packagings,
+              onCellTap:
+                  (
+                    Option opt,
+                    package_model.PackageModel pkg,
+                    int? mappingId,
+                    int? price,
+                    int? stock,
+                    int? colorId,
+                  ) {
+                    _openMatrixCellDialog(
+                      context,
+                      opt,
+                      pkg,
+                      mappingId,
+                      price,
+                      stock,
+                      colorId,
+                    );
+                  },
+            );
+          }),
+        ],
       ),
     );
   }

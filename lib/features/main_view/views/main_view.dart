@@ -58,7 +58,10 @@ class _MainviewState extends State<Mainview> {
                     child: SingleChildScrollView(
                       child: Padding(
                         padding: const EdgeInsets.all(24),
-                        child: Obx(() => _nav.current),
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 1100),
+                          child: Obx(() => _nav.current),
+                        ),
                       ),
                     ),
                   ),

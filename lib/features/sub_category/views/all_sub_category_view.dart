@@ -19,42 +19,39 @@ class AllSubCategoryView extends StatelessWidget {
       AllSubCategoryCrudController(),
     );
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchField(
-            hintText: 'Search sub categories... ',
-            onChanged: subController.setSearchQuery,
-          ),
-          const SizedBox(height: 12),
-          ToolbarRow(
-            onAdd: () => _openCreateDialog(context, subController),
-            onRefresh: () {
-              subController.getAllSubCategories();
-            },
-            addText: 'Add Sub Category',
-            refreshText: 'Refresh',
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (subController.isLoading.value) {
-              return const BuildProgressIndicator();
-            }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SearchField(
+          hintText: 'Search sub categories... ',
+          onChanged: subController.setSearchQuery,
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(
+          onAdd: () => _openCreateDialog(context, subController),
+          onRefresh: () {
+            subController.getAllSubCategories();
+          },
+          addText: 'Add Sub Category',
+          refreshText: 'Refresh',
+        ),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (subController.isLoading.value) {
+            return const BuildProgressIndicator();
+          }
 
-            final rows = subController.filteredAllSubCategories;
+          final rows = subController.filteredAllSubCategories;
 
-            return AllSubCategoryDataTable(
-              rows: rows,
-              onEdit: (subCategory) =>
-                  _openEditDialog(context, subController, subCategory),
-              onDelete: (subCategory) =>
-                  _confirmDelete(context, subController, subCategory),
-            );
-          }),
-        ],
-      ),
+          return AllSubCategoryDataTable(
+            rows: rows,
+            onEdit: (subCategory) =>
+                _openEditDialog(context, subController, subCategory),
+            onDelete: (subCategory) =>
+                _confirmDelete(context, subController, subCategory),
+          );
+        }),
+      ],
     );
   }
 

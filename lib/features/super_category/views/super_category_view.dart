@@ -19,40 +19,37 @@ class SuperCategoryView extends StatelessWidget {
       SuperCategoryController(),
     );
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SearchField(
-            hintText: 'Search super categories...',
-            onChanged: (v) => controller.setSearchQuery(v),
-          ),
-          const SizedBox(height: 12),
-          ToolbarRow(
-            onAdd: () => _openCreateDialog(context, controller),
-            onRefresh: controller.getSuperCategories,
-            addText: 'Add Super Category',
-            refreshText: 'Refresh',
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            if (controller.isLoading.value) {
-              return const BuildProgressIndicator();
-            }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SearchField(
+          hintText: 'Search super categories...',
+          onChanged: (v) => controller.setSearchQuery(v),
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(
+          onAdd: () => _openCreateDialog(context, controller),
+          onRefresh: controller.getSuperCategories,
+          addText: 'Add Super Category',
+          refreshText: 'Refresh',
+        ),
+        const SizedBox(height: 16),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return const BuildProgressIndicator();
+          }
 
-            final filtered = controller.filteredSuperCategories;
+          final filtered = controller.filteredSuperCategories;
 
-            return SuperCategoryDataTable(
-              rows: filtered,
-              onEdit: (superCategory) =>
-                  _openEditDialog(context, controller, superCategory),
-              onDelete: (superCategory) =>
-                  _confirmDelete(context, controller, superCategory),
-            );
-          }),
-        ],
-      ),
+          return SuperCategoryDataTable(
+            rows: filtered,
+            onEdit: (superCategory) =>
+                _openEditDialog(context, controller, superCategory),
+            onDelete: (superCategory) =>
+                _confirmDelete(context, controller, superCategory),
+          );
+        }),
+      ],
     );
   }
 
