@@ -14,18 +14,22 @@ class OptionPackagingService {
     required int packagingId,
     required num pricePerUnit,
     required int stockQuantity,
-    required int colorId,
+    int? colorId,
   }) async {
     try {
+      final data = <String, dynamic>{
+        'product_option_id': productOptionId,
+        'packaging_id': packagingId,
+        'price_per_unit': pricePerUnit,
+        'stock_quantity': stockQuantity,
+      };
+      if (colorId != null) {
+        data['color_id'] = colorId;
+      }
+
       final response = await _dioClient.post(
         ApiEndpoint.createOptionPackaging,
-        data: {
-          'product_option_id': productOptionId,
-          'packaging_id': packagingId,
-          'price_per_unit': pricePerUnit,
-          'stock_quantity': stockQuantity,
-          'color_id': colorId,
-        },
+        data: data,
       );
 
       final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
@@ -60,18 +64,22 @@ class OptionPackagingService {
     required int packagingId,
     required num pricePerUnit,
     required int stockQuantity,
-    required int colorId,
+    int? colorId,
   }) async {
     try {
+      final data = <String, dynamic>{
+        'product_option_id': productOptionId,
+        'packaging_id': packagingId,
+        'price_per_unit': pricePerUnit,
+        'stock_quantity': stockQuantity,
+      };
+      if (colorId != null) {
+        data['color_id'] = colorId;
+      }
+
       final response = await _dioClient.put(
         ApiEndpoint.updateOptionPackaging(id),
-        data: {
-          'product_option_id': productOptionId,
-          'packaging_id': packagingId,
-          'price_per_unit': pricePerUnit,
-          'stock_quantity': stockQuantity,
-          'color_id': colorId,
-        },
+        data: data,
       );
 
       final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);

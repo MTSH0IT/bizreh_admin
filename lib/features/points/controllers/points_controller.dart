@@ -272,7 +272,7 @@ class PointsController extends GetxController {
       'max_points_per_user':
           int.tryParse(maxPointsPerUserController.text.trim()) ??
           maxPointsPerUserController.text.trim(),
-      'expiration_date': expirationDateController.text.trim(),
+      'expration_date': expirationDateController.text.trim(),
       'role_type': selectedRoleType.value,
       'is_active': selectedIsActive.value,
     };

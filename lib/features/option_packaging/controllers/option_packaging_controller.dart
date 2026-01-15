@@ -50,7 +50,7 @@ class OptionPackagingController extends GetxController {
     required int packagingId,
     required num pricePerUnit,
     required int stockQuantity,
-    required int colorId,
+    int? colorId,
   }) async {
     try {
       isSaving.value = true;

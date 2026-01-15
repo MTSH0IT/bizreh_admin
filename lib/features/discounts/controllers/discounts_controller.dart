@@ -277,7 +277,7 @@ class DiscountsController extends GetxController {
   }
 
   Future<void> createDiscount() async {
-    //if (!_validateForm()) return;
+    if (!_validateForm()) return;
 
     try {
       isCreating.value = true;

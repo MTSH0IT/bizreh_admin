@@ -180,12 +180,10 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
           onSubmit: () async {
             final price = num.tryParse(_priceController.text.trim());
             final stock = int.tryParse(_stockController.text.trim());
-            final colorId = widget.controller.selectedColorId.value;
+            final selectedColorId = widget.controller.selectedColorId.value;
+            final colorId = selectedColorId == 0 ? null : selectedColorId;
 
             if (price == null || stock == null) {
-              return;
-            }
-            if (colorId == 0) {
               return;
             }
 
