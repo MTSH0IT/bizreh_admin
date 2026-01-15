@@ -17,7 +17,7 @@ class BrandFormDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(isEditing ? 'Edit Brand' : 'Create Brand'),
       content: SizedBox(
-        width: 520,
+        width: 500,
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -59,9 +59,6 @@ class BrandFormDialog extends StatelessWidget {
               await controller.updateBrand();
             } else {
               await controller.createBrand();
-            }
-            if (context.mounted) {
-              Get.back();
             }
           },
           isBusy: () =>

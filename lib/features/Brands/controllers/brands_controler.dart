@@ -77,7 +77,8 @@ class BrandsController extends GetxController {
       );
       getBrands();
       clearForm();
-      //showMassage('Brand created successfully', true);
+      showMassage('Brand created successfully', true);
+      Get.back();
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in createBrand: ${e.message}');
@@ -110,8 +111,8 @@ class BrandsController extends GetxController {
       getBrands();
 
       clearForm();
-      //showMassage('Brand updated successfully', true);
-      //Get.back();
+      showMassage('Brand updated successfully', true);
+      Get.back();
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in updateBrand: ${e.message}');
