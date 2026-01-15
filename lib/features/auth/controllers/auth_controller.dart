@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/auth/models/auth_response.dart';
+import 'package:bizreh_admin/features/auth/views/login_view.dart';
 import 'package:bizreh_admin/features/main_view/views/main_view.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/auth_service.dart';
@@ -32,7 +33,7 @@ class AuthController extends GetxController {
     super.onClose();
   }
 
-  Future<void> login() async {
+  Future<void> login({required bool rememberMe}) async {
     isLoading.value = true;
     try {
       final AuthResponse res = await _authService.login(
@@ -40,8 +41,15 @@ class AuthController extends GetxController {
         password: loginPassword,
       );
       await _persistAuth(res);
-      await _storage.setString(StorageKey.email, loginEmail);
-      await _storage.setString(StorageKey.password, loginPassword);
+      if (rememberMe) {
+        await _storage.setBool(StorageKey.rememberMe, true);
+        await _storage.setString(StorageKey.email, loginEmail);
+        await _storage.setString(StorageKey.password, loginPassword);
+      } else {
+        await _storage.remove(StorageKey.rememberMe);
+        await _storage.remove(StorageKey.email);
+        await _storage.remove(StorageKey.password);
+      }
       Get.offAll(() => Mainview());
       clearCtrl();
       Get.snackbar(
@@ -63,6 +71,9 @@ class AuthController extends GetxController {
   Future<bool> tryAutoLogin() async {
     isLoading.value = true;
     try {
+      final remember = _storage.getBool(StorageKey.rememberMe) ?? false;
+      if (!remember) return false;
+
       final savedEmail = _storage.getString(StorageKey.email);
       final savedPassword = _storage.getString(StorageKey.password);
 
@@ -93,5 +104,21 @@ class AuthController extends GetxController {
   void clearCtrl() {
     loginEmailCtrl.clear();
     loginPasswordCtrl.clear();
+  }
+
+  Future<void> logout() async {
+    try {
+      token = null;
+      await _storage.remove(StorageKey.token);
+      await _storage.remove(StorageKey.user);
+      await _storage.remove(StorageKey.email);
+      await _storage.remove(StorageKey.password);
+      await _storage.remove(StorageKey.rememberMe);
+    } catch (e) {
+      log('AuthController logout error: $e');
+    } finally {
+      clearCtrl();
+      Get.offAll(() => const LoginView());
+    }
   }
 }

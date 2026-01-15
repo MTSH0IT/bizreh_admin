@@ -1,5 +1,6 @@
 import 'package:bizreh_admin/features/users/controllers/users_controller.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
+import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,60 +31,45 @@ class UserFormDialog extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: TextFormField(
+                        child: LabeledTextField(
+                          label: 'First Name',
+                          hint: 'Enter first name',
                           controller: controller.firstNameController,
-                          decoration: const InputDecoration(
-                            labelText: 'First Name',
-                            border: OutlineInputBorder(),
-                          ),
                         ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        child: TextFormField(
+                        child: LabeledTextField(
+                          label: 'Last Name',
+                          hint: 'Enter last name',
                           controller: controller.lastNameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Last Name',
-                            border: OutlineInputBorder(),
-                          ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  TextFormField(
+
+                  LabeledTextField(
+                    label: 'Email',
+                    hint: 'Enter email address',
                     controller: controller.emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      border: OutlineInputBorder(),
-                    ),
                     keyboardType: TextInputType.emailAddress,
                   ),
-                  const SizedBox(height: 16),
-                  TextFormField(
+
+                  LabeledTextField(
+                    label: 'Phone',
+                    hint: 'Enter phone number',
                     controller: controller.phoneController,
-                    decoration: const InputDecoration(
-                      labelText: 'Phone',
-                      border: OutlineInputBorder(),
-                    ),
                     keyboardType: TextInputType.phone,
                   ),
-                  const SizedBox(height: 16),
-                  Obx(() {
-                    final isBusy =
-                        controller.isCreating.value ||
-                        controller.isUpdating.value;
 
-                    return TextFormField(
+                  Obx(() {
+                    return LabeledTextField(
+                      label: controller.isEditing
+                          ? 'Password (leave empty to keep current)'
+                          : 'Password',
+                      hint: 'Enter password',
                       controller: controller.passwordController,
-                      decoration: InputDecoration(
-                        labelText: controller.isEditing
-                            ? 'Password (leave empty to keep current)'
-                            : 'Password',
-                        border: const OutlineInputBorder(),
-                      ),
                       obscureText: true,
-                      enabled: !isBusy,
                     );
                   }),
                 ],

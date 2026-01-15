@@ -22,7 +22,6 @@ class AdminSidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = <AdminSidebarItemData>[
-      const AdminSidebarItemData(title: 'Dashboard', icon: Icons.home_outlined),
       const AdminSidebarItemData(title: 'Users', icon: Icons.group_outlined),
       const AdminSidebarItemData(
         title: 'Brands',

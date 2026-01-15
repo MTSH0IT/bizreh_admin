@@ -77,52 +77,47 @@ class _MainviewState extends State<Mainview> {
   MainNavEntry _buildRootEntry(int selectedIndex) {
     switch (selectedIndex) {
       case 0:
-        return const MainNavEntry(
-          title: 'Dashboard',
-          page: _PlaceholderPage(title: 'Dashboard'),
-        );
-      case 1:
         return const MainNavEntry(title: 'Users', page: UsersView());
-      case 2:
+      case 1:
         return const MainNavEntry(title: 'Brands', page: BrandsView());
-      case 3:
+      case 2:
         return const MainNavEntry(
           title: 'Super Categories',
           page: SuperCategoryView(),
         );
-      case 4:
+      case 3:
         return const MainNavEntry(title: 'Categories', page: AllCategoryView());
-      case 5:
+      case 4:
         return const MainNavEntry(
           title: 'Sub Categories',
           page: AllSubCategoryView(),
         );
-      case 6:
+      case 5:
         return const MainNavEntry(title: 'Products', page: ProductsView());
-      case 7:
+      case 6:
         return const MainNavEntry(
           title: 'Color Family',
           page: ColorFamilyView(),
         );
-      case 8:
+      case 7:
         return const MainNavEntry(
           title: 'Top Selling',
           page: ProductTopSellingView(),
         );
-      case 9:
+      case 8:
         return const MainNavEntry(title: 'Packagings', page: PackagingsView());
-      case 10:
+      case 9:
         return const MainNavEntry(title: 'Drivers', page: DriversView());
-      case 11:
+      case 10:
         return const MainNavEntry(title: 'Cities', page: CitiesView());
-      case 12:
+      case 11:
         return const MainNavEntry(title: 'Suppliers', page: SuppliersView());
-      case 13:
+      case 12:
         return const MainNavEntry(title: 'Orders', page: OrdersView());
-      case 14:
+      case 13:
         return const MainNavEntry(title: 'Discounts', page: DiscountsView());
-      case 15:
-        return const MainNavEntry(title: 'Discounts', page: PointsView());
+      case 14:
+        return const MainNavEntry(title: 'Points', page: PointsView());
 
       default:
         return const MainNavEntry(

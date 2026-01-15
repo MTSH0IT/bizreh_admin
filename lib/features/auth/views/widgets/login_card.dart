@@ -82,7 +82,7 @@ class LoginCard extends StatelessWidget {
             () => LoginButton(
               onPressed: authController.isLoading.value
                   ? null
-                  : () => authController.login(),
+                  : () => authController.login(rememberMe: rememberMe.value),
               isLoading: authController.isLoading.value,
             ),
           ),

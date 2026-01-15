@@ -3,6 +3,7 @@ class StorageKey {
   static const String user = 'user';
   static const String email = 'email';
   static const String password = 'password';
+  static const String rememberMe = 'remember_me';
 }
 
 class JsonKey {

@@ -1,3 +1,4 @@
+import 'package:bizreh_admin/features/auth/controllers/auth_controller.dart';
 import 'package:bizreh_admin/features/profile/controllers/profile_controller.dart';
 import 'package:bizreh_admin/utils/func/date_format.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
@@ -10,6 +11,7 @@ class ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProfileController controller = Get.put(ProfileController());
+    final authController = Get.put(AuthController());
 
     return Obx(() {
       if (controller.isLoading.value) {
@@ -78,6 +80,16 @@ class ProfileView extends StatelessWidget {
                 onPressed: controller.getProfile,
                 icon: const Icon(Icons.refresh),
                 tooltip: 'Refresh',
+              ),
+              const SizedBox(width: 8),
+              ElevatedButton.icon(
+                onPressed: () => authController.logout(),
+                icon: const Icon(Icons.logout),
+                label: const Text('تسجيل الخروج'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                ),
               ),
             ],
           ),

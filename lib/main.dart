@@ -1,4 +1,7 @@
 import 'package:bizreh_admin/features/auth/views/login_view.dart';
+import 'package:bizreh_admin/features/auth/controllers/auth_controller.dart';
+import 'package:bizreh_admin/features/main_view/views/main_view.dart';
+import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bizreh_admin/utils/storageService/storage_service.dart';
@@ -15,8 +18,42 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: const LoginView(),
+      home: const _RootDecider(),
       debugShowCheckedModeBanner: false,
     );
+  }
+}
+
+class _RootDecider extends StatefulWidget {
+  const _RootDecider();
+
+  @override
+  State<_RootDecider> createState() => _RootDeciderState();
+}
+
+class _RootDeciderState extends State<_RootDecider> {
+  late final AuthController _authController;
+
+  @override
+  void initState() {
+    super.initState();
+    _authController = Get.put(AuthController());
+    _attemptAutoLogin();
+  }
+
+  Future<void> _attemptAutoLogin() async {
+    final success = await _authController.tryAutoLogin();
+    if (!mounted) return;
+
+    if (success) {
+      Get.offAll(() => Mainview());
+    } else {
+      Get.offAll(() => const LoginView());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(body: BuildProgressIndicator());
   }
 }

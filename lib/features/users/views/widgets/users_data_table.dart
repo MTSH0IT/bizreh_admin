@@ -82,6 +82,7 @@ class UsersDataTable extends StatelessWidget {
           DataCell(
             IconButton(
               icon: const Icon(Icons.notifications),
+              color: Colors.grey,
               tooltip: 'Send notification',
               onPressed: onSendNotification == null
                   ? null
