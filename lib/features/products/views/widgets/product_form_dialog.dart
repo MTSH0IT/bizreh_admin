@@ -159,9 +159,6 @@ class ProductFormDialog extends StatelessWidget {
             } else {
               await controller.createProduct();
             }
-            if (context.mounted) {
-              Get.back();
-            }
           },
           isBusy: () =>
               controller.isCreating.value || controller.isUpdating.value,

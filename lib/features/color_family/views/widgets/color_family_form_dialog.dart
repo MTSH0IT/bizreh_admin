@@ -53,9 +53,6 @@ class ColorFamilyFormDialog extends StatelessWidget {
             } else {
               await controller.createColor();
             }
-            if (context.mounted) {
-              Get.back();
-            }
           },
           isBusy: () =>
               controller.isCreating.value || controller.isUpdating.value,

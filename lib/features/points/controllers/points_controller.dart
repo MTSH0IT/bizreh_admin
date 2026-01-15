@@ -298,6 +298,8 @@ class PointsController extends GetxController {
       await _pointsService.createPointsOffer(body: _buildBody());
       await getPointsOffers();
       clearForm();
+      Get.back();
+      showMassage('Points offer created successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in createPointsOffer: ${e.message}');
@@ -322,6 +324,8 @@ class PointsController extends GetxController {
       );
       await getPointsOffers();
       clearForm();
+      Get.back();
+      showMassage('Points offer updated successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in updatePointsOffer: ${e.message}');

@@ -62,6 +62,8 @@ class CitiesController extends GetxController {
       );
       await getCities();
       clearForm();
+      Get.back();
+      showMassage('City created successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in createCity: ${e.message}');
@@ -87,6 +89,8 @@ class CitiesController extends GetxController {
       );
       await getCities();
       clearForm();
+      Get.back();
+      showMassage('City updated successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in updateCity: ${e.message}');

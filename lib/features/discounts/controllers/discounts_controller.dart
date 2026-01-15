@@ -284,6 +284,8 @@ class DiscountsController extends GetxController {
       await _discountsService.createDiscount(body: _buildBody());
       await getDiscounts();
       clearForm();
+      Get.back();
+      showMassage('Discount created successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in createDiscount: ${e.message}');
@@ -308,6 +310,8 @@ class DiscountsController extends GetxController {
       );
       await getDiscounts();
       clearForm();
+      Get.back();
+      showMassage('Discount updated successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in updateDiscount: ${e.message}');

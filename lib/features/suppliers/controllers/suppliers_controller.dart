@@ -96,6 +96,8 @@ class SuppliersController extends GetxController {
       );
       await getSuppliers();
       clearForm();
+      Get.back();
+      showMassage('Supplier created successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in createSupplier: ${e.message}');
@@ -123,6 +125,8 @@ class SuppliersController extends GetxController {
       );
       await getSuppliers();
       clearForm();
+      Get.back();
+      showMassage('Supplier updated successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in updateSupplier: ${e.message}');

@@ -62,6 +62,8 @@ class PackagingController extends GetxController {
       );
       await getPackagings();
       clearForm();
+      Get.back();
+      showMassage('Packaging created successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in createPackaging: ${e.message}');
@@ -87,6 +89,8 @@ class PackagingController extends GetxController {
       );
       await getPackagings();
       clearForm();
+      Get.back();
+      showMassage('Packaging updated successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in updatePackaging: ${e.message}');

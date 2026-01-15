@@ -65,6 +65,8 @@ class ColorFamilyController extends GetxController {
       );
       await getColors();
       clearForm();
+      Get.back();
+      showMassage('Color created successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in createColor: ${e.message}');
@@ -91,6 +93,8 @@ class ColorFamilyController extends GetxController {
       );
       await getColors();
       clearForm();
+      Get.back();
+      showMassage('Color updated successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in updateColor: ${e.message}');

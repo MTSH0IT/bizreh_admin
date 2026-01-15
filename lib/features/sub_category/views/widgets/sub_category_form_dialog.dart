@@ -60,9 +60,6 @@ class SubCategoryFormDialog extends StatelessWidget {
             } else {
               await controller.createSubCategory();
             }
-            if (context.mounted) {
-              Get.back();
-            }
           },
           isBusy: () =>
               controller.isCreating.value || controller.isUpdating.value,

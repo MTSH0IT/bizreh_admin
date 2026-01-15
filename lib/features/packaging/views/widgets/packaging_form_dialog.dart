@@ -47,9 +47,6 @@ class PackagingFormDialog extends StatelessWidget {
             } else {
               await controller.createPackaging();
             }
-            if (context.mounted) {
-              Get.back();
-            }
           },
           isBusy: () =>
               controller.isCreating.value || controller.isUpdating.value,

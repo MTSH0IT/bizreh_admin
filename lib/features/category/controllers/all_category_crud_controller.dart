@@ -175,6 +175,8 @@ class AllCategoryCrudController extends GetxController {
 
       await getAllCategories();
       clearForm();
+      Get.back();
+      showMassage('Category created successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in createCategory: ${e.message}');
@@ -204,9 +206,10 @@ class AllCategoryCrudController extends GetxController {
             ? selectedImagePath.value
             : null,
       );
-
       await getAllCategories();
       clearForm();
+      Get.back();
+      showMassage('Category updated successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in updateCategory: ${e.message}');

@@ -111,6 +111,8 @@ class DriversController extends GetxController {
 
       await getDrivers();
       clearForm();
+      Get.back();
+      showMassage('Driver created successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in createDriver: ${e.message}');

@@ -96,6 +96,8 @@ class SubCategoryController extends GetxController {
 
       await getSubCategories(selectedCategoryId.value);
       clearForm();
+      Get.back();
+      showMassage('Sub category created successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in createSubCategory: ${e.message}');
@@ -129,6 +131,8 @@ class SubCategoryController extends GetxController {
 
       await getSubCategories(selectedCategoryId.value);
       clearForm();
+      Get.back();
+      showMassage('Sub category updated successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in updateSubCategory: ${e.message}');

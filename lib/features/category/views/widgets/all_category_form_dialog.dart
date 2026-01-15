@@ -90,9 +90,6 @@ class AllCategoryFormDialog extends StatelessWidget {
             } else {
               await controller.createCategory();
             }
-            if (context.mounted) {
-              Get.back();
-            }
           },
           isBusy: () =>
               controller.isCreating.value || controller.isUpdating.value,

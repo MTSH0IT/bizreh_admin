@@ -124,6 +124,8 @@ class ProductsController extends GetxController {
 
       await getProducts();
       clearForm();
+      Get.back();
+      showMassage('Product created successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in createProduct: ${e.message}');
@@ -160,6 +162,8 @@ class ProductsController extends GetxController {
 
       await getProducts();
       clearForm();
+      Get.back();
+      showMassage('Product updated successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in updateProduct: ${e.message}');

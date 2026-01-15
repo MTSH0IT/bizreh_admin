@@ -78,7 +78,8 @@ class SuperCategoryController extends GetxController {
       );
       getSuperCategories();
       clearForm();
-      //showMassage('Super category created successfully', true);
+      Get.back();
+      showMassage('Super category created successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in createSuperCategory: ${e.message}');
@@ -109,6 +110,7 @@ class SuperCategoryController extends GetxController {
       getSuperCategories();
 
       clearForm();
+      Get.back();
       showMassage('Super category updated successfully', true);
     } on AppException catch (e) {
       showMassage(e.message, false);

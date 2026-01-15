@@ -233,9 +233,6 @@ class PointFormDialog extends StatelessWidget {
             } else {
               await controller.createPointsOffer();
             }
-            if (context.mounted) {
-              Get.back();
-            }
           },
           isBusy: () =>
               controller.isCreating.value || controller.isUpdating.value,

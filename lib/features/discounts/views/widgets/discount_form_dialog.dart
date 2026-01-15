@@ -225,9 +225,6 @@ class DiscountFormDialog extends StatelessWidget {
             } else {
               await controller.createDiscount();
             }
-            if (context.mounted) {
-              Get.back();
-            }
           },
           isBusy: () =>
               controller.isCreating.value || controller.isUpdating.value,

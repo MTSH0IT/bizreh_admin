@@ -138,9 +138,6 @@ class DriverFormDialog extends StatelessWidget {
                 : () async {
                     try {
                       await controller.createDriver();
-                      if (context.mounted) {
-                        Get.back();
-                      }
                     } catch (_) {}
                   },
             child: busy

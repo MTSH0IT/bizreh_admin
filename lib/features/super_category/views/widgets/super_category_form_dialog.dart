@@ -17,7 +17,7 @@ class SuperCategoryFormDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(isEditing ? 'Edit Super Category' : 'Create Super Category'),
       content: SizedBox(
-        width: 520,
+        width: 500,
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -56,9 +56,6 @@ class SuperCategoryFormDialog extends StatelessWidget {
               await controller.updateSuperCategory();
             } else {
               await controller.createSuperCategory();
-            }
-            if (context.mounted) {
-              Get.back();
             }
           },
           isBusy: () =>

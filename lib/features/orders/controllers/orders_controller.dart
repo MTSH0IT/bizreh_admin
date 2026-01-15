@@ -101,6 +101,7 @@ class OrdersController extends GetxController {
       await getOrders();
       showMassage('Driver assigned successfully', true);
       selectedDriverId.value = 0;
+      Get.back();
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in assignDriverToOrder: ${e.message}');

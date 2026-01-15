@@ -148,6 +148,7 @@ class ProductOptionsController extends GetxController {
             : null,
       );
 
+      Get.back();
       showMassage('Option created successfully', true);
       clearForm();
       await reloadFromServer();
@@ -179,6 +180,7 @@ class ProductOptionsController extends GetxController {
             : null,
       );
 
+      Get.back();
       showMassage('Option updated successfully', true);
       clearForm();
       await reloadFromServer();

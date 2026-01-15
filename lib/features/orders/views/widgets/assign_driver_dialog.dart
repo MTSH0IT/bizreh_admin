@@ -66,9 +66,6 @@ class AssignDriverDialog extends StatelessWidget {
                 ? null
                 : () async {
                     await controller.assignDriverToOrder(orderId: orderId);
-                    if (context.mounted) {
-                      Get.back();
-                    }
                   },
             child: busy
                 ? const BuildProgressIndicator(

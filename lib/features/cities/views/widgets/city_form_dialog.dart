@@ -47,9 +47,6 @@ class CityFormDialog extends StatelessWidget {
             } else {
               await controller.createCity();
             }
-            if (context.mounted) {
-              Get.back();
-            }
           },
           isBusy: () =>
               controller.isCreating.value || controller.isUpdating.value,
