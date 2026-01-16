@@ -46,22 +46,22 @@ class AdminTopBar extends StatelessWidget {
             );
           }),
           const Spacer(),
-          SizedBox(
-            width: 260,
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: hintText,
-                prefixIcon: const Icon(Icons.search),
-                isDense: true,
-                filled: true,
-                fillColor: const Color(0xFFF3F4F6),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-          ),
+          // SizedBox(
+          //   width: 260,
+          //   child: TextField(
+          //     decoration: InputDecoration(
+          //       hintText: hintText,
+          //       prefixIcon: const Icon(Icons.search),
+          //       isDense: true,
+          //       filled: true,
+          //       fillColor: const Color(0xFFF3F4F6),
+          //       border: OutlineInputBorder(
+          //         borderRadius: BorderRadius.circular(12),
+          //         borderSide: BorderSide.none,
+          //       ),
+          //     ),
+          //   ),
+          // ),
           const SizedBox(width: 12),
           IconButton(
             onPressed: () {},

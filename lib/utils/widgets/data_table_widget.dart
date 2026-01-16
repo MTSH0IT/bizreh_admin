@@ -65,7 +65,7 @@ class DataTableWidget<T> extends StatelessWidget {
             dataRowMinHeight: dataRowMinHeight,
             dataRowMaxHeight: dataRowMaxHeight,
             columnSpacing: 12,
-            horizontalMargin: 32,
+            horizontalMargin: 24,
             columns: [
               ...columns,
               if (showActions && (onEdit != null || onDelete != null))
@@ -76,8 +76,9 @@ class DataTableWidget<T> extends StatelessWidget {
                   ),
                 ),
             ],
-            rows: rows.map((item) {
-              final index = rows.indexOf(item);
+            rows: rows.asMap().entries.map((entry) {
+              final index = entry.key;
+              final item = entry.value;
               final cells = buildCells(item, index);
 
               return DataRow.byIndex(
