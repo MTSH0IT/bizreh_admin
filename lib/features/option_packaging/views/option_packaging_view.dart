@@ -98,7 +98,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
           }),
           const SizedBox(height: 24),
           const Text(
-            'Option × Packaging Matrix',
+            'Option Packaging Matrix',
             style: TextStyle(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 12),

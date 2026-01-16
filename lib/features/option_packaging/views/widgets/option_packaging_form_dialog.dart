@@ -3,6 +3,7 @@ import 'package:bizreh_admin/features/packaging/models/package_model.dart'
     as package_model;
 import 'package:bizreh_admin/features/products/models/product_model/option.dart';
 import 'package:bizreh_admin/utils/func/color_degree.dart';
+import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/color_dot.dart';
 import 'package:bizreh_admin/utils/widgets/form_dialog_actions.dart';
@@ -57,7 +58,7 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
       if (currentColorId != null && currentColorId > 0) {
         widget.controller.setSelectedColorId(currentColorId);
       } else {
-        widget.controller.setSelectedColorId(0);
+        widget.controller.setSelectedColorId(null);
       }
       if (widget.controller.colors.isEmpty &&
           !widget.controller.isColorsLoading.value) {
@@ -103,34 +104,34 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
             const SizedBox(height: 12),
             Obx(() {
               final loading = widget.controller.isColorsLoading.value;
-              final items = widget.controller.colors
-                  .where((c) => c.id != null)
-                  .map(
-                    (c) => DropdownMenuItem<int>(
-                      value: c.id!,
-                      child: Row(
-                        children: [
-                          ColorDot(
-                            size: 18,
-                            color: parseColorDegree(c.colorDegree),
-                            selected: false,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              c.name ?? c.arName ?? 'Color #${c.id!}',
-                              overflow: TextOverflow.ellipsis,
+              final items = <DropdownMenuItem<int>>[
+                const DropdownMenuItem(value: null, child: Text('No color')),
+                ...widget.controller.colors
+                    .where((c) => c.id != null)
+                    .map(
+                      (c) => DropdownMenuItem<int>(
+                        value: c.id!,
+                        child: Row(
+                          children: [
+                            ColorDot(
+                              size: 18,
+                              color: parseColorDegree(c.colorDegree),
+                              selected: false,
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                c.name ?? c.arName ?? 'Color #${c.id!}',
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  )
-                  .toList();
+              ];
 
-              final selected = widget.controller.selectedColorId.value == 0
-                  ? null
-                  : widget.controller.selectedColorId.value;
+              final selected = widget.controller.selectedColorId.value;
 
               return LoadingDropdownFormField2<int>(
                 isLoading: loading,
@@ -161,7 +162,6 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
                       if (widget.onSaved != null) {
                         await widget.onSaved!();
                       }
-                      // Get.back();
                     },
               style: TextButton.styleFrom(foregroundColor: Colors.red),
               child: widget.controller.isDeleting.value
@@ -199,8 +199,6 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
             if (widget.onSaved != null) {
               await widget.onSaved!();
             }
-
-            // Get.back();
           },
           isBusy: () => widget.controller.isSaving.value,
           submitText: isEditing ? 'Update' : 'Create',

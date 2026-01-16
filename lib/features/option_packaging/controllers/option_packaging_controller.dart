@@ -44,6 +44,33 @@ class OptionPackagingController extends GetxController {
     selectedColorId.value = id ?? 0;
   }
 
+  bool validateMappingInputs({
+    required num? pricePerUnit,
+    required int? stockQuantity,
+  }) {
+    if (pricePerUnit == null) {
+      showMassage('Please enter a valid price', false);
+      return false;
+    }
+
+    if (pricePerUnit <= 0) {
+      showMassage('Price must be greater than 0', false);
+      return false;
+    }
+
+    if (stockQuantity == null) {
+      showMassage('Please enter a valid stock quantity', false);
+      return false;
+    }
+
+    if (stockQuantity < 0) {
+      showMassage('Stock quantity cannot be negative', false);
+      return false;
+    }
+
+    return true;
+  }
+
   Future<void> saveMapping({
     int? mappingId,
     required int productOptionId,
@@ -52,6 +79,13 @@ class OptionPackagingController extends GetxController {
     required int stockQuantity,
     int? colorId,
   }) async {
+    if (!validateMappingInputs(
+      pricePerUnit: pricePerUnit,
+      stockQuantity: stockQuantity,
+    )) {
+      return;
+    }
+
     try {
       isSaving.value = true;
 
