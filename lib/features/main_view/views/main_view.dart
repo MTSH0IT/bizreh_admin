@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:bizreh_admin/features/Brands/views/brands_view.dart';
 import 'package:bizreh_admin/features/Driver/views/drivers_view.dart';
 import 'package:bizreh_admin/features/category/views/all_category_view.dart';
 import 'package:bizreh_admin/features/color_family/views/color_family_view.dart';
 import 'package:bizreh_admin/features/discounts/views/discounts_view.dart';
+import 'package:bizreh_admin/features/gifts/views/gifts_view.dart';
 import 'package:bizreh_admin/features/main_view/views/widgets/admin_topbar.dart';
 import 'package:bizreh_admin/features/orders/views/orders_view.dart';
 import 'package:bizreh_admin/features/packaging/views/packagings_view.dart';
@@ -55,12 +58,23 @@ class _MainviewState extends State<Mainview> {
                 children: [
                   const AdminTopBar(),
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 1100),
-                          child: Obx(() => _nav.current),
+                    child: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context).copyWith(
+                        dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse,
+                          PointerDeviceKind.trackpad,
+                        },
+                        scrollbars: true,
+                      ),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Padding(
+                          padding: const EdgeInsets.all(24),
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 1200),
+                            child: Obx(() => _nav.current),
+                          ),
                         ),
                       ),
                     ),
@@ -118,6 +132,8 @@ class _MainviewState extends State<Mainview> {
         return const MainNavEntry(title: 'Discounts', page: DiscountsView());
       case 14:
         return const MainNavEntry(title: 'Points', page: PointsView());
+      case 15:
+        return const MainNavEntry(title: 'Gifts', page: GiftsView());
 
       default:
         return const MainNavEntry(

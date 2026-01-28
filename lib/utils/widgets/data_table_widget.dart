@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bizreh_admin/utils/consts/colors.dart';
 import 'package:bizreh_admin/utils/widgets/image_network.dart';
 import 'package:bizreh_admin/utils/func/date_format.dart';
@@ -15,6 +17,8 @@ class DataTableWidget<T> extends StatelessWidget {
   final double headingRowHeight;
   final double dataRowMinHeight;
   final double dataRowMaxHeight;
+  final double columnSpacing;
+  final double horizontalMargin;
 
   const DataTableWidget({
     super.key,
@@ -28,6 +32,8 @@ class DataTableWidget<T> extends StatelessWidget {
     this.headingRowHeight = 52,
     this.dataRowMinHeight = 60,
     this.dataRowMaxHeight = 72,
+    this.columnSpacing = 16,
+    this.horizontalMargin = 16,
   });
 
   @override
@@ -58,58 +64,74 @@ class DataTableWidget<T> extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: DataTable(
-            headingRowHeight: headingRowHeight,
-            dataRowMinHeight: dataRowMinHeight,
-            dataRowMaxHeight: dataRowMaxHeight,
-            columnSpacing: 12,
-            horizontalMargin: 24,
-            columns: [
-              ...columns,
-              if (showActions && (onEdit != null || onDelete != null))
-                const DataColumn(
-                  label: Text(
-                    'Actions',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-            ],
-            rows: rows.asMap().entries.map((entry) {
-              final index = entry.key;
-              final item = entry.value;
-              final cells = buildCells(item, index);
-
-              return DataRow.byIndex(
-                index: index,
-                cells: [
-                  ...cells,
+        child: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(
+            dragDevices: {
+              PointerDeviceKind.touch,
+              PointerDeviceKind.mouse,
+              PointerDeviceKind.trackpad,
+            },
+            scrollbars: true,
+          ),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: 1200,
+              child: DataTable(
+                headingRowHeight: headingRowHeight,
+                dataRowMinHeight: dataRowMinHeight,
+                dataRowMaxHeight: dataRowMaxHeight,
+                columnSpacing: columnSpacing,
+                horizontalMargin: horizontalMargin,
+                columns: [
+                  ...columns,
                   if (showActions && (onEdit != null || onDelete != null))
-                    DataCell(
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (onEdit != null)
-                            IconButton(
-                              onPressed: () => onEdit!(item),
-                              icon: const Icon(Icons.edit, size: 16),
-                              color: kprimaryColor,
-                              tooltip: 'Edit',
-                            ),
-                          if (onDelete != null)
-                            IconButton(
-                              onPressed: () => onDelete!(item),
-                              icon: const Icon(Icons.delete_outline, size: 16),
-                              color: Colors.red,
-                              tooltip: 'Delete',
-                            ),
-                        ],
+                    const DataColumn(
+                      label: Text(
+                        'Actions',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
                 ],
-              );
-            }).toList(),
+                rows: rows.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final item = entry.value;
+                  final cells = buildCells(item, index);
+
+                  return DataRow.byIndex(
+                    index: index,
+                    cells: [
+                      ...cells,
+                      if (showActions && (onEdit != null || onDelete != null))
+                        DataCell(
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (onEdit != null)
+                                IconButton(
+                                  onPressed: () => onEdit!(item),
+                                  icon: const Icon(Icons.edit, size: 16),
+                                  color: kprimaryColor,
+                                  tooltip: 'Edit',
+                                ),
+                              if (onDelete != null)
+                                IconButton(
+                                  onPressed: () => onDelete!(item),
+                                  icon: const Icon(
+                                    Icons.delete_outline,
+                                    size: 16,
+                                  ),
+                                  color: Colors.red,
+                                  tooltip: 'Delete',
+                                ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  );
+                }).toList(),
+              ),
+            ),
           ),
         ),
       ),
@@ -139,19 +161,20 @@ class DataTableImageCell extends StatelessWidget {
     return SizedBox(
       width: width ?? defaultSize,
       height: height ?? defaultSize,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
-        child: imageUrl == null || imageUrl!.isEmpty
-            ? ColoredBox(
-                color: const Color(0xFFF3F4F6),
-                child: Icon(
-                  Icons.image_not_supported,
-                  color: Colors.grey[400],
-                  size: (width ?? height ?? 54) * 0.5,
-                ),
-              )
-            : ImageNetwork(image: imageUrl!),
-      ),
+      child: ImageNetwork(image: imageUrl ?? ''),
+      // ClipRRect(
+      //   borderRadius: BorderRadius.circular(borderRadius),
+      //   child: imageUrl == null || imageUrl!.isEmpty
+      //       ? ColoredBox(
+      //           color: const Color(0xFFF3F4F6),
+      //   child: Icon(
+      //     Icons.image_not_supported,
+      //     color: Colors.grey[400],
+      //     size: (width ?? height ?? 54) * 0.5,
+      //   ),
+      // )
+      // : ImageNetwork(image: imageUrl!),
+      // ),
     );
   }
 }
