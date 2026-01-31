@@ -32,8 +32,8 @@ class DataTableWidget<T> extends StatelessWidget {
     this.headingRowHeight = 52,
     this.dataRowMinHeight = 60,
     this.dataRowMaxHeight = 72,
-    this.columnSpacing = 16,
-    this.horizontalMargin = 16,
+    this.columnSpacing = 8,
+    this.horizontalMargin = 8,
   });
 
   @override
@@ -76,7 +76,7 @@ class DataTableWidget<T> extends StatelessWidget {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: SizedBox(
-              width: 1200,
+              width: 1100,
               child: DataTable(
                 headingRowHeight: headingRowHeight,
                 dataRowMinHeight: dataRowMinHeight,

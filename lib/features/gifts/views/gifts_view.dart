@@ -1,7 +1,9 @@
 import 'package:bizreh_admin/features/gifts/controllers/gifts_controller.dart';
 import 'package:bizreh_admin/features/gifts/models/gifts_model.dart';
+import 'package:bizreh_admin/features/gifts/views/user_gifts_view.dart';
 import 'package:bizreh_admin/features/gifts/views/widgets/gift_form_dialog.dart';
 import 'package:bizreh_admin/features/gifts/views/widgets/gifts_data_table.dart';
+import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
@@ -16,6 +18,7 @@ class GiftsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GiftsController controller = Get.put(GiftsController());
+    final MainNavController nav = Get.find<MainNavController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,6 +33,20 @@ class GiftsView extends StatelessWidget {
           onRefresh: controller.getGifts,
           addText: 'Add Gift',
           refreshText: 'Refresh',
+          extraActions: [
+            OutlinedButton.icon(
+              onPressed: () {
+                nav.push(
+                  const MainNavEntry(
+                    title: 'User Gifts',
+                    page: UserGiftsView(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.card_giftcard_outlined),
+              label: const Text('User Gifts'),
+            ),
+          ],
         ),
         const SizedBox(height: 16),
         Obx(() {
