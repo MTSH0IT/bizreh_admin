@@ -43,24 +43,6 @@ class SubCategoryController extends GetxController {
     super.onClose();
   }
 
-  // تحميل كل الـ SubCategories
-  Future<void> getAllSubCategories() async {
-    try {
-      isLoading.value = true;
-
-      final fetched = await _subCategoryService.getAllSubCategories();
-      allSubCategories.assignAll(fetched);
-    } on AppException catch (e) {
-      showMassage(e.message, false);
-      log('AppException in getAllSubCategories: ${e.message}');
-    } catch (e) {
-      showMassage('Failed to load all sub categories', false);
-      log('Error in getAllSubCategories: $e');
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
   // تحميل الـ SubCategories الخاصة بـ Category معين
   Future<void> getSubCategories(int categoryId) async {
     try {
