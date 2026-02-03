@@ -1,16 +1,18 @@
 import 'dart:developer';
 
-import 'package:bizreh_admin/features/products/controllers/products_controller.dart';
 import 'package:bizreh_admin/features/products/models/product_model/option.dart';
 import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/products_option_service.dart';
+import 'package:bizreh_admin/services/products_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProductOptionsController extends GetxController {
   final ProductsOptionService _service = ProductsOptionService();
+  final ProductsService productsService = ProductsService();
+
   final ProductModel product;
 
   ProductOptionsController({required this.product});
@@ -55,22 +57,9 @@ class ProductOptionsController extends GetxController {
     try {
       isReloading.value = true;
 
-      if (!Get.isRegistered<ProductsController>()) {
-        loadFromProduct();
-        return;
-      }
-
-      final ProductsController productsController =
-          Get.find<ProductsController>();
-      await productsController.getProducts();
-
-      ProductModel? updated;
-      for (final p in productsController.products) {
-        if (p.id == productId) {
-          updated = p;
-          break;
-        }
-      }
+      final ProductModel? updated = await productsService.getProductById(
+        productId,
+      );
 
       if (updated?.options != null) {
         product.options = updated!.options;

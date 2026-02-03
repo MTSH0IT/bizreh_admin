@@ -1,8 +1,7 @@
 import 'package:bizreh_admin/features/option_packaging/controllers/option_packaging_controller.dart';
 import 'package:bizreh_admin/features/option_packaging/controllers/product_options_controller.dart';
 import 'package:bizreh_admin/features/packaging/controllers/packaging_controller.dart';
-import 'package:bizreh_admin/features/packaging/models/package_model.dart'
-    as package_model;
+import 'package:bizreh_admin/features/packaging/models/package_model.dart';
 import 'package:bizreh_admin/features/products/models/product_model/option.dart';
 import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
@@ -49,6 +48,9 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
     }
 
     optionPackagingController = Get.put(OptionPackagingController());
+    optionPackagingController.onSaved = () async {
+      await optionsController.reloadFromServer();
+    };
   }
 
   @override
@@ -61,83 +63,84 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 12),
-          ToolbarRow(
-            onAdd: () => _openOptionFormDialog(context),
-            onRefresh: () async {
-              optionsController.loadFromProduct();
-              await optionsController.reloadFromServer();
-              await packagingController.getPackagings();
-            },
-            addText: 'Add Option',
-            refreshText: 'Reload',
-          ),
-          const SizedBox(height: 16),
-          Obx(() {
-            final rows = optionsController.options.toList();
+    return Obx(() {
+      if (packagingController.isLoading.value ||
+          optionsController.isReloading.value) {
+        return const BuildProgressIndicator();
+      }
 
-            return OptionsDataTable(
-              rows: rows,
-              onEdit: (opt) {
-                optionsController.setOptionForEdit(opt);
-                _openOptionFormDialog(context);
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: const Color(0xFFE5E7EB)),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 12),
+            ToolbarRow(
+              onAdd: () => _openOptionFormDialog(context),
+              onRefresh: () async {
+                await optionsController.reloadFromServer();
+                await packagingController.getPackagings();
               },
-              onDelete: (opt) => _confirmDelete(context, opt),
-            );
-          }),
-          const SizedBox(height: 24),
-          const Text(
-            'Option Packaging Matrix',
-            style: TextStyle(fontWeight: FontWeight.w800),
-          ),
-          const SizedBox(height: 12),
-          Obx(() {
-            if (packagingController.isLoading.value ||
-                optionsController.isReloading.value) {
-              return const BuildProgressIndicator();
-            }
+              addText: 'Add Option',
+              refreshText: 'Reload',
+            ),
+            const SizedBox(height: 16),
+            Obx(() {
+              final rows = optionsController.options.toList();
 
-            final options = optionsController.options.toList();
-            final packagings = packagingController.packagings.toList();
+              return OptionsDataTable(
+                rows: rows,
+                onEdit: (opt) {
+                  optionsController.setOptionForEdit(opt);
+                  _openOptionFormDialog(context);
+                },
+                onDelete: (opt) => _confirmDelete(context, opt),
+              );
+            }),
+            const SizedBox(height: 24),
+            const Text(
+              'Option Packaging Matrix',
+              style: TextStyle(fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 12),
+            Obx(() {
+              final options = optionsController.options.toList();
+              final packagings = packagingController.packagings.toList();
 
-            return OptionsPackagingMatrixTable(
-              options: options,
-              packagings: packagings,
-              onCellTap:
-                  (
-                    Option opt,
-                    package_model.PackageModel pkg,
-                    int? mappingId,
-                    int? price,
-                    int? stock,
-                    int? colorId,
-                  ) {
-                    _openMatrixCellDialog(
-                      context,
-                      opt,
-                      pkg,
-                      mappingId,
-                      price,
-                      stock,
-                      colorId,
-                    );
-                  },
-            );
-          }),
-        ],
-      ),
-    );
+              return OptionsPackagingMatrixTable(
+                options: options,
+                packagings: packagings,
+                onCellTap:
+                    (
+                      Option opt,
+                      PackageModel pkg,
+                      int? mappingId,
+                      int? price,
+                      int? stock,
+                      int? colorId,
+                    ) {
+                      _openMatrixCellDialog(
+                        context,
+                        opt,
+                        pkg,
+                        mappingId,
+                        price,
+                        stock,
+                        colorId,
+                      );
+                    },
+              );
+            }),
+          ],
+        ),
+      );
+    });
   }
 
   void _openOptionFormDialog(BuildContext context) {
@@ -164,7 +167,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
   Future<void> _openMatrixCellDialog(
     BuildContext context,
     Option option,
-    package_model.PackageModel packaging,
+    PackageModel packaging,
     int? mappingId,
     int? currentPrice,
     int? currentStock,
@@ -179,9 +182,6 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
         initialPrice: currentPrice,
         initialStock: currentStock,
         initialColorId: currentColorId,
-        onSaved: () async {
-          await optionsController.reloadFromServer();
-        },
       ),
     );
   }

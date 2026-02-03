@@ -70,10 +70,7 @@ class CategoryDataTable extends StatelessWidget {
                 Get.find<MainNavController>().push(
                   MainNavEntry(
                     title: category.title ?? 'Sub Categories',
-                    page: SubCategoryView(
-                      categoryId: category.id,
-                      categoryTitle: category.title,
-                    ),
+                    page: SubCategoryView(categoryId: category.id),
                   ),
                 );
               },

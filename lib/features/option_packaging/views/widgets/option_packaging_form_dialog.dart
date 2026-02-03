@@ -1,6 +1,5 @@
 import 'package:bizreh_admin/features/option_packaging/controllers/option_packaging_controller.dart';
-import 'package:bizreh_admin/features/packaging/models/package_model.dart'
-    as package_model;
+import 'package:bizreh_admin/features/packaging/models/package_model.dart';
 import 'package:bizreh_admin/features/products/models/product_model/option.dart';
 import 'package:bizreh_admin/utils/func/color_degree.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
@@ -14,12 +13,11 @@ import 'package:get/get.dart';
 class OptionPackagingFormDialog extends StatefulWidget {
   final OptionPackagingController controller;
   final Option option;
-  final package_model.PackageModel packaging;
+  final PackageModel packaging;
   final int? mappingId;
   final int? initialPrice;
   final int? initialStock;
   final int? initialColorId;
-  final Future<void> Function()? onSaved;
 
   const OptionPackagingFormDialog({
     super.key,
@@ -30,7 +28,6 @@ class OptionPackagingFormDialog extends StatefulWidget {
     this.initialPrice,
     this.initialStock,
     this.initialColorId,
-    this.onSaved,
   });
 
   @override
@@ -158,9 +155,6 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
                       final id = widget.mappingId;
                       if (id == null) return;
                       await widget.controller.deleteMapping(id);
-                      if (widget.onSaved != null) {
-                        await widget.onSaved!();
-                      }
                     },
               style: TextButton.styleFrom(foregroundColor: Colors.red),
               child: widget.controller.isDeleting.value
@@ -194,10 +188,6 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
               stockQuantity: stock,
               colorId: colorId,
             );
-
-            if (widget.onSaved != null) {
-              await widget.onSaved!();
-            }
           },
           isBusy: () => widget.controller.isSaving.value,
           submitText: isEditing ? 'Update' : 'Create',

@@ -5,6 +5,7 @@ import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/color_servise.dart';
 import 'package:bizreh_admin/services/option_packaging_servise.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OptionPackagingController extends GetxController {
@@ -17,6 +18,8 @@ class OptionPackagingController extends GetxController {
   final RxList<ColorModel> colors = <ColorModel>[].obs;
   final RxBool isColorsLoading = false.obs;
   final RxInt selectedColorId = 0.obs;
+
+  VoidCallback? onSaved;
 
   @override
   void onInit() {
@@ -99,6 +102,7 @@ class OptionPackagingController extends GetxController {
         );
         Get.back();
         showMassage('Mapping created successfully', true);
+        onSaved?.call();
       } else {
         await _service.updateOptionPackaging(
           id: mappingId,
@@ -110,6 +114,7 @@ class OptionPackagingController extends GetxController {
         );
         Get.back();
         showMassage('Mapping updated successfully', true);
+        onSaved?.call();
       }
     } on AppException catch (e) {
       showMassage(e.message, false);
@@ -126,6 +131,7 @@ class OptionPackagingController extends GetxController {
     try {
       isDeleting.value = true;
       await _service.deleteOptionPackaging(id);
+      onSaved?.call();
       Get.back();
       showMassage('Mapping deleted successfully', true);
     } on AppException catch (e) {

@@ -75,7 +75,7 @@ class FormImagePickerSection extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     child: Image.file(
                       File(path),
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       errorBuilder: (context, error, stackTrace) =>
                           const ColoredBox(
                             color: Color(0xFFF3F4F6),
@@ -101,6 +101,7 @@ class FormImagePickerSection extends StatelessWidget {
               hasExisting && path.isEmpty ? 'Change Image' : 'Select Image',
             ),
           ),
+          const SizedBox(height: 12),
         ],
       );
     });

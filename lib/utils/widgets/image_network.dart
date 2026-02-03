@@ -19,7 +19,7 @@ class ImageNetwork extends StatelessWidget {
       placeholder: (context, url) => const BuildProgressIndicator(),
       errorWidget: (context, url, error) =>
           Icon(icon, size: 40, color: Colors.black54),
-      fit: BoxFit.cover,
+      fit: BoxFit.contain,
       width: double.infinity,
       height: double.infinity,
     );

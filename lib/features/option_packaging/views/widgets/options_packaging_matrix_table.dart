@@ -66,66 +66,49 @@ class OptionsPackagingMatrixTable extends StatelessWidget {
       );
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: DataTableWidget<Option>(
-            rows: options,
-            showActions: false,
-            emptyMessage: 'No options or packagings available',
-            dataRowMinHeight: 72,
-            dataRowMaxHeight: 100,
-            columns: [
-              const DataColumn(
-                label: Text(
-                  'op/pk',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              ...packagings.map((p) {
-                return DataColumn(
-                  label: Text(
-                    p.title ?? '-',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                );
-              }),
-            ],
-            buildCells: (opt, index) {
-              return [
-                DataCell(
-                  Text(
-                    opt.optionName ?? '-',
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                ),
-                ...packagings.map((pkg) {
-                  final id = pkg.id;
-                  if (id == null) {
-                    return const DataCell(Text('-'));
-                  }
-
-                  return DataCell(
-                    OptionPackagingMatrixCell(
-                      option: opt,
-                      packaging: pkg,
-                      mappings: _cells(opt, id),
-                      onCellTap: onCellTap,
-                    ),
-                  );
-                }),
-              ];
-            },
-          ),
+    return DataTableWidget<Option>(
+      rows: options,
+      showActions: false,
+      emptyMessage: 'No options or packagings available',
+      dataRowMinHeight: 72,
+      dataRowMaxHeight: 100,
+      columns: [
+        const DataColumn(
+          label: Text('op/pk', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
-      ),
+        ...packagings.map((p) {
+          return DataColumn(
+            label: Text(
+              p.title ?? '-',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          );
+        }),
+      ],
+      buildCells: (opt, index) {
+        return [
+          DataCell(
+            Text(
+              opt.optionName ?? '-',
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ),
+          ...packagings.map((pkg) {
+            final id = pkg.id;
+            if (id == null) {
+              return const DataCell(Text('-'));
+            }
+            return DataCell(
+              OptionPackagingMatrixCell(
+                option: opt,
+                packaging: pkg,
+                mappings: _cells(opt, id),
+                onCellTap: onCellTap,
+              ),
+            );
+          }),
+        ];
+      },
     );
   }
 }

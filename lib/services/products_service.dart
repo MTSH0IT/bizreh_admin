@@ -10,6 +10,36 @@ import 'package:dio/dio.dart';
 class ProductsService {
   final DioClient _dioClient = DioClient();
 
+  Future<ProductModel?> getProductById(int id) async {
+    try {
+      final response = await _dioClient.get('${ApiEndpoint.getProducts}/$id');
+
+      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+        final productWrapper = json['product']['product'];
+        return ProductModel.fromJson(productWrapper as Map<String, dynamic>);
+      });
+
+      if (apiResponse.success && apiResponse.data != null) {
+        return apiResponse.data as ProductModel;
+      } else {
+        throw Exception(apiResponse.message ?? 'Something went wrong');
+      }
+    } on DioException catch (e) {
+      final err = e.error;
+      if (err is AppException) {
+        log(
+          'products service AppException getProductById : ${err.message}${err.statusCode}',
+        );
+        throw err;
+      }
+      log('products service DioException getProductById : ${e.message}');
+      throw Exception(e.message);
+    } catch (e) {
+      log('products service catch getProductById : ${e.toString()}');
+      throw Exception(e.toString());
+    }
+  }
+
   Future<List<ProductModel>> getProducts() async {
     try {
       final response = await _dioClient.get(ApiEndpoint.getProducts);
