@@ -179,7 +179,7 @@ class DiscountFormDialog extends StatelessWidget {
                   items: items,
                   values: controller.selectedMainCategoryIds.toList(),
                   onChanged: controller.setSelectedMainCategories,
-                  labelText: 'Categories (Main)',
+                  labelText: 'Categories',
                   hintText: 'Select categories',
                   enableSearch: true,
                   searchHintText: 'Search categories...',

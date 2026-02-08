@@ -51,7 +51,11 @@ class PointsView extends StatelessWidget {
 
   void _openCreateDialog(BuildContext context, PointsController controller) {
     openFormDialog<void>(
-      onBeforeOpen: controller.clearForm,
+      onBeforeOpen: () {
+        controller.clearForm;
+        controller.getMeta();
+      },
+
       dialogBuilder: (_) => PointFormDialog(controller: controller),
     );
   }
@@ -62,7 +66,10 @@ class PointsView extends StatelessWidget {
     PointModel point,
   ) {
     openFormDialog<void>(
-      onBeforeOpen: () => controller.setPointForEdit(point),
+      onBeforeOpen: () {
+        controller.setPointForEdit(point);
+        controller.getMeta();
+      },
       dialogBuilder: (_) => PointFormDialog(controller: controller),
     );
   }

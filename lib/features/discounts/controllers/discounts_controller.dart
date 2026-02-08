@@ -1,9 +1,13 @@
 import 'dart:developer';
 
+import 'package:bizreh_admin/features/Brands/controllers/brands_controler.dart';
 import 'package:bizreh_admin/features/Brands/models/brands_model.dart';
+import 'package:bizreh_admin/features/category/controllers/all_category_crud_controller.dart';
 import 'package:bizreh_admin/features/category/models/all_category_model.dart';
 import 'package:bizreh_admin/features/discounts/models/discount_model/discount_model.dart';
+import 'package:bizreh_admin/features/products/controllers/products_controller.dart';
 import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
+import 'package:bizreh_admin/features/sub_category/controllers/all_sub_category_crud_controller.dart';
 import 'package:bizreh_admin/features/sub_category/models/all_sub_category_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/brands_service.dart';
@@ -90,20 +94,86 @@ class DiscountsController extends GetxController {
   }
 
   Future<void> getMeta() async {
+    final productsController = Get.isRegistered<ProductsController>()
+        ? Get.find<ProductsController>()
+        : null;
+    final brandsController = Get.isRegistered<BrandsController>()
+        ? Get.find<BrandsController>()
+        : null;
+    final categoriesController = Get.isRegistered<AllCategoryCrudController>()
+        ? Get.find<AllCategoryCrudController>()
+        : null;
+    final subCategoriesController =
+        Get.isRegistered<AllSubCategoryCrudController>()
+        ? Get.find<AllSubCategoryCrudController>()
+        : null;
+
+    if (productsController != null && productsController.products.isNotEmpty) {
+      products.assignAll(productsController.products);
+    }
+
+    if (brandsController != null && brandsController.brands.isNotEmpty) {
+      brands.assignAll(brandsController.brands);
+    }
+
+    if (categoriesController != null &&
+        categoriesController.allCategories.isNotEmpty) {
+      categories.assignAll(categoriesController.allCategories);
+    }
+
+    if (subCategoriesController != null &&
+        subCategoriesController.allSubCategories.isNotEmpty) {
+      subCategories.assignAll(subCategoriesController.allSubCategories);
+    }
+
+    if (products.isNotEmpty &&
+        brands.isNotEmpty &&
+        categories.isNotEmpty &&
+        subCategories.isNotEmpty) {
+      return;
+    }
+
     try {
       isMetaLoading.value = true;
 
-      final results = await Future.wait([
-        _productsService.getProducts(),
-        _brandsService.getBrands(),
-        _categoryService.getAllCategories(),
-        _subCategoryService.getAllSubCategories(),
-      ]);
+      final futures = <Future<dynamic>>[];
+      final keys = <String>[];
 
-      products.assignAll(results[0] as List<ProductModel>);
-      brands.assignAll(results[1] as List<BrandsModel>);
-      categories.assignAll(results[2] as List<AllCategoryModel>);
-      subCategories.assignAll(results[3] as List<AllSubCategoryModel>);
+      if (products.isEmpty) {
+        futures.add(_productsService.getProducts());
+        keys.add('products');
+      }
+      if (brands.isEmpty) {
+        futures.add(_brandsService.getBrands());
+        keys.add('brands');
+      }
+      if (categories.isEmpty) {
+        futures.add(_categoryService.getAllCategories());
+        keys.add('categories');
+      }
+      if (subCategories.isEmpty) {
+        futures.add(_subCategoryService.getAllSubCategories());
+        keys.add('subCategories');
+      }
+
+      final results = await Future.wait(futures);
+
+      for (var i = 0; i < results.length; i++) {
+        switch (keys[i]) {
+          case 'products':
+            products.assignAll(results[i] as List<ProductModel>);
+            break;
+          case 'brands':
+            brands.assignAll(results[i] as List<BrandsModel>);
+            break;
+          case 'categories':
+            categories.assignAll(results[i] as List<AllCategoryModel>);
+            break;
+          case 'subCategories':
+            subCategories.assignAll(results[i] as List<AllSubCategoryModel>);
+            break;
+        }
+      }
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in getMeta: ${e.message}');
