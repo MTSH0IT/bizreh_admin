@@ -8,6 +8,7 @@ import 'package:bizreh_admin/utils/widgets/form_dialog_actions.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class OptionPackagingFormDialog extends StatefulWidget {
@@ -15,7 +16,7 @@ class OptionPackagingFormDialog extends StatefulWidget {
   final Option option;
   final PackageModel packaging;
   final int? mappingId;
-  final int? initialPrice;
+  final num? initialPrice;
   final int? initialStock;
   final int? initialColorId;
 
@@ -51,14 +52,9 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final currentColorId = widget.initialColorId;
-      if (currentColorId != null && currentColorId > 0) {
-        widget.controller.setSelectedColorId(currentColorId);
-      } else {
-        widget.controller.setSelectedColorId(null);
-      }
-      if (widget.controller.colors.isEmpty &&
-          !widget.controller.isColorsLoading.value) {
-        widget.controller.loadColors();
+      widget.controller.setSelectedColorId(currentColorId);
+      if (!widget.controller.isColorsLoading.value) {
+        widget.controller.loadColorsIfNeeded();
       }
     });
   }
@@ -90,12 +86,16 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
               hint: 'Enter price',
               controller: _priceController,
               keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+              ],
             ),
             LabeledTextField(
               label: 'Stock quantity',
               hint: 'Enter stock',
               controller: _stockController,
               keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             ),
             const SizedBox(height: 12),
             Obx(() {
@@ -117,7 +117,7 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                c.name ?? c.arName ?? 'Color #${c.id!}',
+                                c.name ?? 'Color #${c.id!}',
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -175,10 +175,6 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
             final stock = int.tryParse(_stockController.text.trim());
             final selectedColorId = widget.controller.selectedColorId.value;
             final colorId = selectedColorId == 0 ? null : selectedColorId;
-
-            if (price == null || stock == null) {
-              return;
-            }
 
             await widget.controller.saveMapping(
               mappingId: widget.mappingId,

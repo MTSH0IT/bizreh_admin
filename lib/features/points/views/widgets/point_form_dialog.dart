@@ -4,6 +4,7 @@ import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
 import 'package:bizreh_admin/utils/widgets/loading_multi_select_dropdown_form_field2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class PointFormDialog extends StatelessWidget {
@@ -38,6 +39,7 @@ class PointFormDialog extends StatelessWidget {
                 hint: 'Enter points amount',
                 controller: controller.pointsAmountController,
                 keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               const SizedBox(height: 12),
               Obx(() {
@@ -62,12 +64,14 @@ class PointFormDialog extends StatelessWidget {
                 hint: 'Enter min purchase amount',
                 controller: controller.minPurchaseAmountController,
                 keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               LabeledTextField(
                 label: 'Max Points Per User',
                 hint: 'Enter max points per user',
                 controller: controller.maxPointsPerUserController,
                 keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               const SizedBox(height: 12),
               TextFormField(

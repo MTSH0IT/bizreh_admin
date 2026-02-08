@@ -17,7 +17,9 @@ void showMassage(String message, bool success) {
           margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
           maxWidth: 520,
           isDismissible: true,
-          duration: const Duration(seconds: 2),
+          duration: success
+              ? const Duration(seconds: 1)
+              : const Duration(seconds: 3),
           animationDuration: const Duration(milliseconds: 300),
           icon: Icon(
             success ? Icons.check_circle : Icons.error_outline,

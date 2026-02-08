@@ -12,7 +12,7 @@ class OptionsPackagingMatrixTable extends StatelessWidget {
     Option option,
     PackageModel packaging,
     int? mappingId,
-    int? price,
+    num? price,
     int? stock,
     int? colorId,
   )?

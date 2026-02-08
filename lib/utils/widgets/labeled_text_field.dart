@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class LabeledTextField extends StatelessWidget {
   final String label;
   final String hint;
   final TextEditingController controller;
   final TextInputType keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
   final String? errorText;
   final bool obscureText;
   final int? maxLines;
@@ -16,6 +18,7 @@ class LabeledTextField extends StatelessWidget {
     required this.hint,
     required this.controller,
     this.keyboardType = TextInputType.text,
+    this.inputFormatters,
     this.errorText,
     this.obscureText = false,
     this.maxLines = 1,
@@ -41,6 +44,7 @@ class LabeledTextField extends StatelessWidget {
           TextField(
             controller: controller,
             keyboardType: keyboardType,
+            inputFormatters: inputFormatters,
             obscureText: obscureText,
             maxLines: maxLines,
             onChanged: onChanged,

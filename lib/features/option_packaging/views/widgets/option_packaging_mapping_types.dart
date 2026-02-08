@@ -1,6 +1,6 @@
 typedef OptionPackagingMapping = ({
   int? id,
-  int? price,
+  num? price,
   int? stock,
   int? colorId,
   String? colorDegree,

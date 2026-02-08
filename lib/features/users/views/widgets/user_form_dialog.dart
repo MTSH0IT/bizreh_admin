@@ -2,6 +2,7 @@ import 'package:bizreh_admin/features/users/controllers/users_controller.dart';
 import 'package:bizreh_admin/utils/widgets/form_dialog_actions.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class UserFormDialog extends StatelessWidget {
@@ -52,6 +53,7 @@ class UserFormDialog extends StatelessWidget {
                   hint: 'Enter phone number',
                   controller: controller.phoneController,
                   keyboardType: TextInputType.phone,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 ),
 
                 Obx(() {

@@ -4,6 +4,7 @@ import 'package:bizreh_admin/utils/widgets/form_image_picker_section.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class AllCategoryFormDialog extends StatelessWidget {
@@ -38,6 +39,7 @@ class AllCategoryFormDialog extends StatelessWidget {
                 hint: 'Enter position',
                 controller: controller.positionController,
                 keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               Obx(() {
                 final items = controller.superCategories

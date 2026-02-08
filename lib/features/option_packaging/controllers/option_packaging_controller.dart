@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/color_family/models/color_model.dart';
+import 'package:bizreh_admin/features/color_family/controllers/color_family_controller.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/color_servise.dart';
 import 'package:bizreh_admin/services/option_packaging_servise.dart';
@@ -24,7 +25,25 @@ class OptionPackagingController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadColors();
+    loadColorsIfNeeded();
+  }
+
+  Future<void> loadColorsIfNeeded() async {
+    final colorFamilyController = Get.isRegistered<ColorFamilyController>()
+        ? Get.find<ColorFamilyController>()
+        : null;
+
+    if (colorFamilyController != null &&
+        colorFamilyController.colors.isNotEmpty) {
+      colors.assignAll(colorFamilyController.colors);
+      return;
+    }
+
+    if (colors.isNotEmpty) {
+      return;
+    }
+
+    await loadColors();
   }
 
   Future<void> loadColors() async {
@@ -78,8 +97,8 @@ class OptionPackagingController extends GetxController {
     int? mappingId,
     required int productOptionId,
     required int packagingId,
-    required num pricePerUnit,
-    required int stockQuantity,
+    num? pricePerUnit,
+    int? stockQuantity,
     int? colorId,
   }) async {
     if (!validateMappingInputs(
@@ -96,8 +115,8 @@ class OptionPackagingController extends GetxController {
         await _service.createOptionPackaging(
           productOptionId: productOptionId,
           packagingId: packagingId,
-          pricePerUnit: pricePerUnit,
-          stockQuantity: stockQuantity,
+          pricePerUnit: pricePerUnit!,
+          stockQuantity: stockQuantity!,
           colorId: colorId,
         );
         Get.back();
@@ -108,8 +127,8 @@ class OptionPackagingController extends GetxController {
           id: mappingId,
           productOptionId: productOptionId,
           packagingId: packagingId,
-          pricePerUnit: pricePerUnit,
-          stockQuantity: stockQuantity,
+          pricePerUnit: pricePerUnit!,
+          stockQuantity: stockQuantity!,
           colorId: colorId,
         );
         Get.back();

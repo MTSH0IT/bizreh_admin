@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/Driver/models/driver_model.dart';
+import 'package:bizreh_admin/features/Driver/controllers/drivers_controller.dart';
 import 'package:bizreh_admin/features/orders/models/order_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/driver_service.dart';
@@ -46,7 +47,23 @@ class OrdersController extends GetxController {
   }
 
   Future<void> loadDriversIfNeeded() async {
-    if (drivers.isNotEmpty) return;
+    // حاول استخدام DriversController كمصدر رئيسي إن كان موجودًا
+    final driversController = Get.isRegistered<DriversController>()
+        ? Get.find<DriversController>()
+        : null;
+
+    // إذا كان DriversController موجودًا ويحتوي بيانات، خذ نفس القائمة (Single Source of Truth)
+    if (driversController != null && driversController.drivers.isNotEmpty) {
+      drivers.assignAll(driversController.drivers);
+      return;
+    }
+
+    // إذا لم يكن هناك DriversController أو قائمته فارغة لكن هذه القائمة ليست فارغة، استخدم الكاش الحالي
+    if (drivers.isNotEmpty) {
+      return;
+    }
+
+    // في آخر خيار، حمّل من الـ API
     await loadDrivers();
   }
 

@@ -3,6 +3,7 @@ import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class DriverFormDialog extends StatelessWidget {
@@ -41,6 +42,7 @@ class DriverFormDialog extends StatelessWidget {
                 hint: 'Enter phone',
                 controller: controller.phoneController,
                 keyboardType: TextInputType.phone,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               LabeledTextField(
                 label: 'Password',

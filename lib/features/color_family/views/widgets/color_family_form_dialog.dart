@@ -35,7 +35,6 @@ class ColorFamilyFormDialog extends StatelessWidget {
                 label: 'Color degree',
                 hint: 'Enter color degree',
                 controller: controller.colorDegreeController,
-                keyboardType: TextInputType.number,
               ),
             ],
           ),

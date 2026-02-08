@@ -121,7 +121,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
                       Option opt,
                       PackageModel pkg,
                       int? mappingId,
-                      int? price,
+                      num? price,
                       int? stock,
                       int? colorId,
                     ) {
@@ -169,7 +169,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
     Option option,
     PackageModel packaging,
     int? mappingId,
-    int? currentPrice,
+    num? currentPrice,
     int? currentStock,
     int? currentColorId,
   ) async {

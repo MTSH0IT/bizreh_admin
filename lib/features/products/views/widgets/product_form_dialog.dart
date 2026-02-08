@@ -4,6 +4,7 @@ import 'package:bizreh_admin/utils/widgets/form_image_picker_section.dart';
 import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class ProductFormDialog extends StatelessWidget {
@@ -115,6 +116,7 @@ class ProductFormDialog extends StatelessWidget {
                 hint: 'Enter position',
                 controller: controller.positionController,
                 keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               const SizedBox(height: 12),
               Obx(() {

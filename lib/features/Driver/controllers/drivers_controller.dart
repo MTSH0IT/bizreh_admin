@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/Driver/models/driver_model.dart';
+import 'package:bizreh_admin/features/suppliers/controllers/suppliers_controller.dart';
 import 'package:bizreh_admin/features/suppliers/models/supplier_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/driver_service.dart';
@@ -39,10 +40,24 @@ class DriversController extends GetxController {
   void onInit() {
     super.onInit();
     getDrivers();
+    loadSuppliersIfNeeded();
   }
 
   Future<void> loadSuppliersIfNeeded() async {
-    if (suppliers.isNotEmpty) return;
+    final suppliersController = Get.isRegistered<SuppliersController>()
+        ? Get.find<SuppliersController>()
+        : null;
+
+    if (suppliersController != null &&
+        suppliersController.suppliers.isNotEmpty) {
+      suppliers.assignAll(suppliersController.suppliers);
+      return;
+    }
+
+    if (suppliers.isNotEmpty) {
+      return;
+    }
+
     await loadSuppliers();
   }
 

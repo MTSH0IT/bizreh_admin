@@ -4,6 +4,7 @@ import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
 import 'package:bizreh_admin/utils/widgets/loading_multi_select_dropdown_form_field2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class DiscountFormDialog extends StatelessWidget {
@@ -38,6 +39,7 @@ class DiscountFormDialog extends StatelessWidget {
                 hint: 'Enter amount',
                 controller: controller.amountController,
                 keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               const SizedBox(height: 12),
               Obx(() {
@@ -62,6 +64,7 @@ class DiscountFormDialog extends StatelessWidget {
                 hint: 'Enter min purchase amount',
                 controller: controller.minPurchaseAmountController,
                 keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               const SizedBox(height: 12),
               TextFormField(
