@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class LoginRememberRow extends StatelessWidget {
   final bool rememberMe;
   final ValueChanged<bool> onRememberChanged;
+  final VoidCallback? onForgotPassword;
 
   const LoginRememberRow({
     super.key,
     required this.rememberMe,
     required this.onRememberChanged,
+    this.onForgotPassword,
   });
 
   @override
@@ -24,7 +26,7 @@ class LoginRememberRow extends StatelessWidget {
         Text('Remember Me', style: const TextStyle(color: Color(0xFF4B5563))),
         const Spacer(),
         TextButton(
-          onPressed: () {},
+          onPressed: onForgotPassword,
           style: TextButton.styleFrom(
             padding: EdgeInsets.zero,
             minimumSize: const Size(0, 0),

@@ -4,6 +4,7 @@ class ApiEndpoint {
 
   // Auth
   static const String login = "/admin/profile/login";
+  static const String forgetPassword = "/admin/profile/forget-password";
 
   // Brands
   static const String getBrands = "/admin/brand";
@@ -131,4 +132,11 @@ class ApiEndpoint {
   static const String getUserGifts = "/admin/gift/user";
   static String changeUserGiftStatus(int id) =>
       "/admin/gift/user-gifts/$id/status";
+
+  // Ads
+  static const String getAds = "/admin/ads";
+  static const String createAd = "/admin/ads";
+  static String updateAd(int id) => "/admin/ads/$id";
+  static String deleteAd(int id) => "/admin/ads/$id";
+  static String changeAdStatus(int id) => "/admin/ads/$id/status";
 }

@@ -2,9 +2,11 @@ import 'package:bizreh_admin/utils/consts/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bizreh_admin/features/auth/views/widgets/login_button.dart';
+import 'package:bizreh_admin/features/auth/views/widgets/forget_password_dialog.dart';
 import 'package:bizreh_admin/features/auth/views/widgets/login_remember_row.dart';
 import 'package:bizreh_admin/features/auth/views/widgets/login_text_field.dart';
 import 'package:bizreh_admin/features/auth/controllers/auth_controller.dart';
+import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
 
 class LoginCard extends StatelessWidget {
   const LoginCard({super.key});
@@ -75,6 +77,16 @@ class LoginCard extends StatelessWidget {
             () => LoginRememberRow(
               rememberMe: rememberMe.value,
               onRememberChanged: (value) => rememberMe.value = value,
+              onForgotPassword: () {
+                openFormDialog<void>(
+                  onBeforeOpen: () {
+                    authController.forgetPasswordEmailCtrl.text =
+                        authController.loginEmailCtrl.text;
+                  },
+                  dialogBuilder: (_) =>
+                      ForgetPasswordDialog(controller: authController),
+                );
+              },
             ),
           ),
           const SizedBox(height: 20),

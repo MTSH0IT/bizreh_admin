@@ -43,4 +43,32 @@ class AuthService {
       throw Exception(e.toString());
     }
   }
+
+  Future<void> forgetPassword({required String email}) async {
+    try {
+      final response = await _dioClient.post(
+        ApiEndpoint.forgetPassword,
+        data: {'email': email},
+      );
+
+      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      if (!apiResponse.success) {
+        throw Exception(apiResponse.message ?? 'Failed to send reset email');
+      }
+    } on DioException catch (e) {
+      final err = e.error;
+      if (err is AppException) {
+        log(
+          "auth service AppException forgetPassword : ${err.message}"
+          "${err.statusCode}",
+        );
+        throw err;
+      }
+      log("auth service DioException forgetPassword : ${e.message}");
+      throw Exception(e.message);
+    } catch (e) {
+      log("auth service catch forgetPassword : ${e.toString()}");
+      throw Exception(e.toString());
+    }
+  }
 }

@@ -20,8 +20,10 @@ class AuthController extends GetxController {
 
   final TextEditingController loginEmailCtrl = TextEditingController();
   final TextEditingController loginPasswordCtrl = TextEditingController();
+  final TextEditingController forgetPasswordEmailCtrl = TextEditingController();
 
   final RxBool isLoading = false.obs;
+  final RxBool isForgettingPassword = false.obs;
 
   String get loginEmail => loginEmailCtrl.text.trim();
   String get loginPassword => loginPasswordCtrl.text.trim();
@@ -30,7 +32,32 @@ class AuthController extends GetxController {
   void onClose() {
     loginEmailCtrl.dispose();
     loginPasswordCtrl.dispose();
+    forgetPasswordEmailCtrl.dispose();
     super.onClose();
+  }
+
+  Future<void> forgetPassword() async {
+    final email = forgetPasswordEmailCtrl.text.trim();
+    if (email.isEmpty) {
+      showMassage('Please enter email', false);
+      return;
+    }
+
+    isForgettingPassword.value = true;
+    try {
+      await _authService.forgetPassword(email: email);
+      showMassage('Password reset email sent', true);
+      forgetPasswordEmailCtrl.clear();
+      Get.back();
+    } on AppException catch (e) {
+      log("auth controller AppException forgetPassword : ${e.toString()}");
+      showMassage(e.message, false);
+    } catch (e) {
+      log("auth controller catch forgetPassword : ${e.toString()}");
+      showMassage("Failed to send reset email", false);
+    } finally {
+      isForgettingPassword.value = false;
+    }
   }
 
   Future<void> login({required bool rememberMe}) async {

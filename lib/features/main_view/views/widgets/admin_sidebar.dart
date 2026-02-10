@@ -77,6 +77,7 @@ class AdminSidebar extends StatelessWidget {
         title: 'Gifts',
         icon: Icons.card_giftcard_outlined,
       ),
+      const AdminSidebarItemData(title: 'Ads', icon: Icons.campaign_outlined),
     ];
 
     return Container(
