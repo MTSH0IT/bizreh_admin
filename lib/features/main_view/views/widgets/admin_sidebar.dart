@@ -31,13 +31,10 @@ class AdminSidebar extends StatelessWidget {
         title: 'Super Categories',
         icon: Icons.category_outlined,
       ),
-      const AdminSidebarItemData(
-        title: 'Categories',
-        icon: Icons.category_outlined,
-      ),
+      const AdminSidebarItemData(title: 'Categories', icon: Icons.list_alt),
       const AdminSidebarItemData(
         title: 'Sub Categories',
-        icon: Icons.category_outlined,
+        icon: Icons.subdirectory_arrow_right_rounded,
       ),
       const AdminSidebarItemData(
         title: 'Products',

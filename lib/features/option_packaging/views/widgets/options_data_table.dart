@@ -23,6 +23,9 @@ class OptionsDataTable extends StatelessWidget {
       onDelete: onDelete,
       columns: const [
         DataColumn(
+          label: Text('Image', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        DataColumn(
           label: Text('Name', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         DataColumn(
@@ -34,16 +37,13 @@ class OptionsDataTable extends StatelessWidget {
         DataColumn(
           label: Text('SKU', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
-        //DataColumn(
-        //  label: Text('Stock', style: TextStyle(fontWeight: FontWeight.bold)),
-        //),
       ],
       buildCells: (opt, index) {
         return [
+          DataCell(DataTableImageCell(imageUrl: opt.mainImage)),
           DataCell(DataTableTextCell(text: opt.optionName)),
           DataCell(DataTableTextCell(text: opt.arOptionName)),
           DataCell(DataTableTextCell(text: opt.optionSku)),
-          //DataCell(DataTableNumberCell(number: opt.stockQuantity)),
         ];
       },
     );

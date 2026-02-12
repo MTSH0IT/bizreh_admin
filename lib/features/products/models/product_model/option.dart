@@ -6,6 +6,7 @@ class Option {
   String? optionName;
   String? arOptionName;
   String? optionSku;
+  String? mainImage;
   int? stockQuantity;
   DateTime? createdAt;
   List<PackagingOption>? packagingOptions;
@@ -16,6 +17,7 @@ class Option {
     this.optionName,
     this.arOptionName,
     this.optionSku,
+    this.mainImage,
     this.stockQuantity,
     this.createdAt,
     this.packagingOptions,
@@ -32,6 +34,7 @@ class Option {
     optionName: json['option_name'] as String?,
     arOptionName: json['ar_option_name'] as String?,
     optionSku: json['option_sku'] as String?,
+    mainImage: json['main_image'] as String?,
     stockQuantity: json['stock_quantity'] as int?,
     createdAt: json['created_at'] == null
         ? null
@@ -47,6 +50,7 @@ class Option {
     'option_name': optionName,
     'ar_option_name': arOptionName,
     'option_sku': optionSku,
+    'main_image': mainImage,
     'stock_quantity': stockQuantity,
     'created_at': createdAt?.toIso8601String(),
     'packaging_options': packagingOptions?.map((e) => e.toJson()).toList(),

@@ -62,12 +62,12 @@ class AdminTopBar extends StatelessWidget {
           //     ),
           //   ),
           // ),
-          const SizedBox(width: 12),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_none_rounded),
-          ),
-          const SizedBox(width: 12),
+          // const SizedBox(width: 12),
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: const Icon(Icons.notifications_none_rounded),
+          // ),
+          // const SizedBox(width: 12),
           InkWell(
             onTap: () {
               nav.resetTo(
