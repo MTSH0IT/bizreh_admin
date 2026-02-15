@@ -10,6 +10,7 @@ class ProductModel {
   int? subCategoryId;
   int? brandId;
   int? isActive;
+  int? position;
   DateTime? createdAt;
   String? brandName;
   String? arBrandName;
@@ -27,6 +28,7 @@ class ProductModel {
     this.subCategoryId,
     this.brandId,
     this.isActive,
+    this.position,
     this.createdAt,
     this.brandName,
     this.arBrandName,
@@ -50,6 +52,7 @@ class ProductModel {
     subCategoryId: json['sub_category_id'] as int?,
     brandId: json['brand_id'] as int?,
     isActive: json['is_active'] as int?,
+    position: json['position'] as int?,
     createdAt: json['created_at'] == null
         ? null
         : DateTime.parse(json['created_at'] as String),

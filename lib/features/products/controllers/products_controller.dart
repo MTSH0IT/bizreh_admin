@@ -257,8 +257,7 @@ class ProductsController extends GetxController {
     arTitleController.text = product.arTitle ?? '';
     descriptionController.text = product.description ?? '';
     arDescriptionController.text = product.arDescription ?? '';
-    // لو أضفت حقل position في ProductModel، عدّل السطر التالي ليستخدمه
-    positionController.text = '';
+    positionController.text = product.position?.toString() ?? "";
     selectedImagePath.value = '';
     selectedBrandId.value = product.brandId ?? 0;
     selectedSubCategoryId.value = product.subCategoryId ?? 0;

@@ -1,4 +1,5 @@
 import 'package:bizreh_admin/features/suppliers/models/supplier_model.dart';
+import 'package:bizreh_admin/utils/func/price_format.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -62,7 +63,7 @@ class SuppliersDataTable extends StatelessWidget {
           DataCell(DataTableTextCell(text: s.cities)),
           DataCell(DataTableNumberCell(number: s.driversCount)),
           DataCell(DataTableNumberCell(number: s.ordersCount)),
-          DataCell(DataTableNumberCell(number: s.totalSales)),
+          DataCell(DataTableNumberCell(number: formatPrice(s.totalSales))),
           DataCell(DataTableDateCell(date: s.createdAt)),
         ];
       },

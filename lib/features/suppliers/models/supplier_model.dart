@@ -9,7 +9,7 @@ class SupplierModel {
   String? cities;
   int? driversCount;
   int? ordersCount;
-  int? totalSales;
+  num? totalSales;
 
   SupplierModel({
     this.id,
@@ -43,7 +43,7 @@ class SupplierModel {
     cities: json['cities'] as String?,
     driversCount: json['drivers_count'] as int?,
     ordersCount: json['orders_count'] as int?,
-    totalSales: json['total_sales'] as int?,
+    totalSales: json['total_sales'] as num?,
   );
 
   Map<String, dynamic> toJson() => {

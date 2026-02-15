@@ -1,4 +1,7 @@
-String formatPrice(num value) {
+String formatPrice(num? value) {
+  if (value == null) {
+    return "-";
+  }
   return value.toStringAsFixed(2);
 }
 
