@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 class OrdersDataTable extends StatelessWidget {
   final List<OrderModel> rows;
   final ValueChanged<OrderModel> onAssign;
+  final ValueChanged<OrderModel> onChangeStatus;
 
   const OrdersDataTable({
     super.key,
     required this.rows,
     required this.onAssign,
+    required this.onChangeStatus,
   });
 
   @override
@@ -50,6 +52,9 @@ class OrdersDataTable extends StatelessWidget {
         DataColumn(
           label: Text('Assign', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
+        DataColumn(
+          label: Text('Status', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
       ],
       buildCells: (o, index) {
         final driverText = (o.driverName ?? '').toString().trim().isEmpty
@@ -70,6 +75,13 @@ class OrdersDataTable extends StatelessWidget {
               onPressed: (o.id == null) ? null : () => onAssign(o),
               style: OutlinedButton.styleFrom(foregroundColor: kprimaryColor),
               child: const Text('Assign'),
+            ),
+          ),
+          DataCell(
+            OutlinedButton(
+              onPressed: (o.id == null) ? null : () => onChangeStatus(o),
+              style: OutlinedButton.styleFrom(foregroundColor: kprimaryColor),
+              child: const Text('Change'),
             ),
           ),
         ];

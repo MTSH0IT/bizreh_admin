@@ -1,5 +1,6 @@
 import 'package:bizreh_admin/features/orders/controllers/orders_controller.dart';
 import 'package:bizreh_admin/features/orders/views/widgets/assign_driver_dialog.dart';
+import 'package:bizreh_admin/features/orders/views/widgets/change_order_status_dialog.dart';
 import 'package:bizreh_admin/features/orders/views/widgets/orders_data_table.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
@@ -44,6 +45,16 @@ class OrdersView extends StatelessWidget {
                   ),
                 );
               }
+            },
+            onChangeStatus: (order) {
+              controller.selectedStatus.value = (order.status ?? '').trim();
+              showDialog<void>(
+                context: context,
+                builder: (_) => ChangeOrderStatusDialog(
+                  controller: controller,
+                  orderId: order.id ?? 0,
+                ),
+              );
             },
           );
         }),

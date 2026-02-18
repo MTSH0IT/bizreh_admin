@@ -72,4 +72,36 @@ class OrdersService {
       throw Exception(e.toString());
     }
   }
+
+  Future<void> changeOrderStatus({
+    required int orderId,
+    required String status,
+  }) async {
+    try {
+      final body = {'status': status};
+
+      final response = await _dioClient.put(
+        ApiEndpoint.changeOrderStatus(orderId),
+        data: body,
+      );
+
+      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      if (!apiResponse.success) {
+        throw Exception(apiResponse.message ?? 'Failed to change order status');
+      }
+    } on DioException catch (e) {
+      final err = e.error;
+      if (err is AppException) {
+        log(
+          'orders service AppException changeOrderStatus : ${err.message}${err.statusCode}',
+        );
+        throw err;
+      }
+      log('orders service DioException changeOrderStatus : ${e.message}');
+      throw Exception(e.message);
+    } catch (e) {
+      log('orders service catch changeOrderStatus : ${e.toString()}');
+      throw Exception(e.toString());
+    }
+  }
 }

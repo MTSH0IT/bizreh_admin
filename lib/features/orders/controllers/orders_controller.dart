@@ -24,6 +24,9 @@ class OrdersController extends GetxController {
   final RxInt selectedDriverId = 0.obs;
   final RxBool isAssigning = false.obs;
 
+  final RxString selectedStatus = ''.obs;
+  final RxBool isUpdatingStatus = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -127,6 +130,31 @@ class OrdersController extends GetxController {
       log('Error in assignDriverToOrder: $e');
     } finally {
       isAssigning.value = false;
+    }
+  }
+
+  Future<void> changeStatusForOrder({required int orderId}) async {
+    final status = selectedStatus.value.trim();
+    if (status.isEmpty) {
+      showMassage('Please select status', false);
+      return;
+    }
+
+    try {
+      isUpdatingStatus.value = true;
+      await _ordersService.changeOrderStatus(orderId: orderId, status: status);
+      await getOrders();
+      showMassage('Order status updated successfully', true);
+      selectedStatus.value = '';
+      Get.back();
+    } on AppException catch (e) {
+      showMassage(e.message, false);
+      log('AppException in changeStatusForOrder: ${e.message}');
+    } catch (e) {
+      showMassage('Failed to update order status', false);
+      log('Error in changeStatusForOrder: $e');
+    } finally {
+      isUpdatingStatus.value = false;
     }
   }
 }

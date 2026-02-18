@@ -83,6 +83,7 @@ class ApiEndpoint {
   // Orders
   static const String getOrders = "/admin/order";
   static String assignOrderDriver(int id) => "/admin/order/$id/assign";
+  static String changeOrderStatus(int id) => "/admin/order/$id/status";
 
   //profile
   static String getProfile = "/admin/profile";
