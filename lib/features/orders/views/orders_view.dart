@@ -1,7 +1,8 @@
 import 'package:bizreh_admin/features/orders/controllers/orders_controller.dart';
-import 'package:bizreh_admin/features/orders/views/widgets/assign_driver_dialog.dart';
 import 'package:bizreh_admin/features/orders/views/widgets/change_order_status_dialog.dart';
 import 'package:bizreh_admin/features/orders/views/widgets/orders_data_table.dart';
+import 'package:bizreh_admin/features/orders/views/order_details_view.dart';
+import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
 import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
@@ -34,18 +35,18 @@ class OrdersView extends StatelessWidget {
 
           return OrdersDataTable(
             rows: rows,
-            onAssign: (order) async {
-              await controller.loadDriversIfNeeded();
-              if (context.mounted) {
-                showDialog<void>(
-                  context: context,
-                  builder: (_) => AssignDriverDialog(
-                    controller: controller,
-                    orderId: order.id ?? 0,
-                  ),
-                );
-              }
-            },
+            // onAssign: (order) async {
+            //   await controller.loadDriversIfNeeded();
+            //   if (context.mounted) {
+            //     showDialog<void>(
+            //       context: context,
+            //       builder: (_) => AssignDriverDialog(
+            //         controller: controller,
+            //         orderId: order.id ?? 0,
+            //       ),
+            //     );
+            //   }
+            // },
             onChangeStatus: (order) {
               controller.selectedStatus.value = (order.status ?? '').trim();
               showDialog<void>(
@@ -53,6 +54,15 @@ class OrdersView extends StatelessWidget {
                 builder: (_) => ChangeOrderStatusDialog(
                   controller: controller,
                   orderId: order.id ?? 0,
+                ),
+              );
+            },
+            onDetails: (order) {
+              final nav = Get.find<MainNavController>();
+              nav.push(
+                MainNavEntry(
+                  title: 'Order ${order.orderNumber ?? ''}',
+                  page: OrderDetailsView(order: order),
                 ),
               );
             },

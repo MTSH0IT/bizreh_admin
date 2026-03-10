@@ -1,16 +1,43 @@
 import 'package:flutter/material.dart';
 
-Color getStatusColor(String statusLabel) {
+Color getOrderStatusColor(String statusLabel) {
   switch (statusLabel) {
-    case 'Delivered':
+    case 'delivered':
       return const Color(0xFF16A34A);
-    case 'Shipped':
-      return const Color(0xFFF59E0B);
-    case 'Processing':
     case 'pending':
       return const Color(0xFF2563EB);
-    case 'canceled':
+    case 'assigned_to_driver':
+      return const Color(0xFFF59E0B);
+    case 'cancelled':
       return const Color(0xFFD81D10);
+    default:
+      return Colors.grey;
+  }
+}
+
+Color getGiftStatusColor(String statusLabel) {
+  switch (statusLabel) {
+    case 'pending':
+      return const Color(0xFF2563EB);
+    case 'redeemed':
+      return const Color(0xFF16A34A);
+    case 'expired':
+      return const Color(0xFFDC2626);
+    default:
+      return Colors.grey;
+  }
+}
+
+Color getPaymentStatusColor(String statusLabel) {
+  switch (statusLabel) {
+    case 'paid':
+      return const Color(0xFF16A34A);
+    case 'pending':
+      return const Color(0xFF2563EB);
+    case 'unpaid':
+      return const Color(0xFFD81D10);
+    case 'refunded':
+      return const Color(0xFFF59E0B);
     default:
       return Colors.grey;
   }

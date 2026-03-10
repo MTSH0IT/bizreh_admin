@@ -1,4 +1,5 @@
 import 'package:bizreh_admin/features/gifts/models/user_gifts_model/user_gifts_model.dart';
+import 'package:bizreh_admin/utils/func/status_color.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -78,16 +79,12 @@ class UserGiftsDataTable extends StatelessWidget {
           DataCell(
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-              // decoration: BoxDecoration(
-              //   color: _statusColor(g.userGiftStatus).withValues(alpha: 0.1),
-              //   borderRadius: BorderRadius.circular(12),
-              // ),
               child: Text(
                 g.userGiftStatus ?? '-',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
-                  color: _statusColor(g.userGiftStatus),
+                  color: getGiftStatusColor(g.userGiftStatus ?? ""),
                 ),
               ),
             ),
@@ -110,19 +107,6 @@ class UserGiftsDataTable extends StatelessWidget {
         ];
       },
     );
-  }
-
-  Color _statusColor(String? status) {
-    switch (status) {
-      case 'pending':
-        return Colors.blue;
-      case 'redeemed':
-        return Colors.green;
-      case 'expired':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
   }
 
   String _normalizeStatus(String? status) {

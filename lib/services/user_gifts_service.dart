@@ -58,10 +58,15 @@ class UserGiftsService {
         data: body,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, (json) => json);
+      final apiResponse = ApiResponse<dynamic>.fromJson(
+        response.data,
+        (json) => json,
+      );
 
       if (!apiResponse.success) {
-        throw Exception(apiResponse.message ?? 'Failed to change user gift status');
+        throw Exception(
+          apiResponse.message ?? 'Failed to change user gift status',
+        );
       }
     } on DioException catch (e) {
       final err = e.error;
@@ -71,7 +76,9 @@ class UserGiftsService {
         );
         throw err;
       }
-      log('user gifts service DioException changeUserGiftStatus : ${e.message}');
+      log(
+        'user gifts service DioException changeUserGiftStatus : ${e.message}',
+      );
       throw Exception(e.message);
     } catch (e) {
       log('user gifts service catch changeUserGiftStatus : ${e.toString()}');

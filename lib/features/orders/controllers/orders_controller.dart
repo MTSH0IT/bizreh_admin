@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:bizreh_admin/features/Driver/models/driver_model.dart';
 import 'package:bizreh_admin/features/Driver/controllers/drivers_controller.dart';
-import 'package:bizreh_admin/features/orders/models/order_model.dart';
+import 'package:bizreh_admin/features/orders/models/order_model/order_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/driver_service.dart';
 import 'package:bizreh_admin/services/orders_service.dart';
