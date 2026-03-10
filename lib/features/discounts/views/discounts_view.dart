@@ -1,7 +1,9 @@
 import 'package:bizreh_admin/features/discounts/controllers/discounts_controller.dart';
 import 'package:bizreh_admin/features/discounts/models/discount_model/discount_model.dart';
+import 'package:bizreh_admin/features/discounts/views/discount_details_view.dart';
 import 'package:bizreh_admin/features/discounts/views/widgets/discount_form_dialog.dart';
 import 'package:bizreh_admin/features/discounts/views/widgets/discounts_data_table.dart';
+import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
@@ -43,9 +45,19 @@ class DiscountsView extends StatelessWidget {
             rows: rows,
             onEdit: (d) => _openEditDialog(context, controller, d),
             onDelete: (d) => _confirmDelete(context, controller, d),
+            onDetails: (d) => _openDetailsDialog(context, d),
           );
         }),
       ],
+    );
+  }
+
+  void _openDetailsDialog(BuildContext context, DiscountModel discount) {
+    Get.find<MainNavController>().push(
+      MainNavEntry(
+        title: discount.title ?? 'Discount Details',
+        page: DiscountDetailsView(discount: discount),
+      ),
     );
   }
 

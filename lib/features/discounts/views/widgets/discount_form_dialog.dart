@@ -19,7 +19,7 @@ class DiscountFormDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(isEditing ? 'Edit Discount' : 'Create Discount'),
       content: SizedBox(
-        width: 620,
+        width: 550,
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -36,10 +36,15 @@ class DiscountFormDialog extends StatelessWidget {
               ),
               LabeledTextField(
                 label: 'Amount',
-                hint: 'Enter amount',
+                hint:
+                    'Value of discount (fixed: 50 = 50, percentage: 20 = 20%)',
                 controller: controller.amountController,
                 keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                    RegExp(r'^[0-9]*\.?[0-9]*'),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
               Obx(() {
@@ -61,8 +66,19 @@ class DiscountFormDialog extends StatelessWidget {
               const SizedBox(height: 12),
               LabeledTextField(
                 label: 'Min Purchase Amount',
-                hint: 'Enter min purchase amount',
+                hint: 'Optional. Minimum cart total required to apply discount',
                 controller: controller.minPurchaseAmountController,
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                    RegExp(r'^[0-9]*\.?[0-9]*'),
+                  ),
+                ],
+              ),
+              LabeledTextField(
+                label: 'Min Quantity',
+                hint: 'Optional. Minimum quantity required to apply discount',
+                controller: controller.minQuantityController,
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
@@ -72,6 +88,7 @@ class DiscountFormDialog extends StatelessWidget {
                 readOnly: true,
                 decoration: const InputDecoration(
                   labelText: 'Expiration Date',
+                  hintText: 'Select expiration date',
                   filled: true,
                   fillColor: Color(0xFFF3F4F6),
                   border: OutlineInputBorder(),

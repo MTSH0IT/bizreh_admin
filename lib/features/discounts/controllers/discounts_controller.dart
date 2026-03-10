@@ -44,11 +44,11 @@ class DiscountsController extends GetxController {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController minPurchaseAmountController =
       TextEditingController();
+  final TextEditingController minQuantityController = TextEditingController();
   final TextEditingController expirationDateController =
       TextEditingController();
 
   final RxString selectedAmountType = 'fixed'.obs; // fixed | percentage
-  final RxString selectedRoleType = 'all'.obs; // all
   final RxInt selectedIsActive = 1.obs; // 1 active
 
   final RxList<int> selectedProductIds = <int>[].obs;
@@ -73,6 +73,7 @@ class DiscountsController extends GetxController {
     arTitleController.dispose();
     amountController.dispose();
     minPurchaseAmountController.dispose();
+    minQuantityController.dispose();
     expirationDateController.dispose();
     super.onClose();
   }
@@ -193,7 +194,7 @@ class DiscountsController extends GetxController {
     return discounts.where((d) {
       final title = (d.title ?? '').toLowerCase();
       final arTitle = (d.arTitle ?? '').toLowerCase();
-      final type = (d.type ?? '').toLowerCase();
+      final type = (d.amountType ?? '').toLowerCase();
       return title.contains(q) || arTitle.contains(q) || type.contains(q);
     }).toList();
   }
@@ -206,10 +207,10 @@ class DiscountsController extends GetxController {
     arTitleController.clear();
     amountController.clear();
     minPurchaseAmountController.clear();
+    minQuantityController.clear();
     expirationDateController.clear();
 
     selectedAmountType.value = 'fixed';
-    selectedRoleType.value = 'all';
     selectedIsActive.value = 1;
 
     selectedProductIds.clear();
@@ -223,11 +224,6 @@ class DiscountsController extends GetxController {
   void setAmountType(String? v) {
     if (v == null || v.isEmpty) return;
     selectedAmountType.value = v;
-  }
-
-  void setRoleType(String? v) {
-    if (v == null || v.isEmpty) return;
-    selectedRoleType.value = v;
   }
 
   void setIsActive(int? v) {
@@ -256,13 +252,14 @@ class DiscountsController extends GetxController {
     titleController.text = discount.title ?? '';
     arTitleController.text = discount.arTitle ?? '';
     amountController.text = discount.amount?.toString() ?? '';
-    minPurchaseAmountController.text = discount.minPurchaseAmount ?? '';
-    expirationDateController.text = discount.exprationDate == null
+    minPurchaseAmountController.text =
+        discount.minPurchaseAmount?.toString() ?? '';
+    minQuantityController.text = discount.minQuantity?.toString() ?? '';
+    expirationDateController.text = discount.expirationDate == null
         ? ''
-        : discount.exprationDate!.toIso8601String().split('T').first;
+        : discount.expirationDate!.toIso8601String().split('T').first;
 
     selectedAmountType.value = discount.amountType ?? 'fixed';
-    selectedRoleType.value = discount.roleType ?? 'all';
     selectedIsActive.value = discount.isActive ?? 1;
 
     final productsIds = (discount.products ?? [])
@@ -334,11 +331,14 @@ class DiscountsController extends GetxController {
           double.tryParse(amountController.text.trim()) ??
           amountController.text.trim(),
       'amount_type': selectedAmountType.value,
-      'min_purchase_amount':
-          int.tryParse(minPurchaseAmountController.text.trim()) ??
-          minPurchaseAmountController.text.trim(),
-      'expration_date': expirationDateController.text.trim(),
-      'role_type': selectedRoleType.value,
+      'expiration_date': expirationDateController.text.trim(),
+      if (minPurchaseAmountController.text.trim().isNotEmpty)
+        'min_purchase_amount':
+            int.tryParse(minPurchaseAmountController.text.trim()) ??
+            double.tryParse(minPurchaseAmountController.text.trim()) ??
+            minPurchaseAmountController.text.trim(),
+      if (minQuantityController.text.trim().isNotEmpty)
+        'min_quantity': int.tryParse(minQuantityController.text.trim()) ?? 0,
       'is_active': selectedIsActive.value,
       'product_ids': selectedProductIds.toList(),
       'brand_ids': selectedBrandIds.toList(),

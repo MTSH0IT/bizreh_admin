@@ -5,9 +5,6 @@ class Brand {
 
   Brand({this.id, this.title, this.arTitle});
 
-  @override
-  String toString() => 'Brand(id: $id, title: $title, arTitle: $arTitle)';
-
   factory Brand.fromJson(Map<String, dynamic> json) => Brand(
     id: json['id'] as int?,
     title: json['title'] as String?,

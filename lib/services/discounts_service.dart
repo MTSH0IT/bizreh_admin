@@ -15,7 +15,7 @@ class DiscountsService {
       final response = await _dioClient.get(ApiEndpoint.getDiscounts);
 
       final apiResponse = ApiResponse.fromJson(response.data, (json) {
-        final List list = (json['discounts'] as List?) ?? <dynamic>[];
+        final List list = (json as List?) ?? <dynamic>[];
         return list
             .map((e) => DiscountModel.fromJson(e as Map<String, dynamic>))
             .toList();
@@ -47,19 +47,6 @@ class DiscountsService {
       final response = await _dioClient.post(
         ApiEndpoint.createDiscount,
         data: body,
-        //  {
-        //   "title": "test",
-        //   "ar_title": "test",
-        //   "amount": 20,
-        //   "amount_type": "fixed",
-        //   "min_purchase_amount": 20,
-        //   "expration_date": "2026-1-14",
-        //   "role_type": "all",
-        //   "is_active": 1,
-        //   "product_ids": [],
-        //   "brand_ids": [],
-        //   "category_ids": [],
-        // },
       );
 
       final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);

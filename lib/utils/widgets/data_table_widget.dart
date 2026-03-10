@@ -73,65 +73,70 @@ class DataTableWidget<T> extends StatelessWidget {
             },
             scrollbars: true,
           ),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: SizedBox(
-              width: 1100,
-              child: DataTable(
-                headingRowHeight: headingRowHeight,
-                dataRowMinHeight: dataRowMinHeight,
-                dataRowMaxHeight: dataRowMaxHeight,
-                columnSpacing: columnSpacing,
-                horizontalMargin: horizontalMargin,
-                columns: [
-                  ...columns,
-                  if (showActions && (onEdit != null || onDelete != null))
-                    const DataColumn(
-                      label: Text(
-                        'Actions',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                ],
-                rows: rows.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final item = entry.value;
-                  final cells = buildCells(item, index);
-
-                  return DataRow.byIndex(
-                    index: index,
-                    cells: [
-                      ...cells,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                  child: DataTable(
+                    headingRowHeight: headingRowHeight,
+                    dataRowMinHeight: dataRowMinHeight,
+                    dataRowMaxHeight: dataRowMaxHeight,
+                    columnSpacing: columnSpacing,
+                    horizontalMargin: horizontalMargin,
+                    columns: [
+                      ...columns,
                       if (showActions && (onEdit != null || onDelete != null))
-                        DataCell(
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (onEdit != null)
-                                IconButton(
-                                  onPressed: () => onEdit!(item),
-                                  icon: const Icon(Icons.edit, size: 16),
-                                  color: kprimaryColor,
-                                  tooltip: 'Edit',
-                                ),
-                              if (onDelete != null)
-                                IconButton(
-                                  onPressed: () => onDelete!(item),
-                                  icon: const Icon(
-                                    Icons.delete_outline,
-                                    size: 16,
-                                  ),
-                                  color: Colors.red,
-                                  tooltip: 'Delete',
-                                ),
-                            ],
+                        const DataColumn(
+                          label: Text(
+                            'Actions',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                     ],
-                  );
-                }).toList(),
-              ),
-            ),
+                    rows: rows.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final item = entry.value;
+                      final cells = buildCells(item, index);
+
+                      return DataRow.byIndex(
+                        index: index,
+                        cells: [
+                          ...cells,
+                          if (showActions &&
+                              (onEdit != null || onDelete != null))
+                            DataCell(
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (onEdit != null)
+                                    IconButton(
+                                      onPressed: () => onEdit!(item),
+                                      icon: const Icon(Icons.edit, size: 16),
+                                      color: kprimaryColor,
+                                      tooltip: 'Edit',
+                                    ),
+                                  if (onDelete != null)
+                                    IconButton(
+                                      onPressed: () => onDelete!(item),
+                                      icon: const Icon(
+                                        Icons.delete_outline,
+                                        size: 16,
+                                      ),
+                                      color: Colors.red,
+                                      tooltip: 'Delete',
+                                    ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -217,7 +222,13 @@ class DataTableTextCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text?.isNotEmpty == true ? text! : fallback, style: style);
+    return Text(
+      text?.isNotEmpty == true ? text! : fallback,
+      style: style,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      softWrap: false,
+    );
   }
 }
 
@@ -236,6 +247,12 @@ class DataTableNumberCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(number?.toString() ?? fallback, style: style);
+    return Text(
+      number?.toString() ?? fallback,
+      style: style,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      softWrap: false,
+    );
   }
 }

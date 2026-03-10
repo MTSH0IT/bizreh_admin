@@ -6,14 +6,11 @@ class DiscountModel {
   int? id;
   String? title;
   String? arTitle;
-  String? type;
-  int? amount;
-  dynamic pointsAmount;
-  String? minPurchaseAmount;
-  dynamic maxPointsPerUser;
+  num? amount;
+  num? minPurchaseAmount;
+  int? minQuantity;
   String? amountType;
-  DateTime? exprationDate;
-  String? roleType;
+  DateTime? expirationDate;
   int? isActive;
   DateTime? createdAt;
   int? productsCount;
@@ -27,14 +24,11 @@ class DiscountModel {
     this.id,
     this.title,
     this.arTitle,
-    this.type,
     this.amount,
-    this.pointsAmount,
     this.minPurchaseAmount,
-    this.maxPointsPerUser,
+    this.minQuantity,
     this.amountType,
-    this.exprationDate,
-    this.roleType,
+    this.expirationDate,
     this.isActive,
     this.createdAt,
     this.productsCount,
@@ -45,25 +39,23 @@ class DiscountModel {
     this.categories,
   });
 
-  @override
-  String toString() {
-    return 'DiscountModel(id: $id, title: $title, arTitle: $arTitle, type: $type, amount: $amount, pointsAmount: $pointsAmount, minPurchaseAmount: $minPurchaseAmount, maxPointsPerUser: $maxPointsPerUser, amountType: $amountType, exprationDate: $exprationDate, roleType: $roleType, isActive: $isActive, createdAt: $createdAt, productsCount: $productsCount, brandsCount: $brandsCount, categoriesCount: $categoriesCount, products: $products, brands: $brands, categories: $categories)';
+  static num? _parseNum(dynamic value) {
+    if (value is num) return value;
+    if (value is String) return num.tryParse(value);
+    return null;
   }
 
   factory DiscountModel.fromJson(Map<String, dynamic> json) => DiscountModel(
     id: json['id'] as int?,
     title: json['title'] as String?,
     arTitle: json['ar_title'] as String?,
-    type: json['type'] as String?,
-    amount: json['amount'] as int?,
-    pointsAmount: json['points_amount'] as dynamic,
-    minPurchaseAmount: json['min_purchase_amount'] as String?,
-    maxPointsPerUser: json['max_points_per_user'] as dynamic,
+    amount: _parseNum(json['amount']),
+    minPurchaseAmount: _parseNum(json['min_purchase_amount']),
+    minQuantity: json['min_quantity'] as int?,
     amountType: json['amount_type'] as String?,
-    exprationDate: json['expration_date'] == null
+    expirationDate: json['expiration_date'] == null
         ? null
-        : DateTime.parse(json['expration_date'] as String),
-    roleType: json['role_type'] as String?,
+        : DateTime.parse(json['expiration_date'] as String),
     isActive: json['is_active'] as int?,
     createdAt: json['created_at'] == null
         ? null
@@ -86,14 +78,11 @@ class DiscountModel {
     'id': id,
     'title': title,
     'ar_title': arTitle,
-    'type': type,
     'amount': amount,
-    'points_amount': pointsAmount,
     'min_purchase_amount': minPurchaseAmount,
-    'max_points_per_user': maxPointsPerUser,
+    'min_quantity': minQuantity,
     'amount_type': amountType,
-    'expration_date': exprationDate?.toIso8601String(),
-    'role_type': roleType,
+    'expiration_date': expirationDate?.toIso8601String(),
     'is_active': isActive,
     'created_at': createdAt?.toIso8601String(),
     'products_count': productsCount,

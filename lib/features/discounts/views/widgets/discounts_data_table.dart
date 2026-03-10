@@ -6,12 +6,14 @@ class DiscountsDataTable extends StatelessWidget {
   final List<DiscountModel> rows;
   final ValueChanged<DiscountModel>? onEdit;
   final ValueChanged<DiscountModel>? onDelete;
+  final ValueChanged<DiscountModel>? onDetails;
 
   const DiscountsDataTable({
     super.key,
     required this.rows,
     this.onEdit,
     this.onDelete,
+    this.onDetails,
   });
 
   @override
@@ -50,6 +52,9 @@ class DiscountsDataTable extends StatelessWidget {
           ),
         ),
         DataColumn(
+          label: Text('Min Qty', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        DataColumn(
           label: Text('Expires', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         DataColumn(
@@ -76,16 +81,19 @@ class DiscountsDataTable extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
+        DataColumn(
+          label: Text('Details', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
       ],
       buildCells: (d, index) {
         return [
           DataCell(DataTableTextCell(text: d.title)),
           DataCell(DataTableTextCell(text: d.arTitle)),
-          //DataCell(DataTableTextCell(text: d.type)),
           DataCell(DataTableNumberCell(number: d.amount)),
           DataCell(DataTableTextCell(text: d.amountType)),
-          DataCell(DataTableTextCell(text: d.minPurchaseAmount)),
-          DataCell(DataTableDateCell(date: d.exprationDate)),
+          DataCell(DataTableTextCell(text: d.minPurchaseAmount?.toString())),
+          DataCell(DataTableNumberCell(number: d.minQuantity)),
+          DataCell(DataTableDateCell(date: d.expirationDate)),
           DataCell(
             DataTableTextCell(text: (d.isActive ?? 0) == 1 ? 'Yes' : 'No'),
           ),
@@ -93,6 +101,13 @@ class DiscountsDataTable extends StatelessWidget {
           DataCell(DataTableNumberCell(number: d.brandsCount)),
           DataCell(DataTableNumberCell(number: d.categoriesCount)),
           DataCell(DataTableDateCell(date: d.createdAt)),
+          DataCell(
+            IconButton(
+              onPressed: onDetails == null ? null : () => onDetails!(d),
+              icon: const Icon(Icons.visibility_outlined, size: 18),
+              tooltip: 'Details',
+            ),
+          ),
         ];
       },
     );

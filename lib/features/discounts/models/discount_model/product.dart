@@ -6,11 +6,6 @@ class Product {
 
   Product({this.id, this.title, this.arTitle, this.image});
 
-  @override
-  String toString() {
-    return 'Product(id: $id, title: $title, arTitle: $arTitle, image: $image)';
-  }
-
   factory Product.fromJson(Map<String, dynamic> json) => Product(
     id: json['id'] as int?,
     title: json['title'] as String?,

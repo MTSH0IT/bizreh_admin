@@ -11,11 +11,6 @@ class Category {
     this.categoryArTitle,
   });
 
-  @override
-  String toString() {
-    return 'Category(categoryId: $categoryId, categoryType: $categoryType, categoryTitle: $categoryTitle, categoryArTitle: $categoryArTitle)';
-  }
-
   factory Category.fromJson(Map<String, dynamic> json) => Category(
     categoryId: json['category_id'] as int?,
     categoryType: json['category_type'] as String?,

@@ -112,8 +112,8 @@ class ApiEndpoint {
   static const String sendNotificationAll = "/admin/notifications/sendAll";
 
   // Discounts
-  static const String getDiscounts = "/admin/discount/discounts";
-  static const String createDiscount = "/admin/discount/discount";
+  static const String getDiscounts = "/admin/discount";
+  static const String createDiscount = "/admin/discount";
   static String updateDiscount(int id) => "/admin/discount/$id";
   static String deleteDiscount(int id) => "/admin/discount/$id";
 
