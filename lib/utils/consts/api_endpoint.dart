@@ -84,6 +84,7 @@ class ApiEndpoint {
   static const String getOrders = "/admin/order";
   static String assignOrderDriver(int id) => "/admin/order/$id/assign";
   static String changeOrderStatus(int id) => "/admin/order/$id/status";
+  static String getOrder(int id) => "/admin/order/$id";
 
   //profile
   static String getProfile = "/admin/profile";
@@ -124,6 +125,8 @@ class ApiEndpoint {
   static String deletePointsOffer(int id) => "/admin/points/$id";
   static String getUserPointsBalance(int userId) =>
       "/admin/points/$userId/balance";
+  static String getUserPointsHistory(int userId) =>
+      "/admin/points/$userId/history";
 
   // Gifts
   static const String getGifts = "/admin/gift";

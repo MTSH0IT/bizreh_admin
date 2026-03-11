@@ -4,11 +4,11 @@ class UserPointHistoyModel {
   int? points;
   String? pointsType;
   String? referenceType;
-  dynamic referenceId;
+  int? referenceId;
   dynamic sourceDescription;
   DateTime? createdAt;
   int? orderId;
-  dynamic userGiftId;
+  int? userGiftId;
 
   UserPointHistoyModel({
     this.id,
@@ -30,13 +30,13 @@ class UserPointHistoyModel {
       points: json['points'] as int?,
       pointsType: json['points_type'] as String?,
       referenceType: json['reference_type'] as String?,
-      referenceId: json['reference_id'] as dynamic,
+      referenceId: json['reference_id'] as int?,
       sourceDescription: json['source_description'] as dynamic,
       createdAt: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
       orderId: json['order_id'] as int?,
-      userGiftId: json['user_gift_id'] as dynamic,
+      userGiftId: json['user_gift_id'] as int?,
     );
   }
 

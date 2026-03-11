@@ -104,4 +104,36 @@ class OrdersService {
       throw Exception(e.toString());
     }
   }
+
+  Future<OrderModel> getOrder(int orderId) async {
+    try {
+      final response = await _dioClient.get(ApiEndpoint.getOrder(orderId));
+
+      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+        if (json is Map<String, dynamic>) {
+          final orderJson = json['order'] as Map<String, dynamic>;
+          return OrderModel.fromJson(orderJson);
+        }
+        throw Exception('Invalid response');
+      });
+
+      if (apiResponse.success && apiResponse.data != null) {
+        return apiResponse.data as OrderModel;
+      }
+      throw Exception(apiResponse.message ?? 'Something went wrong');
+    } on DioException catch (e) {
+      final err = e.error;
+      if (err is AppException) {
+        log(
+          'orders service AppException getOrder : ${err.message}${err.statusCode}',
+        );
+        throw err;
+      }
+      log('orders service DioException getOrder : ${e.message}');
+      throw Exception(e.message);
+    } catch (e) {
+      log('orders service catch getOrder : ${e.toString()}');
+      throw Exception(e.toString());
+    }
+  }
 }

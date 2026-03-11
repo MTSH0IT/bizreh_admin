@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/points/models/point_model.dart';
+import 'package:bizreh_admin/features/points/models/user_point_histoy_model.dart';
 import 'package:bizreh_admin/features/points/models/user_points_balance_model.dart';
 import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
@@ -152,6 +153,41 @@ class PointsService {
       throw Exception(e.message);
     } catch (e) {
       log('points service catch getUserPointsBalance : ${e.toString()}');
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<UserPointHistoyModel>> getUserPointsHistory(int userId) async {
+    try {
+      final response = await _dioClient.get(
+        ApiEndpoint.getUserPointsHistory(userId),
+      );
+
+      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+        final List list = (json as List?) ?? <dynamic>[];
+        return list
+            .map(
+              (e) => UserPointHistoyModel.fromJson(e as Map<String, dynamic>),
+            )
+            .toList();
+      });
+
+      if (apiResponse.success && apiResponse.data != null) {
+        return apiResponse.data as List<UserPointHistoyModel>;
+      }
+      throw Exception(apiResponse.message ?? 'Something went wrong');
+    } on DioException catch (e) {
+      final err = e.error;
+      if (err is AppException) {
+        log(
+          'points service AppException getUserPointsHistory : ${err.message}${err.statusCode}',
+        );
+        throw err;
+      }
+      log('points service DioException getUserPointsHistory : ${e.message}');
+      throw Exception(e.message);
+    } catch (e) {
+      log('points service catch getUserPointsHistory : ${e.toString()}');
       throw Exception(e.toString());
     }
   }
