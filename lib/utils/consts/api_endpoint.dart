@@ -122,6 +122,8 @@ class ApiEndpoint {
   static const String createPointsOffer = "/admin/points";
   static String updatePointsOffer(int id) => "/admin/points/$id";
   static String deletePointsOffer(int id) => "/admin/points/$id";
+  static String getUserPointsBalance(int userId) =>
+      "/admin/points/$userId/balance";
 
   // Gifts
   static const String getGifts = "/admin/gift";

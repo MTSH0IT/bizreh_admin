@@ -1,4 +1,6 @@
 import 'package:bizreh_admin/features/users/models/user_model.dart';
+import 'package:bizreh_admin/features/points/views/user_points_balance_view.dart';
+import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:bizreh_admin/utils/widgets/active_switch.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +60,9 @@ class UsersDataTable extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
+        DataColumn(
+          label: Text('Points', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
       ],
       buildCells: (user, index) {
         final name = '${user.firstName ?? '-'} ${user.lastName ?? ''}'.trim();
@@ -87,6 +92,28 @@ class UsersDataTable extends StatelessWidget {
               onPressed: onSendNotification == null
                   ? null
                   : () => onSendNotification!(user),
+            ),
+          ),
+          DataCell(
+            ElevatedButton.icon(
+              onPressed: () {
+                final userId = user.id;
+                if (userId == null) return;
+                Get.find<MainNavController>().push(
+                  MainNavEntry(
+                    title: 'Points Details : $name',
+                    page: UserPointsBalanceView(userId: userId),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.stars_rounded, size: 16),
+              label: const Text('Points details'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+              ),
             ),
           ),
         ];
