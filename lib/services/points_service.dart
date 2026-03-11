@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bizreh_admin/features/points/models/point_model/point_model.dart';
+import 'package:bizreh_admin/features/points/models/point_model.dart';
 import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';
@@ -15,7 +15,7 @@ class PointsService {
       final response = await _dioClient.get(ApiEndpoint.getPointsOffers);
 
       final apiResponse = ApiResponse.fromJson(response.data, (json) {
-        final List list = (json['points_offers'] as List?) ?? <dynamic>[];
+        final List list = (json as List?) ?? <dynamic>[];
         return list
             .map((e) => PointModel.fromJson(e as Map<String, dynamic>))
             .toList();

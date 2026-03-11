@@ -1,5 +1,5 @@
 import 'package:bizreh_admin/features/points/controllers/points_controller.dart';
-import 'package:bizreh_admin/features/points/models/point_model/point_model.dart';
+import 'package:bizreh_admin/features/points/models/point_model.dart';
 import 'package:bizreh_admin/features/points/views/widgets/point_form_dialog.dart';
 import 'package:bizreh_admin/features/points/views/widgets/points_data_table.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';

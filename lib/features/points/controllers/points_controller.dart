@@ -2,38 +2,27 @@ import 'dart:developer';
 
 import 'package:bizreh_admin/features/Brands/models/brands_model.dart';
 import 'package:bizreh_admin/features/Brands/controllers/brands_controler.dart';
-import 'package:bizreh_admin/features/category/models/all_category_model.dart';
-import 'package:bizreh_admin/features/category/controllers/all_category_crud_controller.dart';
-import 'package:bizreh_admin/features/points/models/point_model/point_model.dart';
-import 'package:bizreh_admin/features/products/controllers/products_controller.dart';
-import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
-import 'package:bizreh_admin/features/sub_category/models/all_sub_category_model.dart';
-import 'package:bizreh_admin/features/sub_category/controllers/all_sub_category_crud_controller.dart';
+import 'package:bizreh_admin/features/packaging/models/package_model.dart';
+import 'package:bizreh_admin/features/points/models/point_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/brands_service.dart';
-import 'package:bizreh_admin/services/category_service.dart';
+import 'package:bizreh_admin/services/packaging_service.dart';
 import 'package:bizreh_admin/services/points_service.dart';
-import 'package:bizreh_admin/services/products_service.dart';
-import 'package:bizreh_admin/services/sub_category_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PointsController extends GetxController {
   final PointsService _pointsService = PointsService();
-  final ProductsService _productsService = ProductsService();
   final BrandsService _brandsService = BrandsService();
-  final CategoryService _categoryService = CategoryService();
-  final SubCategoryService _subCategoryService = SubCategoryService();
+  final PackagingService _packagingService = PackagingService();
 
   final RxList<PointModel> pointsOffers = <PointModel>[].obs;
   final RxBool isLoading = false.obs;
 
   final RxBool isMetaLoading = false.obs;
-  final RxList<ProductModel> products = <ProductModel>[].obs;
   final RxList<BrandsModel> brands = <BrandsModel>[].obs;
-  final RxList<AllCategoryModel> categories = <AllCategoryModel>[].obs;
-  final RxList<AllSubCategoryModel> subCategories = <AllSubCategoryModel>[].obs;
+  final RxList<PackageModel> packagings = <PackageModel>[].obs;
 
   final RxBool isCreating = false.obs;
   final RxBool isUpdating = false.obs;
@@ -41,22 +30,14 @@ class PointsController extends GetxController {
 
   final TextEditingController titleController = TextEditingController();
   final TextEditingController arTitleController = TextEditingController();
-  final TextEditingController pointsAmountController = TextEditingController();
-  final TextEditingController minPurchaseAmountController =
-      TextEditingController();
-  final TextEditingController maxPointsPerUserController =
-      TextEditingController();
-  final TextEditingController expirationDateController =
-      TextEditingController();
+  final TextEditingController pointsPerUnitController = TextEditingController();
+  final TextEditingController minQuantityController = TextEditingController();
+  final TextEditingController startDateController = TextEditingController();
+  final TextEditingController endDateController = TextEditingController();
 
-  final RxString selectedAmountType = 'fixed'.obs; // fixed | percentage
-  final RxString selectedRoleType = 'all'.obs;
+  final RxInt selectedBrandId = RxInt(0);
+  final RxInt selectedPackagingId = RxInt(0);
   final RxInt selectedIsActive = 1.obs;
-
-  final RxList<int> selectedProductIds = <int>[].obs;
-  final RxList<int> selectedBrandIds = <int>[].obs;
-  final RxList<int> selectedMainCategoryIds = <int>[].obs;
-  final RxList<int> selectedSubCategoryIds = <int>[].obs;
 
   final Rx<PointModel?> selectedPointOffer = Rx<PointModel?>(null);
 
@@ -73,50 +54,23 @@ class PointsController extends GetxController {
   void onClose() {
     titleController.dispose();
     arTitleController.dispose();
-    pointsAmountController.dispose();
-    minPurchaseAmountController.dispose();
-    maxPointsPerUserController.dispose();
-    expirationDateController.dispose();
+    pointsPerUnitController.dispose();
+    minQuantityController.dispose();
+    startDateController.dispose();
+    endDateController.dispose();
     super.onClose();
   }
 
   Future<void> getMeta() async {
-    final productsController = Get.isRegistered<ProductsController>()
-        ? Get.find<ProductsController>()
-        : null;
     final brandsController = Get.isRegistered<BrandsController>()
         ? Get.find<BrandsController>()
         : null;
-    final categoriesController = Get.isRegistered<AllCategoryCrudController>()
-        ? Get.find<AllCategoryCrudController>()
-        : null;
-    final subCategoriesController =
-        Get.isRegistered<AllSubCategoryCrudController>()
-        ? Get.find<AllSubCategoryCrudController>()
-        : null;
-
-    if (productsController != null && productsController.products.isNotEmpty) {
-      products.assignAll(productsController.products);
-    }
 
     if (brandsController != null && brandsController.brands.isNotEmpty) {
       brands.assignAll(brandsController.brands);
     }
 
-    if (categoriesController != null &&
-        categoriesController.allCategories.isNotEmpty) {
-      categories.assignAll(categoriesController.allCategories);
-    }
-
-    if (subCategoriesController != null &&
-        subCategoriesController.allSubCategories.isNotEmpty) {
-      subCategories.assignAll(subCategoriesController.allSubCategories);
-    }
-
-    if (products.isNotEmpty &&
-        brands.isNotEmpty &&
-        categories.isNotEmpty &&
-        subCategories.isNotEmpty) {
+    if (brands.isNotEmpty && packagings.isNotEmpty) {
       return;
     }
 
@@ -126,38 +80,24 @@ class PointsController extends GetxController {
       final futures = <Future<dynamic>>[];
       final keys = <String>[];
 
-      if (products.isEmpty) {
-        futures.add(_productsService.getProducts());
-        keys.add('products');
-      }
       if (brands.isEmpty) {
         futures.add(_brandsService.getBrands());
         keys.add('brands');
       }
-      if (categories.isEmpty) {
-        futures.add(_categoryService.getAllCategories());
-        keys.add('categories');
-      }
-      if (subCategories.isEmpty) {
-        futures.add(_subCategoryService.getAllSubCategories());
-        keys.add('subCategories');
+      if (packagings.isEmpty) {
+        futures.add(_packagingService.getPackagings());
+        keys.add('packagings');
       }
 
       final results = await Future.wait(futures);
 
       for (var i = 0; i < results.length; i++) {
         switch (keys[i]) {
-          case 'products':
-            products.assignAll(results[i] as List<ProductModel>);
-            break;
           case 'brands':
             brands.assignAll(results[i] as List<BrandsModel>);
             break;
-          case 'categories':
-            categories.assignAll(results[i] as List<AllCategoryModel>);
-            break;
-          case 'subCategories':
-            subCategories.assignAll(results[i] as List<AllSubCategoryModel>);
+          case 'packagings':
+            packagings.assignAll(results[i] as List<PackageModel>);
             break;
         }
       }
@@ -165,7 +105,7 @@ class PointsController extends GetxController {
       showMassage(e.message, false);
       log('AppException in getMeta: ${e.message}');
     } catch (e) {
-      showMassage('Failed to load products/brands/categories', false);
+      showMassage('Failed to load brands/packagings', false);
       log('Error in getMeta: $e');
     } finally {
       isMetaLoading.value = false;
@@ -196,8 +136,12 @@ class PointsController extends GetxController {
     return pointsOffers.where((p) {
       final title = (p.title ?? '').toLowerCase();
       final arTitle = (p.arTitle ?? '').toLowerCase();
-      final type = (p.type ?? '').toLowerCase();
-      return title.contains(q) || arTitle.contains(q) || type.contains(q);
+      final brand = (p.brandTitle ?? '').toLowerCase();
+      final packaging = (p.packagingTitle ?? '').toLowerCase();
+      return title.contains(q) ||
+          arTitle.contains(q) ||
+          brand.contains(q) ||
+          packaging.contains(q);
     }).toList();
   }
 
@@ -206,31 +150,16 @@ class PointsController extends GetxController {
   void clearForm() {
     titleController.clear();
     arTitleController.clear();
-    pointsAmountController.clear();
-    minPurchaseAmountController.clear();
-    maxPointsPerUserController.clear();
-    expirationDateController.clear();
+    pointsPerUnitController.clear();
+    minQuantityController.clear();
+    startDateController.clear();
+    endDateController.clear();
 
-    selectedAmountType.value = 'fixed';
-    selectedRoleType.value = 'all';
+    selectedBrandId.value = 0;
+    selectedPackagingId.value = 0;
     selectedIsActive.value = 1;
 
-    selectedProductIds.clear();
-    selectedBrandIds.clear();
-    selectedMainCategoryIds.clear();
-    selectedSubCategoryIds.clear();
-
     selectedPointOffer.value = null;
-  }
-
-  void setAmountType(String? v) {
-    if (v == null || v.isEmpty) return;
-    selectedAmountType.value = v;
-  }
-
-  void setRoleType(String? v) {
-    if (v == null || v.isEmpty) return;
-    selectedRoleType.value = v;
   }
 
   void setIsActive(int? v) {
@@ -238,57 +167,41 @@ class PointsController extends GetxController {
     selectedIsActive.value = v;
   }
 
-  void setSelectedProducts(List<int> ids) => selectedProductIds.assignAll(ids);
+  void setSelectedBrandId(int? id) {
+    if (id == null) return;
+    selectedBrandId.value = id;
+  }
 
-  void setSelectedBrands(List<int> ids) => selectedBrandIds.assignAll(ids);
-
-  void setSelectedMainCategories(List<int> ids) =>
-      selectedMainCategoryIds.assignAll(ids);
-
-  void setSelectedSubCategories(List<int> ids) =>
-      selectedSubCategoryIds.assignAll(ids);
+  void setSelectedPackagingId(int? id) {
+    if (id == null) return;
+    selectedPackagingId.value = id;
+  }
 
   void setPointForEdit(PointModel point) {
     selectedPointOffer.value = point;
 
     titleController.text = point.title ?? '';
     arTitleController.text = point.arTitle ?? '';
-    pointsAmountController.text = point.pointsAmount?.toString() ?? '';
-    minPurchaseAmountController.text = point.minPurchaseAmount ?? '';
-    maxPointsPerUserController.text = point.maxPointsPerUser?.toString() ?? '';
-    expirationDateController.text = point.exprationDate == null
+    pointsPerUnitController.text = point.pointsPerUnit?.toString() ?? '';
+    minQuantityController.text = point.minQuantity?.toString() ?? '';
+    startDateController.text = point.startDate == null
         ? ''
-        : point.exprationDate!.toIso8601String().split('T').first;
+        : point.startDate!
+              .toIso8601String()
+              .replaceFirst('T', ' ')
+              .split('.')
+              .first;
+    endDateController.text = point.endDate == null
+        ? ''
+        : point.endDate!
+              .toIso8601String()
+              .replaceFirst('T', ' ')
+              .split('.')
+              .first;
 
-    selectedAmountType.value = point.amountType ?? 'fixed';
-    selectedRoleType.value = point.roleType ?? 'all';
+    selectedBrandId.value = point.brandId ?? 0;
+    selectedPackagingId.value = point.packagingId ?? 0;
     selectedIsActive.value = point.isActive ?? 1;
-
-    final productsIds = (point.products ?? [])
-        .map((p) => p.id)
-        .whereType<int>()
-        .toList();
-    selectedProductIds.assignAll(productsIds);
-
-    final brandsIds = (point.brands ?? [])
-        .map((b) => b.id)
-        .whereType<int>()
-        .toList();
-    selectedBrandIds.assignAll(brandsIds);
-
-    final mainIds = (point.categories ?? [])
-        .where((c) => c.categoryId != null && c.categoryType == 'main')
-        .map((c) => c.categoryId)
-        .whereType<int>()
-        .toList();
-    selectedMainCategoryIds.assignAll(mainIds);
-
-    final subIds = (point.categories ?? [])
-        .where((c) => c.categoryId != null && c.categoryType == 'sub')
-        .map((c) => c.categoryId)
-        .whereType<int>()
-        .toList();
-    selectedSubCategoryIds.assignAll(subIds);
   }
 
   bool _validateForm() {
@@ -300,62 +213,49 @@ class PointsController extends GetxController {
       showMassage('Please enter Arabic title', false);
       return false;
     }
-    if (pointsAmountController.text.trim().isEmpty) {
-      showMassage('Please enter points amount', false);
+    if (selectedBrandId.value <= 0) {
+      showMassage('Please select brand', false);
       return false;
     }
-    if (minPurchaseAmountController.text.trim().isEmpty) {
-      showMassage('Please enter min purchase amount', false);
+    if (selectedPackagingId.value <= 0) {
+      showMassage('Please select packaging', false);
       return false;
     }
-    if (maxPointsPerUserController.text.trim().isEmpty) {
-      showMassage('Please enter max points per user', false);
+    if (pointsPerUnitController.text.trim().isEmpty) {
+      showMassage('Please enter points per unit', false);
       return false;
     }
-    if (expirationDateController.text.trim().isEmpty) {
-      showMassage('Please select expiration date', false);
+    if (minQuantityController.text.trim().isEmpty) {
+      showMassage('Please enter min quantity', false);
+      return false;
+    }
+    if (startDateController.text.trim().isEmpty) {
+      showMassage('Please select start date', false);
+      return false;
+    }
+    if (endDateController.text.trim().isEmpty) {
+      showMassage('Please select end date', false);
       return false;
     }
     return true;
   }
 
   Map<String, dynamic> _buildBody() {
-    final categoryIds = <Map<String, dynamic>>[
-      ...selectedMainCategoryIds.map(
-        (id) => {'category_id': id, 'category_type': 'main'},
-      ),
-      ...selectedSubCategoryIds.map(
-        (id) => {'category_id': id, 'category_type': 'sub'},
-      ),
-    ];
-
     final body = <String, dynamic>{
       'title': titleController.text.trim(),
       'ar_title': arTitleController.text.trim(),
-      'points_amount':
-          int.tryParse(pointsAmountController.text.trim()) ??
-          pointsAmountController.text.trim(),
-      'amount_type': selectedAmountType.value,
-      'min_purchase_amount':
-          int.tryParse(minPurchaseAmountController.text.trim()) ??
-          minPurchaseAmountController.text.trim(),
-      'max_points_per_user':
-          int.tryParse(maxPointsPerUserController.text.trim()) ??
-          maxPointsPerUserController.text.trim(),
-      'expration_date': expirationDateController.text.trim(),
-      'role_type': selectedRoleType.value,
+      'brand_id': selectedBrandId.value,
+      'packaging_id': selectedPackagingId.value,
+      'points_per_unit':
+          int.tryParse(pointsPerUnitController.text.trim()) ??
+          pointsPerUnitController.text.trim(),
+      'min_quantity':
+          int.tryParse(minQuantityController.text.trim()) ??
+          minQuantityController.text.trim(),
+      'start_date': startDateController.text.trim(),
+      'end_date': endDateController.text.trim(),
       'is_active': selectedIsActive.value,
     };
-
-    if (selectedProductIds.isNotEmpty) {
-      body['product_ids'] = selectedProductIds.toList();
-    }
-    if (selectedBrandIds.isNotEmpty) {
-      body['brand_ids'] = selectedBrandIds.toList();
-    }
-    if (categoryIds.isNotEmpty) {
-      body['category_ids'] = categoryIds;
-    }
 
     return body;
   }

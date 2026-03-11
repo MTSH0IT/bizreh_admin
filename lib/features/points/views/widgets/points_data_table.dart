@@ -1,4 +1,4 @@
-import 'package:bizreh_admin/features/points/models/point_model/point_model.dart';
+import 'package:bizreh_admin/features/points/models/point_model.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -31,50 +31,32 @@ class PointsDataTable extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        // DataColumn(
-        //   label: Text('Type', style: TextStyle(fontWeight: FontWeight.bold)),
-        // ),
         DataColumn(
-          label: Text('Points', style: TextStyle(fontWeight: FontWeight.bold)),
+          label: Text('Brand', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         DataColumn(
           label: Text(
-            'Amount Type',
+            'Packaging',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         DataColumn(
           label: Text(
-            'Min Purchase',
+            'Points/Unit',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         DataColumn(
-          label: Text(
-            'Max/User',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+          label: Text('Min Qty', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         DataColumn(
-          label: Text('Expires', style: TextStyle(fontWeight: FontWeight.bold)),
+          label: Text('Start', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        DataColumn(
+          label: Text('End', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         DataColumn(
           label: Text('Active', style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
-        DataColumn(
-          label: Text(
-            'Products',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-        DataColumn(
-          label: Text('Brands', style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
-        DataColumn(
-          label: Text(
-            'Categories',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
         ),
         DataColumn(
           label: Text(
@@ -87,18 +69,17 @@ class PointsDataTable extends StatelessWidget {
         return [
           DataCell(DataTableTextCell(text: p.title)),
           DataCell(DataTableTextCell(text: p.arTitle)),
-          //DataCell(DataTableTextCell(text: p.type)),
-          DataCell(DataTableNumberCell(number: p.pointsAmount)),
-          DataCell(DataTableTextCell(text: p.amountType)),
-          DataCell(DataTableTextCell(text: p.minPurchaseAmount)),
-          DataCell(DataTableNumberCell(number: p.maxPointsPerUser)),
-          DataCell(DataTableDateCell(date: p.exprationDate)),
+          DataCell(DataTableTextCell(text: p.brandTitle ?? p.brandArTitle)),
+          DataCell(
+            DataTableTextCell(text: p.packagingTitle ?? p.packagingArTitle),
+          ),
+          DataCell(DataTableNumberCell(number: p.pointsPerUnit)),
+          DataCell(DataTableNumberCell(number: p.minQuantity)),
+          DataCell(DataTableDateCell(date: p.startDate)),
+          DataCell(DataTableDateCell(date: p.endDate)),
           DataCell(
             DataTableTextCell(text: (p.isActive ?? 0) == 1 ? 'Yes' : 'No'),
           ),
-          DataCell(DataTableNumberCell(number: p.productsCount)),
-          DataCell(DataTableNumberCell(number: p.brandsCount)),
-          DataCell(DataTableNumberCell(number: p.categoriesCount)),
           DataCell(DataTableDateCell(date: p.createdAt)),
         ];
       },
