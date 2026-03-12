@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/cities/models/city_model.dart';
+import 'package:bizreh_admin/features/suppliers/controllers/suppliers_controller.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/cities_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
@@ -40,6 +41,11 @@ class CitiesController extends GetxController {
       isLoading.value = true;
       final data = await _service.getCities();
       cities.assignAll(data);
+
+      // Sync with SuppliersController if it exists
+      if (Get.isRegistered<SuppliersController>()) {
+        Get.find<SuppliersController>().cities.assignAll(data);
+      }
     } on AppException catch (e) {
       showMassage(e.message, false);
       log('AppException in getCities: ${e.message}');

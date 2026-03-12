@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bizreh_admin/features/Brands/models/brands_model.dart';
 import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
+import 'package:bizreh_admin/features/product_top_silling/controllers/product_top_selling_controller.dart';
 import 'package:bizreh_admin/features/sub_category/models/all_sub_category_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/brands_service.dart';
@@ -181,6 +182,11 @@ class ProductsController extends GetxController {
 
       await _productsService.deleteProduct(id);
       await getProducts();
+
+      // Refresh Top Selling list if controller exists
+      if (Get.isRegistered<ProductTopSellingController>()) {
+        await Get.find<ProductTopSellingController>().getTopSellingProducts();
+      }
 
       showMassage('Product deleted successfully', true);
     } on AppException catch (e) {

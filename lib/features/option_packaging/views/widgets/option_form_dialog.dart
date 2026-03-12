@@ -1,4 +1,5 @@
 import 'package:bizreh_admin/features/option_packaging/controllers/product_options_controller.dart';
+import 'package:bizreh_admin/utils/widgets/app_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/form_dialog_actions.dart';
 import 'package:bizreh_admin/utils/widgets/form_image_picker_section.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
@@ -14,40 +15,8 @@ class OptionFormDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final isEditing = controller.isEditing;
 
-    return AlertDialog(
+    return AppFormDialog(
       title: Text(isEditing ? 'Edit Option' : 'Create Option'),
-      content: SizedBox(
-        width: 520,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              LabeledTextField(
-                label: 'Option Name',
-                hint: 'Enter option name',
-                controller: controller.optionNameController,
-              ),
-              LabeledTextField(
-                label: 'Arabic Option Name',
-                hint: 'Enter Arabic option name',
-                controller: controller.arOptionNameController,
-              ),
-              LabeledTextField(
-                label: 'SKU',
-                hint: 'Enter option sku',
-                controller: controller.optionSkuController,
-              ),
-              const SizedBox(height: 12),
-              FormImagePickerSection(
-                selectedImagePath: controller.mainImagePath,
-                existingImageUrl: null,
-                isEditing: false,
-                onPathSelected: controller.setImagePath,
-              ),
-            ],
-          ),
-        ),
-      ),
       actions: [
         FormDialogActions(
           onCancel: () {
@@ -69,6 +38,34 @@ class OptionFormDialog extends StatelessWidget {
           submitText: isEditing ? 'Update' : 'Create',
         ),
       ],
+
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          LabeledTextField(
+            label: 'Option Name',
+            hint: 'Enter option name',
+            controller: controller.optionNameController,
+          ),
+          LabeledTextField(
+            label: 'Arabic Option Name',
+            hint: 'Enter Arabic option name',
+            controller: controller.arOptionNameController,
+          ),
+          LabeledTextField(
+            label: 'SKU',
+            hint: 'Enter option sku',
+            controller: controller.optionSkuController,
+          ),
+          const SizedBox(height: 12),
+          FormImagePickerSection(
+            selectedImagePath: controller.mainImagePath,
+            existingImageUrl: null,
+            isEditing: false,
+            onPathSelected: controller.setImagePath,
+          ),
+        ],
+      ),
     );
   }
 }

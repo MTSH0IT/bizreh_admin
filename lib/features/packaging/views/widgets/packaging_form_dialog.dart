@@ -1,4 +1,5 @@
 import 'package:bizreh_admin/features/packaging/controllers/packaging_controller.dart';
+import 'package:bizreh_admin/utils/widgets/app_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/form_dialog_actions.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:flutter/material.dart';
@@ -13,28 +14,8 @@ class PackagingFormDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final isEditing = controller.isEditing;
 
-    return AlertDialog(
+    return AppFormDialog(
       title: Text(isEditing ? 'Edit Packaging' : 'Create Packaging'),
-      content: SizedBox(
-        width: 520,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              LabeledTextField(
-                label: 'Title',
-                hint: 'Enter packaging title',
-                controller: controller.titleController,
-              ),
-              LabeledTextField(
-                label: 'Arabic Title',
-                hint: 'Enter Arabic packaging title',
-                controller: controller.arTitleController,
-              ),
-            ],
-          ),
-        ),
-      ),
       actions: [
         FormDialogActions(
           onCancel: () {
@@ -53,6 +34,21 @@ class PackagingFormDialog extends StatelessWidget {
           submitText: isEditing ? 'Update' : 'Create',
         ),
       ],
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          LabeledTextField(
+            label: 'Title',
+            hint: 'Enter packaging title',
+            controller: controller.titleController,
+          ),
+          LabeledTextField(
+            label: 'Arabic Title',
+            hint: 'Enter Arabic packaging title',
+            controller: controller.arTitleController,
+          ),
+        ],
+      ),
     );
   }
 }

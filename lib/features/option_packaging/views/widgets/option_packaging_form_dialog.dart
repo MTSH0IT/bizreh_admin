@@ -2,6 +2,7 @@ import 'package:bizreh_admin/features/option_packaging/controllers/option_packag
 import 'package:bizreh_admin/features/packaging/models/package_model.dart';
 import 'package:bizreh_admin/features/products/models/product_model/option.dart';
 import 'package:bizreh_admin/utils/func/color_degree.dart';
+import 'package:bizreh_admin/utils/widgets/app_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/color_dot.dart';
 import 'package:bizreh_admin/utils/widgets/form_dialog_actions.dart';
@@ -70,81 +71,8 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
   Widget build(BuildContext context) {
     final isEditing = widget.mappingId != null;
 
-    return AlertDialog(
+    return AppFormDialog(
       title: Text(isEditing ? 'Edit Mapping' : 'Create Mapping'),
-      content: SizedBox(
-        width: 420,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Option: ${widget.option.optionName ?? '-'}'),
-            Text('Packaging: ${widget.packaging.title ?? '-'}'),
-            const SizedBox(height: 12),
-            LabeledTextField(
-              label: 'Price per unit',
-              hint: 'Enter price',
-              controller: _priceController,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-              ],
-            ),
-            LabeledTextField(
-              label: 'Stock quantity',
-              hint: 'Enter stock',
-              controller: _stockController,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            ),
-            const SizedBox(height: 12),
-            Obx(() {
-              final loading = widget.controller.isColorsLoading.value;
-              final items = <DropdownMenuItem<int>>[
-                const DropdownMenuItem(value: null, child: Text('No color')),
-                ...widget.controller.colors
-                    .where((c) => c.id != null)
-                    .map(
-                      (c) => DropdownMenuItem<int>(
-                        value: c.id!,
-                        child: Row(
-                          children: [
-                            ColorDot(
-                              size: 18,
-                              color: parseColorDegree(c.colorDegree),
-                              selected: false,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                c.name ?? 'Color #${c.id!}',
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-              ];
-
-              final selected = widget.controller.selectedColorId.value;
-
-              return LoadingDropdownFormField2<int>(
-                isLoading: loading,
-                items: items,
-                value: selected,
-                labelText: 'Color',
-                hintText: 'Select color',
-                enableSearch: true,
-                searchHintText: 'Search color...',
-                onChanged: (v) {
-                  widget.controller.setSelectedColorId(v);
-                },
-              );
-            }),
-          ],
-        ),
-      ),
       actions: [
         if (isEditing)
           Obx(() {
@@ -189,6 +117,77 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
           submitText: isEditing ? 'Update' : 'Create',
         ),
       ],
+
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Option: ${widget.option.optionName ?? '-'}'),
+          Text('Packaging: ${widget.packaging.title ?? '-'}'),
+          const SizedBox(height: 12),
+          LabeledTextField(
+            label: 'Price per unit',
+            hint: 'Enter price',
+            controller: _priceController,
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+            ],
+          ),
+          LabeledTextField(
+            label: 'Stock quantity',
+            hint: 'Enter stock',
+            controller: _stockController,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          ),
+          const SizedBox(height: 12),
+          Obx(() {
+            final loading = widget.controller.isColorsLoading.value;
+            final items = <DropdownMenuItem<int>>[
+              const DropdownMenuItem(value: null, child: Text('No color')),
+              ...widget.controller.colors
+                  .where((c) => c.id != null)
+                  .map(
+                    (c) => DropdownMenuItem<int>(
+                      value: c.id!,
+                      child: Row(
+                        children: [
+                          ColorDot(
+                            size: 18,
+                            color: parseColorDegree(c.colorDegree),
+                            selected: false,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              c.name ?? 'Color #${c.id!}',
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+            ];
+
+            final selected = widget.controller.selectedColorId.value;
+
+            return LoadingDropdownFormField2<int>(
+              isLoading: loading,
+              items: items,
+              value: selected,
+              labelText: 'Color',
+              hintText: 'Select color',
+              enableSearch: true,
+              searchHintText: 'Search color...',
+              onChanged: (v) {
+                widget.controller.setSelectedColorId(v);
+              },
+            );
+          }),
+        ],
+      ),
     );
   }
 }
