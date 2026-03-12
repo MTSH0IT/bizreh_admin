@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:bizreh_admin/features/Brands/views/brands_view.dart';
 import 'package:bizreh_admin/features/Driver/views/drivers_view.dart';
 import 'package:bizreh_admin/features/category/views/all_category_view.dart';
@@ -59,23 +57,18 @@ class _MainviewState extends State<Mainview> {
                 children: [
                   const AdminTopBar(),
                   Expanded(
-                    child: ScrollConfiguration(
-                      behavior: ScrollConfiguration.of(context).copyWith(
-                        dragDevices: {
-                          PointerDeviceKind.touch,
-                          PointerDeviceKind.mouse,
-                          PointerDeviceKind.trackpad,
-                        },
-                        scrollbars: true,
-                      ),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Padding(
-                          padding: const EdgeInsets.all(24),
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 1200),
-                            child: Obx(() => _nav.current),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            minWidth: 900,
+                            maxWidth: 1200,
+                            maxHeight: 900,
+                            minHeight: 600,
                           ),
+                          child: Obx(() => _nav.current),
                         ),
                       ),
                     ),

@@ -30,8 +30,8 @@ class DataTableWidget<T> extends StatelessWidget {
     this.showActions = true,
     this.emptyMessage,
     this.headingRowHeight = 52,
-    this.dataRowMinHeight = 60,
-    this.dataRowMaxHeight = 72,
+    this.dataRowMinHeight = 55,
+    this.dataRowMaxHeight = 70,
     this.columnSpacing = 8,
     this.horizontalMargin = 8,
   });
@@ -64,80 +64,69 @@ class DataTableWidget<T> extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: ScrollConfiguration(
-          behavior: ScrollConfiguration.of(context).copyWith(
-            dragDevices: {
-              PointerDeviceKind.touch,
-              PointerDeviceKind.mouse,
-              PointerDeviceKind.trackpad,
-            },
-            scrollbars: true,
-          ),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                  child: DataTable(
-                    headingRowHeight: headingRowHeight,
-                    dataRowMinHeight: dataRowMinHeight,
-                    dataRowMaxHeight: dataRowMaxHeight,
-                    columnSpacing: columnSpacing,
-                    horizontalMargin: horizontalMargin,
-                    columns: [
-                      ...columns,
-                      if (showActions && (onEdit != null || onDelete != null))
-                        const DataColumn(
-                          label: Text(
-                            'Actions',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                child: DataTable(
+                  headingRowHeight: headingRowHeight,
+                  dataRowMinHeight: dataRowMinHeight,
+                  dataRowMaxHeight: dataRowMaxHeight,
+                  columnSpacing: columnSpacing,
+                  horizontalMargin: horizontalMargin,
+                  columns: [
+                    ...columns,
+                    if (showActions && (onEdit != null || onDelete != null))
+                      const DataColumn(
+                        label: Text(
+                          'Actions',
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                    ],
-                    rows: rows.asMap().entries.map((entry) {
-                      final index = entry.key;
-                      final item = entry.value;
-                      final cells = buildCells(item, index);
+                      ),
+                  ],
+                  rows: rows.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final item = entry.value;
+                    final cells = buildCells(item, index);
 
-                      return DataRow.byIndex(
-                        index: index,
-                        cells: [
-                          ...cells,
-                          if (showActions &&
-                              (onEdit != null || onDelete != null))
-                            DataCell(
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  if (onEdit != null)
-                                    IconButton(
-                                      onPressed: () => onEdit!(item),
-                                      icon: const Icon(Icons.edit, size: 16),
-                                      color: kprimaryColor,
-                                      tooltip: 'Edit',
+                    return DataRow.byIndex(
+                      index: index,
+                      cells: [
+                        ...cells,
+                        if (showActions && (onEdit != null || onDelete != null))
+                          DataCell(
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (onEdit != null)
+                                  IconButton(
+                                    onPressed: () => onEdit!(item),
+                                    icon: const Icon(Icons.edit, size: 16),
+                                    color: kprimaryColor,
+                                    tooltip: 'Edit',
+                                  ),
+                                if (onDelete != null)
+                                  IconButton(
+                                    onPressed: () => onDelete!(item),
+                                    icon: const Icon(
+                                      Icons.delete_outline,
+                                      size: 16,
                                     ),
-                                  if (onDelete != null)
-                                    IconButton(
-                                      onPressed: () => onDelete!(item),
-                                      icon: const Icon(
-                                        Icons.delete_outline,
-                                        size: 16,
-                                      ),
-                                      color: Colors.red,
-                                      tooltip: 'Delete',
-                                    ),
-                                ],
-                              ),
+                                    color: Colors.red,
+                                    tooltip: 'Delete',
+                                  ),
+                              ],
                             ),
-                        ],
-                      );
-                    }).toList(),
-                  ),
+                          ),
+                      ],
+                    );
+                  }).toList(),
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -167,19 +156,6 @@ class DataTableImageCell extends StatelessWidget {
       width: width ?? defaultSize,
       height: height ?? defaultSize,
       child: ImageNetwork(image: imageUrl ?? ''),
-      // ClipRRect(
-      //   borderRadius: BorderRadius.circular(borderRadius),
-      //   child: imageUrl == null || imageUrl!.isEmpty
-      //       ? ColoredBox(
-      //           color: const Color(0xFFF3F4F6),
-      //   child: Icon(
-      //     Icons.image_not_supported,
-      //     color: Colors.grey[400],
-      //     size: (width ?? height ?? 54) * 0.5,
-      //   ),
-      // )
-      // : ImageNetwork(image: imageUrl!),
-      // ),
     );
   }
 }

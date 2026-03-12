@@ -1,6 +1,7 @@
 import 'package:bizreh_admin/features/auth/views/login_view.dart';
 import 'package:bizreh_admin/features/auth/controllers/auth_controller.dart';
 import 'package:bizreh_admin/features/main_view/views/main_view.dart';
+import 'package:bizreh_admin/utils/widgets/app_scroll_behavior.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       home: const _RootDecider(),
+      scrollBehavior: const AppScrollBehavior(),
       debugShowCheckedModeBanner: false,
     );
   }
