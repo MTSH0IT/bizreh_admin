@@ -1,8 +1,8 @@
 class UserPointsBalanceModel {
   int? userId;
-  String? totalPointsEarned;
-  String? totalPointsUsed;
-  String? availablePoints;
+  int? totalPointsEarned;
+  int? totalPointsUsed;
+  int? availablePoints;
   int? totalTransactions;
 
   UserPointsBalanceModel({
@@ -16,9 +16,9 @@ class UserPointsBalanceModel {
   factory UserPointsBalanceModel.fromJson(Map<String, dynamic> json) {
     return UserPointsBalanceModel(
       userId: json['user_id'] as int?,
-      totalPointsEarned: json['total_points_earned'] as String?,
-      totalPointsUsed: json['total_points_used'] as String?,
-      availablePoints: json['available_points'] as String?,
+      totalPointsEarned: json['total_points_earned'] as int?,
+      totalPointsUsed: json['total_points_used'] as int?,
+      availablePoints: json['available_points'] as int?,
       totalTransactions: json['total_transactions'] as int?,
     );
   }
