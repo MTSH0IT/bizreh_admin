@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class LabeledTextField extends StatelessWidget {
-  final String label;
-  final String hint;
+  final String? label;
+  final String? hint;
   final TextEditingController controller;
   final TextInputType keyboardType;
   final List<TextInputFormatter>? inputFormatters;
@@ -14,8 +14,8 @@ class LabeledTextField extends StatelessWidget {
 
   const LabeledTextField({
     super.key,
-    required this.label,
-    required this.hint,
+    this.label,
+    this.hint,
     required this.controller,
     this.keyboardType = TextInputType.text,
     this.inputFormatters,
@@ -32,14 +32,15 @@ class LabeledTextField extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF374151),
+          if (label != null)
+            Text(
+              label!,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF374151),
+              ),
             ),
-          ),
           const SizedBox(height: 8),
           TextField(
             controller: controller,

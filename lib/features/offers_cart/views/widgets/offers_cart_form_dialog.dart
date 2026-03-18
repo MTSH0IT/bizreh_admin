@@ -2,6 +2,7 @@ import 'package:bizreh_admin/features/offers_cart/controllers/offers_cart_contro
 import 'package:bizreh_admin/utils/widgets/app_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/form_dialog_actions.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
+import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -104,21 +105,27 @@ class OffersCartFormDialog extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(
-                        child: LabeledTextField(
-                          label: 'Option packaging id',
-                          hint: 'e.g. 92',
-                          controller: item.optionPackagingIdController,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                        ),
+                        flex: 3,
+                        child: Obx(() {
+                          return LoadingDropdownFormField2<int>(
+                            isLoading: controller.isMetaLoading.value,
+                            items: controller.optionPackagingItems,
+                            value: item.selectedOptionPackagingId.value,
+                            onChanged: (v) {
+                              item.selectedOptionPackagingId.value = v;
+                            },
+                            labelText: 'Option packaging',
+                            hintText: 'Select option packaging',
+                            enableSearch: true,
+                            searchHintText:
+                                'Search by product/option/packaging/sku...',
+                          );
+                        }),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: LabeledTextField(
-                          label: 'Item quantity',
-                          hint: 'e.g. 3',
+                          hint: 'quantity',
                           controller: item.quantityController,
                           keyboardType: TextInputType.number,
                           inputFormatters: [

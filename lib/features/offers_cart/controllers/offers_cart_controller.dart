@@ -10,19 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OffersCartItemInput {
-  final TextEditingController optionPackagingIdController;
+  final RxnInt selectedOptionPackagingId;
   final TextEditingController quantityController;
 
   OffersCartItemInput({int? optionPackagingId, int? quantity})
-    : optionPackagingIdController = TextEditingController(
-        text: optionPackagingId?.toString() ?? '',
-      ),
+    : selectedOptionPackagingId = RxnInt(optionPackagingId),
       quantityController = TextEditingController(
         text: quantity?.toString() ?? '',
       );
 
   void dispose() {
-    optionPackagingIdController.dispose();
     quantityController.dispose();
   }
 }
@@ -56,6 +53,45 @@ class OffersCartController extends GetxController {
   final RxList<OffersCartItemInput> items = <OffersCartItemInput>[].obs;
 
   final RxString searchQuery = ''.obs;
+
+  List<DropdownMenuItem<int>> get optionPackagingItems {
+    final seen = <int>{};
+    final out = <DropdownMenuItem<int>>[];
+
+    for (final p in products) {
+      final productLabel = (p.title?.isNotEmpty == true
+          ? p.title!
+          : (p.arTitle ?? '-'));
+      final options = p.options ?? const [];
+
+      for (final opt in options) {
+        final optLabel = (opt.optionName?.isNotEmpty == true
+            ? opt.optionName!
+            : (opt.arOptionName ?? '-'));
+        final mappings = opt.packagingOptions ?? const [];
+
+        for (final m in mappings) {
+          final id = m.id;
+          if (id == null || !seen.add(id)) continue;
+          final pkgLabel = (m.packagingTitle?.isNotEmpty == true
+              ? m.packagingTitle!
+              : (m.arPackagingTitle ?? '-'));
+          final skuLabel = m.optionSku?.isNotEmpty == true ? m.optionSku! : '-';
+          out.add(
+            DropdownMenuItem<int>(
+              value: id,
+              child: Text(
+                '$productLabel / $optLabel / $pkgLabel (SKU:$skuLabel) [#$id]',
+                // overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          );
+        }
+      }
+    }
+
+    return out;
+  }
 
   @override
   void onInit() {
@@ -212,7 +248,7 @@ class OffersCartController extends GetxController {
     }
 
     final nonEmptyItems = items.where((i) {
-      final id = int.tryParse(i.optionPackagingIdController.text.trim());
+      final id = i.selectedOptionPackagingId.value;
       final q = int.tryParse(i.quantityController.text.trim());
       return id != null && id > 0 && q != null && q > 0;
     }).toList();
@@ -229,7 +265,7 @@ class OffersCartController extends GetxController {
     final itemsBody = <Map<String, dynamic>>[];
 
     for (final i in items) {
-      final id = int.tryParse(i.optionPackagingIdController.text.trim());
+      final id = i.selectedOptionPackagingId.value;
       final q = int.tryParse(i.quantityController.text.trim());
       if (id == null || id <= 0 || q == null || q <= 0) continue;
       itemsBody.add({'option_packaging_id': id, 'quantity': q});
