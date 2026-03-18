@@ -34,16 +34,12 @@ class OptionsDataTable extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        DataColumn(
-          label: Text('SKU', style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
       ],
       buildCells: (opt, index) {
         return [
           DataCell(DataTableImageCell(imageUrl: opt.mainImage)),
           DataCell(DataTableTextCell(text: opt.optionName)),
           DataCell(DataTableTextCell(text: opt.arOptionName)),
-          DataCell(DataTableTextCell(text: opt.optionSku)),
         ];
       },
     );

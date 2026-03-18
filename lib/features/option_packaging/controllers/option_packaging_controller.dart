@@ -69,6 +69,7 @@ class OptionPackagingController extends GetxController {
   bool validateMappingInputs({
     required num? pricePerUnit,
     required int? stockQuantity,
+    required String? optionSku,
   }) {
     if (pricePerUnit == null) {
       showMassage('Please enter a valid price', false);
@@ -90,6 +91,11 @@ class OptionPackagingController extends GetxController {
       return false;
     }
 
+    if (optionSku == null || optionSku.trim().isEmpty) {
+      showMassage('Please enter a valid sku', false);
+      return false;
+    }
+
     return true;
   }
 
@@ -99,11 +105,13 @@ class OptionPackagingController extends GetxController {
     required int packagingId,
     num? pricePerUnit,
     int? stockQuantity,
+    required String optionSku,
     int? colorId,
   }) async {
     if (!validateMappingInputs(
       pricePerUnit: pricePerUnit,
       stockQuantity: stockQuantity,
+      optionSku: optionSku,
     )) {
       return;
     }
@@ -117,6 +125,7 @@ class OptionPackagingController extends GetxController {
           packagingId: packagingId,
           pricePerUnit: pricePerUnit!,
           stockQuantity: stockQuantity!,
+          optionSku: optionSku.trim(),
           colorId: colorId,
         );
         Get.back();
@@ -129,6 +138,7 @@ class OptionPackagingController extends GetxController {
           packagingId: packagingId,
           pricePerUnit: pricePerUnit!,
           stockQuantity: stockQuantity!,
+          optionSku: optionSku.trim(),
           colorId: colorId,
         );
         Get.back();

@@ -52,11 +52,6 @@ class OptionFormDialog extends StatelessWidget {
             hint: 'Enter Arabic option name',
             controller: controller.arOptionNameController,
           ),
-          LabeledTextField(
-            label: 'SKU',
-            hint: 'Enter option sku',
-            controller: controller.optionSkuController,
-          ),
           const SizedBox(height: 12),
           FormImagePickerSection(
             selectedImagePath: controller.mainImagePath,

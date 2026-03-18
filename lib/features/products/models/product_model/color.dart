@@ -6,11 +6,6 @@ class Color {
 
   Color({this.id, this.name, this.arName, this.degree});
 
-  @override
-  String toString() {
-    return 'Color(id: $id, name: $name, arName: $arName, degree: $degree)';
-  }
-
   factory Color.fromJson(Map<String, dynamic> json) => Color(
     id: json['id'] as int?,
     name: json['name'] as String?,

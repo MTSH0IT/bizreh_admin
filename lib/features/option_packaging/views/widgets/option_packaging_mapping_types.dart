@@ -4,4 +4,5 @@ typedef OptionPackagingMapping = ({
   int? stock,
   int? colorId,
   String? colorDegree,
+  String? optionSku,
 });

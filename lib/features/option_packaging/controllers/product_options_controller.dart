@@ -21,7 +21,6 @@ class ProductOptionsController extends GetxController {
 
   final TextEditingController optionNameController = TextEditingController();
   final TextEditingController arOptionNameController = TextEditingController();
-  final TextEditingController optionSkuController = TextEditingController();
   final RxString mainImagePath = ''.obs;
 
   final RxBool isCreating = false.obs;
@@ -43,7 +42,6 @@ class ProductOptionsController extends GetxController {
   void onClose() {
     optionNameController.dispose();
     arOptionNameController.dispose();
-    optionSkuController.dispose();
     super.onClose();
   }
 
@@ -76,14 +74,12 @@ class ProductOptionsController extends GetxController {
     selectedOption.value = option;
     optionNameController.text = option.optionName ?? '';
     arOptionNameController.text = option.arOptionName ?? '';
-    optionSkuController.text = option.optionSku ?? '';
     mainImagePath.value = '';
   }
 
   void clearForm() {
     optionNameController.clear();
     arOptionNameController.clear();
-    optionSkuController.clear();
     mainImagePath.value = '';
     selectedOption.value = null;
   }
@@ -100,11 +96,6 @@ class ProductOptionsController extends GetxController {
 
     if (arOptionNameController.text.trim().isEmpty) {
       showMassage('Please enter Arabic option name', false);
-      return false;
-    }
-
-    if (optionSkuController.text.trim().isEmpty) {
-      showMassage('Please enter option sku', false);
       return false;
     }
 
@@ -130,7 +121,6 @@ class ProductOptionsController extends GetxController {
       await _service.createProductOption(
         optionName: optionNameController.text.trim(),
         arOptionName: arOptionNameController.text.trim(),
-        optionSku: optionSkuController.text.trim(),
         productId: productId,
         mainImagePath: mainImagePath.value.isNotEmpty
             ? mainImagePath.value
@@ -162,7 +152,6 @@ class ProductOptionsController extends GetxController {
         id: id,
         optionName: optionNameController.text.trim(),
         arOptionName: arOptionNameController.text.trim(),
-        optionSku: optionSkuController.text.trim(),
         productId: productId,
         mainImagePath: mainImagePath.value.isNotEmpty
             ? mainImagePath.value

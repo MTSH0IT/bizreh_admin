@@ -12,7 +12,6 @@ class ProductsOptionService {
   Future<void> createProductOption({
     required String optionName,
     required String arOptionName,
-    required String optionSku,
     required int productId,
     String? mainImagePath,
   }) async {
@@ -20,7 +19,6 @@ class ProductsOptionService {
       final formData = FormData.fromMap({
         'option_name': optionName,
         'ar_option_name': arOptionName,
-        'option_sku': optionSku,
         'product_id': productId,
         if (mainImagePath != null)
           'main_image': await MultipartFile.fromFile(mainImagePath),
@@ -60,7 +58,6 @@ class ProductsOptionService {
     required int id,
     required String optionName,
     required String arOptionName,
-    required String optionSku,
     required int productId,
     String? mainImagePath,
   }) async {
@@ -68,7 +65,6 @@ class ProductsOptionService {
       final formData = FormData.fromMap({
         'option_name': optionName,
         'ar_option_name': arOptionName,
-        'option_sku': optionSku,
         'product_id': productId,
         if (mainImagePath != null)
           'main_image': await MultipartFile.fromFile(mainImagePath),

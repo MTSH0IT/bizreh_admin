@@ -124,6 +124,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
                       num? price,
                       int? stock,
                       int? colorId,
+                      String? optionSku,
                     ) {
                       _openMatrixCellDialog(
                         context,
@@ -133,6 +134,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
                         price,
                         stock,
                         colorId,
+                        optionSku,
                       );
                     },
               );
@@ -172,6 +174,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
     num? currentPrice,
     int? currentStock,
     int? currentColorId,
+    String? currentSku,
   ) async {
     openFormDialog<void>(
       dialogBuilder: (_) => OptionPackagingFormDialog(
@@ -182,6 +185,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
         initialPrice: currentPrice,
         initialStock: currentStock,
         initialColorId: currentColorId,
+        initialSku: currentSku,
       ),
     );
   }

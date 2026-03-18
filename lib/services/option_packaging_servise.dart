@@ -14,6 +14,7 @@ class OptionPackagingService {
     required int packagingId,
     required num pricePerUnit,
     required int stockQuantity,
+    required String optionSku,
     int? colorId,
   }) async {
     try {
@@ -22,6 +23,7 @@ class OptionPackagingService {
         'packaging_id': packagingId,
         'price_per_unit': pricePerUnit,
         'stock_quantity': stockQuantity,
+        'option_sku': optionSku,
       };
       if (colorId != null) {
         data['color_id'] = colorId;
@@ -64,6 +66,7 @@ class OptionPackagingService {
     required int packagingId,
     required num pricePerUnit,
     required int stockQuantity,
+    required String optionSku,
     int? colorId,
   }) async {
     try {
@@ -72,6 +75,7 @@ class OptionPackagingService {
         'packaging_id': packagingId,
         'price_per_unit': pricePerUnit,
         'stock_quantity': stockQuantity,
+        'option_sku': optionSku,
       };
       if (colorId != null) {
         data['color_id'] = colorId;

@@ -16,6 +16,7 @@ class OptionPackagingMappingRow extends StatelessWidget {
     num? price,
     int? stock,
     int? colorId,
+    String? optionSku,
   )?
   onTap;
 
@@ -54,6 +55,7 @@ class OptionPackagingMappingRow extends StatelessWidget {
               mapping.price,
               mapping.stock,
               mapping.colorId,
+              mapping.optionSku,
             ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
@@ -64,7 +66,7 @@ class OptionPackagingMappingRow extends StatelessWidget {
             const SizedBox(width: 6),
             Flexible(
               child: Text(
-                'P:${mapping.price?.toString() ?? '-'}  S:${mapping.stock?.toString() ?? '-'}',
+                'SKU:${mapping.optionSku ?? '-'}  P:${mapping.price?.toString() ?? '-'}  S:${mapping.stock?.toString() ?? '-'}',
                 style: const TextStyle(fontSize: 12, color: Color(0xFF374151)),
                 overflow: TextOverflow.ellipsis,
               ),

@@ -15,6 +15,7 @@ class OptionsPackagingMatrixTable extends StatelessWidget {
     num? price,
     int? stock,
     int? colorId,
+    String? optionSku,
   )?
   onCellTap;
 
@@ -39,6 +40,7 @@ class OptionsPackagingMatrixTable extends StatelessWidget {
           stock: p.stockQuantity,
           colorId: p.color?.id,
           colorDegree: p.color?.degree,
+          optionSku: p.optionSku,
         ));
       }
     }
@@ -70,8 +72,6 @@ class OptionsPackagingMatrixTable extends StatelessWidget {
       rows: options,
       showActions: false,
       emptyMessage: 'No options or packagings available',
-      dataRowMinHeight: 72,
-      dataRowMaxHeight: 100,
       columns: [
         const DataColumn(
           label: Text('op/pk', style: TextStyle(fontWeight: FontWeight.bold)),

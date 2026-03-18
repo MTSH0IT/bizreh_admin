@@ -3,6 +3,7 @@ import 'color.dart';
 class PackagingOption {
   int? id;
   int? packagingId;
+  String? optionSku;
   num? pricePerUnit;
   int? stockQuantity;
   String? packagingTitle;
@@ -12,6 +13,7 @@ class PackagingOption {
   PackagingOption({
     this.id,
     this.packagingId,
+    this.optionSku,
     this.pricePerUnit,
     this.stockQuantity,
     this.packagingTitle,
@@ -19,15 +21,11 @@ class PackagingOption {
     this.color,
   });
 
-  @override
-  String toString() {
-    return 'PackagingOption(id: $id, packagingId: $packagingId, pricePerUnit: $pricePerUnit, stockQuantity: $stockQuantity, packagingTitle: $packagingTitle, arPackagingTitle: $arPackagingTitle, color: $color)';
-  }
-
   factory PackagingOption.fromJson(Map<String, dynamic> json) {
     return PackagingOption(
       id: json['id'] as int?,
       packagingId: json['packaging_id'] as int?,
+      optionSku: json['option_sku'] as String?,
       pricePerUnit: json['price_per_unit'] as num?,
       stockQuantity: json['stock_quantity'] as int?,
       packagingTitle: json['packaging_title'] as String?,
@@ -41,6 +39,7 @@ class PackagingOption {
   Map<String, dynamic> toJson() => {
     'id': id,
     'packaging_id': packagingId,
+    'option_sku': optionSku,
     'price_per_unit': pricePerUnit,
     'stock_quantity': stockQuantity,
     'packaging_title': packagingTitle,

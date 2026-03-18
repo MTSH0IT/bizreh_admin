@@ -20,6 +20,7 @@ class OptionPackagingFormDialog extends StatefulWidget {
   final num? initialPrice;
   final int? initialStock;
   final int? initialColorId;
+  final String? initialSku;
 
   const OptionPackagingFormDialog({
     super.key,
@@ -30,6 +31,7 @@ class OptionPackagingFormDialog extends StatefulWidget {
     this.initialPrice,
     this.initialStock,
     this.initialColorId,
+    this.initialSku,
   });
 
   @override
@@ -40,6 +42,7 @@ class OptionPackagingFormDialog extends StatefulWidget {
 class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
   late final TextEditingController _priceController;
   late final TextEditingController _stockController;
+  late final TextEditingController _skuController;
 
   @override
   void initState() {
@@ -50,6 +53,7 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
     _stockController = TextEditingController(
       text: widget.initialStock?.toString() ?? '',
     );
+    _skuController = TextEditingController(text: widget.initialSku ?? '');
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final currentColorId = widget.initialColorId;
@@ -64,6 +68,7 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
   void dispose() {
     _priceController.dispose();
     _stockController.dispose();
+    _skuController.dispose();
     super.dispose();
   }
 
@@ -101,6 +106,7 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
           onSubmit: () async {
             final price = num.tryParse(_priceController.text.trim());
             final stock = int.tryParse(_stockController.text.trim());
+            final sku = _skuController.text.trim();
             final selectedColorId = widget.controller.selectedColorId.value;
             final colorId = selectedColorId == 0 ? null : selectedColorId;
 
@@ -110,6 +116,7 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
               packagingId: widget.packaging.id!,
               pricePerUnit: price,
               stockQuantity: stock,
+              optionSku: sku,
               colorId: colorId,
             );
           },
@@ -140,6 +147,11 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
             controller: _stockController,
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          ),
+          LabeledTextField(
+            label: 'SKU',
+            hint: 'Enter sku',
+            controller: _skuController,
           ),
           const SizedBox(height: 12),
           Obx(() {
