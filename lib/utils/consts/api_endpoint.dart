@@ -145,4 +145,11 @@ class ApiEndpoint {
   static String updateAd(int id) => "/admin/ads/$id";
   static String deleteAd(int id) => "/admin/ads/$id";
   static String changeAdStatus(int id) => "/admin/ads/$id/status";
+
+  // Offers Cart
+  static const String getOffersCart = "/admin/offers-cart";
+  static const String createOffersCart = "/admin/offers-cart";
+  static String updateOffersCart(int id) => "/admin/offers-cart/$id";
+  static String deleteOffersCart(int id) => "/admin/offers-cart/$id";
+  static String toggleOffersCart(int id) => "/admin/offers-cart/$id/toggle";
 }

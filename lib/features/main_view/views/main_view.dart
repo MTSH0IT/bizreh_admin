@@ -7,6 +7,7 @@ import 'package:bizreh_admin/features/gifts/views/gifts_view.dart';
 import 'package:bizreh_admin/features/ads/views/ads_view.dart';
 import 'package:bizreh_admin/features/main_view/views/widgets/admin_topbar.dart';
 import 'package:bizreh_admin/features/orders/views/orders_view.dart';
+import 'package:bizreh_admin/features/offers_cart/views/offers_cart_view.dart';
 import 'package:bizreh_admin/features/packaging/views/packagings_view.dart';
 import 'package:bizreh_admin/features/points/views/points_view.dart';
 import 'package:bizreh_admin/features/sub_category/views/all_sub_category_view.dart';
@@ -61,15 +62,7 @@ class _MainviewState extends State<Mainview> {
                       scrollDirection: Axis.vertical,
                       child: Padding(
                         padding: const EdgeInsets.all(24),
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            minWidth: 900,
-                            maxWidth: 1200,
-                            maxHeight: 900,
-                            minHeight: 600,
-                          ),
-                          child: Obx(() => _nav.current),
-                        ),
+                        child: Obx(() => _nav.current),
                       ),
                     ),
                   ),
@@ -131,6 +124,9 @@ class _MainviewState extends State<Mainview> {
 
       case 16:
         return const MainNavEntry(title: 'Ads', page: AdsView());
+
+      case 17:
+        return const MainNavEntry(title: 'Offers Cart', page: OffersCartView());
 
       default:
         return const MainNavEntry(
