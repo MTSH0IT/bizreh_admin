@@ -9,16 +9,7 @@ class OptionPackagingMatrixCell extends StatelessWidget {
   final Option option;
   final PackageModel packaging;
   final List<OptionPackagingMapping> mappings;
-  final void Function(
-    Option option,
-    PackageModel packaging,
-    int? mappingId,
-    num? price,
-    int? stock,
-    int? colorId,
-    String? optionSku,
-  )?
-  onCellTap;
+  final OptionPackagingTapCallback? onCellTap;
 
   const OptionPackagingMatrixCell({
     super.key,
@@ -52,8 +43,11 @@ class OptionPackagingMatrixCell extends StatelessWidget {
             ),
           if (onCellTap != null)
             InkWell(
-              onTap: () =>
-                  onCellTap!(option, packaging, null, null, null, null, null),
+              onTap: () => onCellTap!((
+                option: option,
+                packaging: packaging,
+                mapping: null,
+              )),
               child: const Padding(
                 padding: EdgeInsets.only(top: 6),
                 child: Text(

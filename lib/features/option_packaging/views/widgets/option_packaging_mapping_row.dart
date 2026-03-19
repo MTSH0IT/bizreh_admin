@@ -9,16 +9,7 @@ class OptionPackagingMappingRow extends StatelessWidget {
   final Option option;
   final PackageModel packaging;
   final OptionPackagingMapping mapping;
-  final void Function(
-    Option option,
-    PackageModel packaging,
-    int? mappingId,
-    num? price,
-    int? stock,
-    int? colorId,
-    String? optionSku,
-  )?
-  onTap;
+  final OptionPackagingTapCallback? onTap;
 
   const OptionPackagingMappingRow({
     super.key,
@@ -48,15 +39,11 @@ class OptionPackagingMappingRow extends StatelessWidget {
     return InkWell(
       onTap: onTap == null
           ? null
-          : () => onTap!(
-              option,
-              packaging,
-              mapping.id,
-              mapping.price,
-              mapping.stock,
-              mapping.colorId,
-              mapping.optionSku,
-            ),
+          : () => onTap!((
+              option: option,
+              packaging: packaging,
+              mapping: mapping,
+            )),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Row(

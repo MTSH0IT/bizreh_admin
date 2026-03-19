@@ -1,7 +1,6 @@
 import 'package:bizreh_admin/features/option_packaging/controllers/option_packaging_controller.dart';
 import 'package:bizreh_admin/features/option_packaging/controllers/product_options_controller.dart';
 import 'package:bizreh_admin/features/packaging/controllers/packaging_controller.dart';
-import 'package:bizreh_admin/features/packaging/models/package_model.dart';
 import 'package:bizreh_admin/features/products/models/product_model/option.dart';
 import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
@@ -15,6 +14,7 @@ import 'widgets/option_form_dialog.dart';
 import 'widgets/options_data_table.dart';
 import 'widgets/option_packaging_form_dialog.dart';
 import 'widgets/options_packaging_matrix_table.dart';
+import 'widgets/option_packaging_mapping_types.dart';
 
 class OptionPackagingView extends StatefulWidget {
   final ProductModel product;
@@ -116,27 +116,9 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
               return OptionsPackagingMatrixTable(
                 options: options,
                 packagings: packagings,
-                onCellTap:
-                    (
-                      Option opt,
-                      PackageModel pkg,
-                      int? mappingId,
-                      num? price,
-                      int? stock,
-                      int? colorId,
-                      String? optionSku,
-                    ) {
-                      _openMatrixCellDialog(
-                        context,
-                        opt,
-                        pkg,
-                        mappingId,
-                        price,
-                        stock,
-                        colorId,
-                        optionSku,
-                      );
-                    },
+                onCellTap: (OptionPackagingTapArgs args) {
+                  _openMatrixCellDialog(context, args);
+                },
               );
             }),
           ],
@@ -168,24 +150,19 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
 
   Future<void> _openMatrixCellDialog(
     BuildContext context,
-    Option option,
-    PackageModel packaging,
-    int? mappingId,
-    num? currentPrice,
-    int? currentStock,
-    int? currentColorId,
-    String? currentSku,
+    OptionPackagingTapArgs args,
   ) async {
+    final mapping = args.mapping;
     openFormDialog<void>(
       dialogBuilder: (_) => OptionPackagingFormDialog(
         controller: optionPackagingController,
-        option: option,
-        packaging: packaging,
-        mappingId: mappingId,
-        initialPrice: currentPrice,
-        initialStock: currentStock,
-        initialColorId: currentColorId,
-        initialSku: currentSku,
+        option: args.option,
+        packaging: args.packaging,
+        mappingId: mapping?.id,
+        initialPrice: mapping?.price,
+        initialStock: mapping?.stock,
+        initialColorId: mapping?.colorId,
+        initialSku: mapping?.optionSku,
       ),
     );
   }

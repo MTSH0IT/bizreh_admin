@@ -8,16 +8,7 @@ import 'package:flutter/material.dart';
 class OptionsPackagingMatrixTable extends StatelessWidget {
   final List<Option> options;
   final List<PackageModel> packagings;
-  final void Function(
-    Option option,
-    PackageModel packaging,
-    int? mappingId,
-    num? price,
-    int? stock,
-    int? colorId,
-    String? optionSku,
-  )?
-  onCellTap;
+  final OptionPackagingTapCallback? onCellTap;
 
   const OptionsPackagingMatrixTable({
     super.key,

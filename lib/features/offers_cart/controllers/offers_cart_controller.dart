@@ -136,7 +136,7 @@ class OffersCartController extends GetxController {
   }
 
   Future<void> getMeta() async {
-    if (products.isNotEmpty) return;
+    //if (products.isNotEmpty) return;
 
     try {
       isMetaLoading.value = true;
