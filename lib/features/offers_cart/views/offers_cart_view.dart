@@ -46,7 +46,7 @@ class OffersCartView extends StatelessWidget {
             onToggle: (o) {
               final id = o.id;
               if (id == null) return;
-              controller.toggleStatus(id);
+              controller.toggleStatus(id, currentIsActive: o.isActive ?? 0);
             },
           );
         }),
@@ -54,7 +54,10 @@ class OffersCartView extends StatelessWidget {
     );
   }
 
-  void _openCreateDialog(BuildContext context, OffersCartController controller) {
+  void _openCreateDialog(
+    BuildContext context,
+    OffersCartController controller,
+  ) {
     openFormDialog<void>(
       onBeforeOpen: () {
         controller.clearForm();

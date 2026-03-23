@@ -346,10 +346,13 @@ class OffersCartController extends GetxController {
     }
   }
 
-  Future<void> toggleStatus(int id) async {
+  Future<void> toggleStatus(int id, {required int currentIsActive}) async {
     try {
       isToggling.value = true;
-      await _service.toggleOfferStatus(id);
+      final newActive = currentIsActive == 1 ? 0 : 1;
+
+      await _service.toggleOfferStatus(id: id, isActive: newActive);
+
       await getOffers();
       showMassage('Offer status updated', true);
     } on AppException catch (e) {

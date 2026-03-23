@@ -68,7 +68,10 @@ class OffersCartService {
     }
   }
 
-  Future<void> updateOffer({required int id, required Map<String, dynamic> body}) async {
+  Future<void> updateOffer({
+    required int id,
+    required Map<String, dynamic> body,
+  }) async {
     try {
       final response = await _dioClient.put(
         ApiEndpoint.updateOffersCart(id),
@@ -97,7 +100,9 @@ class OffersCartService {
 
   Future<void> deleteOffer(int id) async {
     try {
-      final response = await _dioClient.delete(ApiEndpoint.deleteOffersCart(id));
+      final response = await _dioClient.delete(
+        ApiEndpoint.deleteOffersCart(id),
+      );
 
       final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
       if (!apiResponse.success) {
@@ -119,9 +124,17 @@ class OffersCartService {
     }
   }
 
-  Future<void> toggleOfferStatus(int id) async {
+  Future<void> toggleOfferStatus({
+    required int id,
+    required int isActive,
+  }) async {
     try {
-      final response = await _dioClient.patch(ApiEndpoint.toggleOffersCart(id));
+      final body = {'is_active': isActive};
+
+      final response = await _dioClient.patch(
+        ApiEndpoint.toggleOffersCart(id),
+        data: body,
+      );
 
       final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
       if (!apiResponse.success) {
