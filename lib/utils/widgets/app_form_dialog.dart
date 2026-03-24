@@ -12,7 +12,7 @@ class AppFormDialog extends StatelessWidget {
     required this.title,
     required this.child,
     required this.actions,
-    this.width = 400,
+    this.width = 450,
     this.contentPadding = const EdgeInsets.fromLTRB(24, 20, 24, 24),
   });
 

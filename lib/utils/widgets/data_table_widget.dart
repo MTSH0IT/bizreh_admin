@@ -17,6 +17,8 @@ class DataTableWidget<T> extends StatelessWidget {
   final double dataRowMaxHeight;
   final double columnSpacing;
   final double horizontalMargin;
+  final double? maxDataCellWidth;
+  final double actionsCellMaxWidth;
 
   const DataTableWidget({
     super.key,
@@ -28,10 +30,12 @@ class DataTableWidget<T> extends StatelessWidget {
     this.showActions = true,
     this.emptyMessage,
     this.headingRowHeight = 52,
-    this.dataRowMinHeight = 55,
-    this.dataRowMaxHeight = 70,
+    this.dataRowMinHeight = 70,
+    this.dataRowMaxHeight = 75,
     this.columnSpacing = 8,
     this.horizontalMargin = 8,
+    this.maxDataCellWidth,
+    this.actionsCellMaxWidth = 140,
   });
 
   @override
@@ -64,6 +68,34 @@ class DataTableWidget<T> extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: LayoutBuilder(
           builder: (context, constraints) {
+            final hasActions =
+                showActions && (onEdit != null || onDelete != null);
+            final totalColumns = columns.length + (hasActions ? 1 : 0);
+            final inferredMaxCellWidth = totalColumns == 0
+                ? constraints.maxWidth
+                : (constraints.maxWidth / totalColumns);
+
+            final cellMaxWidth =
+                maxDataCellWidth ?? inferredMaxCellWidth.clamp(120, 420);
+
+            DataCell constrainCell(DataCell cell, {double? maxWidth}) {
+              final child = cell.child;
+              return DataCell(
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: maxWidth ?? cellMaxWidth,
+                  ),
+                  child: Align(alignment: Alignment.centerLeft, child: child),
+                ),
+                placeholder: cell.placeholder,
+                showEditIcon: cell.showEditIcon,
+                onTap: cell.onTap,
+                onLongPress: cell.onLongPress,
+                onDoubleTap: cell.onDoubleTap,
+                onTapCancel: cell.onTapCancel,
+              );
+            }
+
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: ConstrainedBox(
@@ -76,7 +108,7 @@ class DataTableWidget<T> extends StatelessWidget {
                   horizontalMargin: horizontalMargin,
                   columns: [
                     ...columns,
-                    if (showActions && (onEdit != null || onDelete != null))
+                    if (hasActions)
                       const DataColumn(
                         label: Text(
                           'Actions',
@@ -88,35 +120,41 @@ class DataTableWidget<T> extends StatelessWidget {
                     final index = entry.key;
                     final item = entry.value;
                     final cells = buildCells(item, index);
+                    final constrainedCells = cells
+                        .map((c) => constrainCell(c))
+                        .toList();
 
                     return DataRow.byIndex(
                       index: index,
                       cells: [
-                        ...cells,
-                        if (showActions && (onEdit != null || onDelete != null))
-                          DataCell(
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (onEdit != null)
-                                  IconButton(
-                                    onPressed: () => onEdit!(item),
-                                    icon: const Icon(Icons.edit, size: 16),
-                                    color: kprimaryColor,
-                                    tooltip: 'Edit',
-                                  ),
-                                if (onDelete != null)
-                                  IconButton(
-                                    onPressed: () => onDelete!(item),
-                                    icon: const Icon(
-                                      Icons.delete_outline,
-                                      size: 16,
+                        ...constrainedCells,
+                        if (hasActions)
+                          constrainCell(
+                            DataCell(
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (onEdit != null)
+                                    IconButton(
+                                      onPressed: () => onEdit!(item),
+                                      icon: const Icon(Icons.edit, size: 16),
+                                      color: kprimaryColor,
+                                      tooltip: 'Edit',
                                     ),
-                                    color: Colors.red,
-                                    tooltip: 'Delete',
-                                  ),
-                              ],
+                                  if (onDelete != null)
+                                    IconButton(
+                                      onPressed: () => onDelete!(item),
+                                      icon: const Icon(
+                                        Icons.delete_outline,
+                                        size: 16,
+                                      ),
+                                      color: Colors.red,
+                                      tooltip: 'Delete',
+                                    ),
+                                ],
+                              ),
                             ),
+                            maxWidth: actionsCellMaxWidth,
                           ),
                       ],
                     );
@@ -186,12 +224,14 @@ class DataTableTextCell extends StatelessWidget {
   final String? text;
   final String fallback;
   final TextStyle? style;
+  final int maxLines;
 
   const DataTableTextCell({
     super.key,
     this.text,
     this.fallback = '-',
     this.style,
+    this.maxLines = 3,
   });
 
   @override
@@ -199,9 +239,9 @@ class DataTableTextCell extends StatelessWidget {
     return Text(
       text?.isNotEmpty == true ? text! : fallback,
       style: style,
-      maxLines: 1,
+      maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
-      softWrap: false,
+      softWrap: true,
     );
   }
 }

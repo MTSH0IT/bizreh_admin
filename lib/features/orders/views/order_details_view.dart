@@ -2,6 +2,8 @@ import 'package:bizreh_admin/features/orders/models/order_model/item.dart';
 import 'package:bizreh_admin/features/orders/models/order_model/order_model.dart';
 import 'package:bizreh_admin/utils/func/date_format.dart';
 import 'package:bizreh_admin/utils/func/status_color.dart';
+import 'package:bizreh_admin/utils/widgets/details_key_value.dart';
+import 'package:bizreh_admin/utils/widgets/details_section_card.dart';
 import 'package:bizreh_admin/utils/widgets/image_network.dart';
 import 'package:flutter/material.dart';
 
@@ -76,7 +78,7 @@ class _Header extends StatelessWidget {
     final status = (order.status ?? '-').trim();
     final payment = (order.paymentStatus ?? '-').trim();
 
-    return _SectionCard(
+    return DetailsSectionCard(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -131,20 +133,20 @@ class _OrderSummaryCard extends StatelessWidget {
     final subtotal = order.financialSummary?.subTotal;
     final discount = order.financialSummary?.totalDiscount;
 
-    return _SectionCard(
+    return DetailsSectionCard(
       title: 'Summary',
       child: Column(
         children: [
           Row(
             children: [
               Expanded(
-                child: _KeyValue(
+                child: DetailsKeyValue(
                   label: 'Total',
                   value: total == null ? '-' : total.toStringAsFixed(2),
                 ),
               ),
               Expanded(
-                child: _KeyValue(
+                child: DetailsKeyValue(
                   label: 'Items',
                   value: order.totalItemsCount?.toString() ?? '-',
                 ),
@@ -155,13 +157,13 @@ class _OrderSummaryCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: _KeyValue(
+                child: DetailsKeyValue(
                   label: 'Sub total',
                   value: subtotal == null ? '-' : subtotal.toStringAsFixed(2),
                 ),
               ),
               Expanded(
-                child: _KeyValue(
+                child: DetailsKeyValue(
                   label: 'Discount',
                   value: discount == null ? '-' : discount.toStringAsFixed(2),
                 ),
@@ -181,7 +183,7 @@ class _CustomerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _SectionCard(
+    return DetailsSectionCard(
       title: 'Customer',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,15 +191,21 @@ class _CustomerCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: _KeyValue(label: 'Name', value: order.userName ?? '-'),
+                child: DetailsKeyValue(
+                  label: 'Name',
+                  value: order.userName ?? '-',
+                ),
               ),
               Expanded(
-                child: _KeyValue(label: 'Phone', value: order.userPhone ?? '-'),
+                child: DetailsKeyValue(
+                  label: 'Phone',
+                  value: order.userPhone ?? '-',
+                ),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          _KeyValue(label: 'Email', value: order.userEmail ?? '-'),
+          DetailsKeyValue(label: 'Email', value: order.userEmail ?? '-'),
         ],
       ),
     );
@@ -213,7 +221,7 @@ class _AddressCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final city = (order.arCityName ?? order.cityName ?? '-').trim();
 
-    return _SectionCard(
+    return DetailsSectionCard(
       title: 'Delivery address',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,10 +229,10 @@ class _AddressCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: _KeyValue(label: 'City', value: city),
+                child: DetailsKeyValue(label: 'City', value: city),
               ),
               Expanded(
-                child: _KeyValue(
+                child: DetailsKeyValue(
                   label: 'Address ID',
                   value: '${order.addressId ?? '-'}',
                 ),
@@ -232,20 +240,20 @@ class _AddressCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          _KeyValue(label: 'Line', value: order.addressLine ?? '-'),
+          DetailsKeyValue(label: 'Line', value: order.addressLine ?? '-'),
           const SizedBox(height: 8),
-          _KeyValue(label: 'Note', value: order.addressNote ?? '-'),
+          DetailsKeyValue(label: 'Note', value: order.addressNote ?? '-'),
           const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
-                child: _KeyValue(
+                child: DetailsKeyValue(
                   label: 'Latitude',
                   value: order.latitude?.toString() ?? '-',
                 ),
               ),
               Expanded(
-                child: _KeyValue(
+                child: DetailsKeyValue(
                   label: 'Longitude',
                   value: order.longitude?.toString() ?? '-',
                 ),
@@ -267,20 +275,20 @@ class _PaymentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final status = (order.paymentStatus ?? '-').trim();
 
-    return _SectionCard(
+    return DetailsSectionCard(
       title: 'Payment',
       child: Column(
         children: [
           Row(
             children: [
               Expanded(
-                child: _KeyValue(
+                child: DetailsKeyValue(
                   label: 'Status',
                   value: status.isEmpty ? '-' : status,
                 ),
               ),
               Expanded(
-                child: _KeyValue(
+                child: DetailsKeyValue(
                   label: 'Total',
                   value: order.financialSummary?.total == null
                       ? '-'
@@ -302,17 +310,20 @@ class _DriverCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _SectionCard(
+    return DetailsSectionCard(
       title: 'Driver',
       child: Column(
         children: [
           Row(
             children: [
               Expanded(
-                child: _KeyValue(label: 'Name', value: order.driverName ?? '-'),
+                child: DetailsKeyValue(
+                  label: 'Name',
+                  value: order.driverName ?? '-',
+                ),
               ),
               Expanded(
-                child: _KeyValue(
+                child: DetailsKeyValue(
                   label: 'Phone',
                   value: order.driverPhone ?? '-',
                 ),
@@ -332,7 +343,7 @@ class _ItemsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _SectionCard(
+    return DetailsSectionCard(
       title: 'Items',
       child: items.isEmpty
           ? const Text('No items', style: TextStyle(color: Color(0xFF6B7280)))
@@ -479,72 +490,6 @@ class _InlineMeta extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _SectionCard extends StatelessWidget {
-  final String? title;
-  final Widget child;
-
-  const _SectionCard({this.title, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (title != null) ...[
-            Text(
-              title!,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 12),
-          ],
-          child,
-        ],
-      ),
-    );
-  }
-}
-
-class _KeyValue extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const _KeyValue({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              color: Color(0xFF6B7280),
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value.trim().isEmpty ? '-' : value,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontWeight: FontWeight.w600),
-          ),
-        ],
-      ),
     );
   }
 }

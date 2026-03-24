@@ -1,5 +1,7 @@
 import 'package:bizreh_admin/features/discounts/models/discount_model/discount_model.dart';
 import 'package:bizreh_admin/utils/func/date_format.dart';
+import 'package:bizreh_admin/utils/widgets/details_key_value.dart';
+import 'package:bizreh_admin/utils/widgets/details_section_card.dart';
 import 'package:flutter/material.dart';
 
 class DiscountDetailsView extends StatelessWidget {
@@ -9,8 +11,8 @@ class DiscountDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = (discount.title ?? '-').trim();
-    final arTitle = (discount.arTitle ?? '-').trim();
+    // final title = (discount.title ?? '-').trim();
+    // final arTitle = (discount.arTitle ?? '-').trim();
 
     final products = discount.products ?? const [];
     final brands = discount.brands ?? const [];
@@ -20,20 +22,20 @@ class DiscountDetailsView extends StatelessWidget {
       builder: (context, constraints) {
         final wide = constraints.maxWidth >= 860;
 
-        final summaryCard = _SectionCard(
+        final summaryCard = DetailsSectionCard(
           title: 'Summary',
           child: Column(
             children: [
               Row(
                 children: [
                   Expanded(
-                    child: _KeyValue(
+                    child: DetailsKeyValue(
                       label: 'Amount',
                       value: discount.amount?.toString() ?? '-',
                     ),
                   ),
                   Expanded(
-                    child: _KeyValue(
+                    child: DetailsKeyValue(
                       label: 'Amount Type',
                       value: (discount.amountType ?? '-').toString(),
                     ),
@@ -44,13 +46,13 @@ class DiscountDetailsView extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: _KeyValue(
+                    child: DetailsKeyValue(
                       label: 'Min Purchase',
                       value: discount.minPurchaseAmount?.toString() ?? '-',
                     ),
                   ),
                   Expanded(
-                    child: _KeyValue(
+                    child: DetailsKeyValue(
                       label: 'Min Quantity',
                       value: discount.minQuantity?.toString() ?? '-',
                     ),
@@ -61,20 +63,20 @@ class DiscountDetailsView extends StatelessWidget {
           ),
         );
 
-        final statusCard = _SectionCard(
+        final statusCard = DetailsSectionCard(
           title: 'Status & Dates',
           child: Column(
             children: [
               Row(
                 children: [
                   Expanded(
-                    child: _KeyValue(
+                    child: DetailsKeyValue(
                       label: 'Active',
                       value: (discount.isActive ?? 0) == 1 ? 'Yes' : 'No',
                     ),
                   ),
                   Expanded(
-                    child: _KeyValue(
+                    child: DetailsKeyValue(
                       label: 'Expires',
                       value: formatDate(discount.expirationDate),
                     ),
@@ -85,13 +87,13 @@ class DiscountDetailsView extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: _KeyValue(
+                    child: DetailsKeyValue(
                       label: 'Created',
                       value: formatDate(discount.createdAt),
                     ),
                   ),
                   Expanded(
-                    child: _KeyValue(
+                    child: DetailsKeyValue(
                       label: 'ID',
                       value: discount.id?.toString() ?? '-',
                     ),
@@ -119,7 +121,7 @@ class DiscountDetailsView extends StatelessWidget {
                 children: [summaryCard, const SizedBox(height: 12), statusCard],
               ),
             const SizedBox(height: 12),
-            _SectionCard(
+            DetailsSectionCard(
               title: 'Targets',
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,72 +246,6 @@ class _ChipList extends StatelessWidget {
             ),
           )
           .toList(),
-    );
-  }
-}
-
-class _SectionCard extends StatelessWidget {
-  final String? title;
-  final Widget child;
-
-  const _SectionCard({this.title, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (title != null) ...[
-            Text(
-              title!,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 12),
-          ],
-          child,
-        ],
-      ),
-    );
-  }
-}
-
-class _KeyValue extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const _KeyValue({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              color: Color(0xFF6B7280),
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value.trim().isEmpty ? '-' : value,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontWeight: FontWeight.w600),
-          ),
-        ],
-      ),
     );
   }
 }

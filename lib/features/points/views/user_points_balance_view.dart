@@ -2,6 +2,8 @@ import 'package:bizreh_admin/features/points/models/user_point_histoy_model.dart
 import 'package:bizreh_admin/features/points/controllers/user_points_balance_controller.dart';
 import 'package:bizreh_admin/utils/func/date_format.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
+import 'package:bizreh_admin/utils/widgets/details_key_value.dart';
+import 'package:bizreh_admin/utils/widgets/details_section_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -57,7 +59,7 @@ class UserPointsBalanceView extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _SectionCard(
+          DetailsSectionCard(
             child: Row(
               children: [
                 const Expanded(
@@ -84,20 +86,20 @@ class UserPointsBalanceView extends StatelessWidget {
             builder: (context, constraints) {
               final wide = constraints.maxWidth >= 860;
 
-              final left = _SectionCard(
+              final left = DetailsSectionCard(
                 title: 'Balance',
                 child: Column(
                   children: [
                     Row(
                       children: [
                         Expanded(
-                          child: _KeyValue(
+                          child: DetailsKeyValue(
                             label: 'Available Points',
                             value: balance.availablePoints.toString(),
                           ),
                         ),
                         Expanded(
-                          child: _KeyValue(
+                          child: DetailsKeyValue(
                             label: 'Transactions',
                             value: balance.totalTransactions.toString(),
                           ),
@@ -108,20 +110,20 @@ class UserPointsBalanceView extends StatelessWidget {
                 ),
               );
 
-              final right = _SectionCard(
+              final right = DetailsSectionCard(
                 title: 'Totals',
                 child: Column(
                   children: [
                     Row(
                       children: [
                         Expanded(
-                          child: _KeyValue(
+                          child: DetailsKeyValue(
                             label: 'Total Earned',
                             value: balance.totalPointsEarned.toString(),
                           ),
                         ),
                         Expanded(
-                          child: _KeyValue(
+                          child: DetailsKeyValue(
                             label: 'Total Used',
                             value: balance.totalPointsUsed.toString(),
                           ),
@@ -149,7 +151,7 @@ class UserPointsBalanceView extends StatelessWidget {
             },
           ),
           const SizedBox(height: 12),
-          _SectionCard(
+          DetailsSectionCard(
             title: 'History',
             child: history.isEmpty
                 ? const Text(
@@ -274,72 +276,6 @@ class _Meta extends StatelessWidget {
         ),
         Text(value.trim().isEmpty ? '-' : value),
       ],
-    );
-  }
-}
-
-class _SectionCard extends StatelessWidget {
-  final String? title;
-  final Widget child;
-
-  const _SectionCard({this.title, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (title != null) ...[
-            Text(
-              title!,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 12),
-          ],
-          child,
-        ],
-      ),
-    );
-  }
-}
-
-class _KeyValue extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const _KeyValue({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              color: Color(0xFF6B7280),
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value.trim().isEmpty ? '-' : value,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontWeight: FontWeight.w600),
-          ),
-        ],
-      ),
     );
   }
 }
