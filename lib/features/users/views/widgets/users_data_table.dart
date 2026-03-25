@@ -106,13 +106,10 @@ class UsersDataTable extends StatelessWidget {
                   ),
                 );
               },
-              icon: const Icon(Icons.stars_rounded, size: 16),
+              icon: const Icon(Icons.stars_rounded, size: 14),
               label: const Text('Points details'),
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
               ),
             ),
           ),

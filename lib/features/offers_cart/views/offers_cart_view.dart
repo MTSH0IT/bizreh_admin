@@ -41,6 +41,7 @@ class OffersCartView extends StatelessWidget {
 
           return OffersCartDataTable(
             rows: rows,
+            isUpdatingStatus: controller.isToggling,
             onEdit: (o) => _openEditDialog(context, controller, o),
             onDelete: (o) => _confirmDelete(context, controller, o),
             onToggle: (o) {
