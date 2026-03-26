@@ -18,6 +18,8 @@ class OrdersController extends GetxController {
 
   final RxString searchQuery = ''.obs;
 
+  final RxString statusFilter = 'all'.obs;
+
   final RxList<DriverModel> drivers = <DriverModel>[].obs;
   final RxBool isDriversLoading = false.obs;
 
@@ -36,7 +38,9 @@ class OrdersController extends GetxController {
   Future<void> getOrders() async {
     try {
       isLoading.value = true;
-      final fetched = await _ordersService.getOrders();
+      final fetched = await _ordersService.getOrders(
+        status: statusFilter.value,
+      );
       orders.assignAll(fetched);
     } on AppException catch (e) {
       showMassage(e.message, false);
@@ -47,6 +51,11 @@ class OrdersController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> setStatusFilter(String status) async {
+    statusFilter.value = status;
+    await getOrders();
   }
 
   Future<void> loadDriversIfNeeded() async {

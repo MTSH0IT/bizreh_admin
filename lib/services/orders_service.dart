@@ -10,9 +10,17 @@ import 'package:dio/dio.dart';
 class OrdersService {
   final DioClient _dioClient = DioClient();
 
-  Future<List<OrderModel>> getOrders() async {
+  Future<List<OrderModel>> getOrders({String? status}) async {
     try {
-      final response = await _dioClient.get(ApiEndpoint.getOrders);
+      final trimmed = status?.trim();
+      final query = (trimmed == null || trimmed.isEmpty || trimmed == 'all')
+          ? null
+          : <String, dynamic>{'status': trimmed};
+
+      final response = await _dioClient.get(
+        ApiEndpoint.getOrders,
+        queryParameters: query,
+      );
 
       final apiResponse = ApiResponse.fromJson(response.data, (json) {
         final List list = (json['orders'] as List?) ?? <dynamic>[];

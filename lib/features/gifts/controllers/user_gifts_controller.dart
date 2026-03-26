@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bizreh_admin/features/gifts/models/user_gifts_model/user_gifts_model.dart';
+import 'package:bizreh_admin/features/gifts/models/user_gifts_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/user_gifts_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
@@ -59,13 +59,12 @@ class UserGiftsController extends GetxController {
     if (q.isEmpty) return userGifts.toList();
 
     return userGifts.where((g) {
-      final giftTitle = (g.gift?.title ?? '').toLowerCase();
-      final giftArTitle = (g.gift?.arTitle ?? '').toLowerCase();
-      final user = g.user;
-      final fullName =
-          (user?.fullName ?? '${user?.firstName ?? ''} ${user?.lastName ?? ''}')
-              .toLowerCase();
-      final userEmail = (user?.email ?? '').toLowerCase();
+      final giftTitle = (g.giftTitle ?? '').toLowerCase();
+      final giftArTitle = (g.giftArTitle ?? '').toLowerCase();
+
+      final fullName = ('${g.firstName ?? ''} ${g.lastName ?? ''}')
+          .toLowerCase();
+      final userEmail = (g.email ?? '').toLowerCase();
       return giftTitle.contains(q) ||
           giftArTitle.contains(q) ||
           fullName.contains(q) ||
@@ -77,7 +76,7 @@ class UserGiftsController extends GetxController {
     required UserGiftsModel model,
     required String status,
   }) async {
-    final id = model.userGiftId;
+    final id = model.id;
     if (id == null) return;
 
     try {

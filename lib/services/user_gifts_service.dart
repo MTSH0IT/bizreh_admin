@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bizreh_admin/features/gifts/models/user_gifts_model/user_gifts_model.dart';
+import 'package:bizreh_admin/features/gifts/models/user_gifts_model.dart';
 import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';
@@ -11,16 +11,19 @@ class UserGiftsService {
   final DioClient _dioClient = DioClient();
 
   Future<List<UserGiftsModel>> getUserGifts({String? status}) async {
+    final trimmed = status?.trim();
+    final query = (trimmed == null || trimmed.isEmpty || trimmed == 'all')
+        ? null
+        : <String, dynamic>{'status': trimmed};
+
     try {
       final response = await _dioClient.get(
         ApiEndpoint.getUserGifts,
-        queryParameters: status != null && status.isNotEmpty
-            ? <String, dynamic>{'status': status}
-            : null,
+        queryParameters: query,
       );
 
       final apiResponse = ApiResponse.fromJson(response.data, (json) {
-        final List list = (json['gifts'] as List?) ?? <dynamic>[];
+        final List list = (json as List?) ?? <dynamic>[];
         return list
             .map((e) => UserGiftsModel.fromJson(e as Map<String, dynamic>))
             .toList();

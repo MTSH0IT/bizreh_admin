@@ -130,12 +130,12 @@ class ApiEndpoint {
 
   // Gifts
   static const String getGifts = "/admin/gift/gifts";
-  static const String createGift = "/admin/gift/gifts";
-  static String updateGift(int id) => "/admin/gift/gifts/$id";
-  static String deleteGift(int id) => "/admin/gift/gifts/$id";
+  static const String createGift = "/admin/gift";
+  static String updateGift(int id) => "/admin/gift/$id";
+  static String deleteGift(int id) => "/admin/gift/$id";
 
   // User Gifts
-  static const String getUserGifts = "/admin/gift/user";
+  static const String getUserGifts = "/admin/gift/user-gifts";
   static String changeUserGiftStatus(int id) =>
       "/admin/gift/user-gifts/$id/status";
 

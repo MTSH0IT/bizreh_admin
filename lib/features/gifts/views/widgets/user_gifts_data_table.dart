@@ -1,4 +1,4 @@
-import 'package:bizreh_admin/features/gifts/models/user_gifts_model/user_gifts_model.dart';
+import 'package:bizreh_admin/features/gifts/models/user_gifts_model.dart';
 import 'package:bizreh_admin/utils/func/status_color.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
@@ -51,20 +51,17 @@ class UserGiftsDataTable extends StatelessWidget {
         ),
       ],
       buildCells: (g, index) {
-        final giftTitle = g.gift?.title ?? '-';
-        final user = g.user;
-        final userName =
-            user?.fullName ??
-            '${user?.firstName ?? ''} ${user?.lastName ?? ''}'.trim();
-        final email = user?.email ?? '-';
-        final phone = user?.phone ?? '-';
+        final giftTitle = g.giftTitle ?? '-';
+        final userName = '${g.firstName ?? ''} ${g.lastName ?? ''}'.trim();
+        final email = g.email ?? '-';
+        final phone = g.phone ?? '-';
 
         return [
           DataCell(
             Row(
               children: [
                 DataTableImageCell(
-                  imageUrl: g.gift?.image,
+                  imageUrl: g.giftImage,
                   width: 40,
                   height: 40,
                 ),
@@ -80,11 +77,11 @@ class UserGiftsDataTable extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
               child: Text(
-                g.userGiftStatus ?? '-',
+                g.status ?? '-',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
-                  color: getGiftStatusColor(g.userGiftStatus ?? ""),
+                  color: getGiftStatusColor(g.status ?? ""),
                 ),
               ),
             ),
@@ -92,7 +89,7 @@ class UserGiftsDataTable extends StatelessWidget {
           DataCell(DataTableDateCell(date: g.createdAt)),
           DataCell(
             DropdownButton<String>(
-              value: _normalizeStatus(g.userGiftStatus),
+              value: _normalizeStatus(g.status),
               items: _statuses
                   .map((s) => DropdownMenuItem(value: s, child: Text(s)))
                   .toList(),

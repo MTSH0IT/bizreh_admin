@@ -5,12 +5,21 @@ import 'package:bizreh_admin/features/orders/views/order_details_view.dart';
 import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
+import 'package:bizreh_admin/utils/widgets/status_filter_dropdown.dart';
 import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OrdersView extends StatelessWidget {
   const OrdersView({super.key});
+
+  static const List<String> _statusOptions = <String>[
+    'all',
+    'delivered',
+    'pending',
+    'assigned_to_driver',
+    'cancelled',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +33,28 @@ class OrdersView extends StatelessWidget {
           onChanged: controller.setSearchQuery,
         ),
         const SizedBox(height: 12),
-        ToolbarRow(onRefresh: controller.getOrders, refreshText: 'Refresh'),
+        ToolbarRow(
+          onRefresh: controller.getOrders,
+          refreshText: 'Refresh',
+          extraActions: [
+            Obx(() {
+              final value = controller.statusFilter.value;
+              final safeValue = _statusOptions.contains(value) ? value : 'all';
+              return StatusFilterDropdown(
+                value: safeValue,
+                items: _statusOptions
+                    .map(
+                      (s) => DropdownMenuItem<String>(value: s, child: Text(s)),
+                    )
+                    .toList(),
+                onChanged: (s) {
+                  if (s == null) return;
+                  controller.setStatusFilter(s);
+                },
+              );
+            }),
+          ],
+        ),
         const SizedBox(height: 16),
         Obx(() {
           if (controller.isLoading.value) {
