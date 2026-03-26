@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/Brands/models/brands_model.dart';
-import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
 import 'package:bizreh_admin/features/product_top_silling/controllers/product_top_selling_controller.dart';
+import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
 import 'package:bizreh_admin/features/sub_category/models/all_sub_category_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/brands_service.dart';
@@ -17,36 +17,38 @@ class ProductsController extends GetxController {
   final BrandsService _brandsService = BrandsService();
   final SubCategoryService _subCategoryService = SubCategoryService();
 
-  // بيانات
+  // Data
   final RxList<ProductModel> products = <ProductModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxBool isCreating = false.obs;
   final RxBool isUpdating = false.obs;
   final RxBool isDeleting = false.obs;
 
-  // بيانات مساعدة للفورم
+  // Form meta
   final RxList<BrandsModel> brands = <BrandsModel>[].obs;
   final RxList<AllSubCategoryModel> allSubCategories =
       <AllSubCategoryModel>[].obs;
   final RxBool isMetaLoading = false.obs;
 
-  // فورم
+  // Form controllers
   final TextEditingController titleController = TextEditingController();
   final TextEditingController arTitleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController arDescriptionController = TextEditingController();
   final TextEditingController positionController = TextEditingController();
+  final TextEditingController tagInputController = TextEditingController();
+  final RxList<String> formTags = <String>[].obs;
   final RxString selectedImagePath = ''.obs;
 
-  // العلاقات
+  // Relations
   final RxInt selectedBrandId = 0.obs;
   final RxInt selectedSubCategoryId = 0.obs;
   final RxInt selectedIsActive = 1.obs; // 1 = active
 
-  // العنصر المحدد للتعديل
+  // Selected product for edit
   final Rx<ProductModel?> selectedProduct = Rx<ProductModel?>(null);
 
-  // البحث
+  // Search
   final RxString searchQuery = ''.obs;
 
   @override
@@ -85,10 +87,10 @@ class ProductsController extends GetxController {
     descriptionController.dispose();
     arDescriptionController.dispose();
     positionController.dispose();
+    tagInputController.dispose();
     super.onClose();
   }
 
-  // تحميل كل المنتجات
   Future<void> getProducts() async {
     try {
       isLoading.value = true;
@@ -118,6 +120,7 @@ class ProductsController extends GetxController {
         position: positionController.text.trim(),
         description: descriptionController.text.trim(),
         arDescription: arDescriptionController.text.trim(),
+        tags: tagsApiValue,
         brandId: selectedBrandId.value,
         subCategoryId: selectedSubCategoryId.value,
         imagePath: selectedImagePath.value,
@@ -153,6 +156,7 @@ class ProductsController extends GetxController {
         position: positionController.text.trim(),
         description: descriptionController.text.trim(),
         arDescription: arDescriptionController.text.trim(),
+        tags: tagsApiValue,
         brandId: selectedBrandId.value,
         subCategoryId: selectedSubCategoryId.value,
         isActive: selectedIsActive.value,
@@ -183,7 +187,6 @@ class ProductsController extends GetxController {
       await _productsService.deleteProduct(id);
       await getProducts();
 
-      // Refresh Top Selling list if controller exists
       if (Get.isRegistered<ProductTopSellingController>()) {
         await Get.find<ProductTopSellingController>().getTopSellingProducts();
       }
@@ -226,6 +229,11 @@ class ProductsController extends GetxController {
       return false;
     }
 
+    // if (formTags.isEmpty) {
+    //   showMassage('Please add at least one tag', false);
+    //   return false;
+    // }
+
     if (selectedBrandId.value == 0) {
       showMassage('Please select brand', false);
       return false;
@@ -250,6 +258,8 @@ class ProductsController extends GetxController {
     descriptionController.clear();
     arDescriptionController.clear();
     positionController.clear();
+    tagInputController.clear();
+    formTags.clear();
     selectedImagePath.value = '';
     selectedProduct.value = null;
     selectedBrandId.value = 0;
@@ -263,7 +273,13 @@ class ProductsController extends GetxController {
     arTitleController.text = product.arTitle ?? '';
     descriptionController.text = product.description ?? '';
     arDescriptionController.text = product.arDescription ?? '';
-    positionController.text = product.position?.toString() ?? "";
+    positionController.text = product.position?.toString() ?? '';
+    formTags.assignAll(
+      (product.tagsArray != null && product.tagsArray!.isNotEmpty)
+          ? product.tagsArray!
+          : _parseTagsFromText(product.tags ?? ''),
+    );
+    tagInputController.clear();
     selectedImagePath.value = '';
     selectedBrandId.value = product.brandId ?? 0;
     selectedSubCategoryId.value = product.subCategoryId ?? 0;
@@ -278,6 +294,33 @@ class ProductsController extends GetxController {
     searchQuery.value = query;
   }
 
+  List<String> _parseTagsFromText(String raw) {
+    final tags = <String>[];
+    for (final part in raw.split(RegExp(r'[,\n\u060C]'))) {
+      final tag = part.trim();
+      if (tag.isEmpty) continue;
+      tags.add(tag);
+    }
+    return tags;
+  }
+
+  String get tagsApiValue => formTags.join(',');
+
+  void addTagFromInput([String? value]) {
+    final input = (value ?? tagInputController.text).trim();
+    if (input.isEmpty) return;
+    final incoming = _parseTagsFromText(input);
+    if (incoming.isEmpty) return;
+    for (final tag in incoming) {
+      formTags.add(tag);
+    }
+    tagInputController.clear();
+  }
+
+  void removeTag(String tag) {
+    formTags.removeWhere((t) => t.toLowerCase() == tag.toLowerCase());
+  }
+
   List<ProductModel> get filteredProducts {
     final q = searchQuery.value.trim().toLowerCase();
     if (q.isEmpty) return products.toList();
@@ -285,7 +328,8 @@ class ProductsController extends GetxController {
     return products.where((p) {
       final title = (p.title ?? '').toLowerCase();
       final arTitle = (p.arTitle ?? '').toLowerCase();
-      return title.contains(q) || arTitle.contains(q);
+      final tags = (p.tags ?? '').toLowerCase();
+      return title.contains(q) || arTitle.contains(q) || tags.contains(q);
     }).toList();
   }
 

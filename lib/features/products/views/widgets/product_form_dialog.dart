@@ -131,6 +131,44 @@ class ProductFormDialog extends StatelessWidget {
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           ),
+          TextFormField(
+            controller: controller.tagInputController,
+            textInputAction: TextInputAction.done,
+            decoration: InputDecoration(
+              labelText: 'Tags',
+              hintText: 'Type tag then press Enter',
+              filled: true,
+              fillColor: const Color(0xFFF3F4F6),
+              border: const OutlineInputBorder(),
+              suffixIcon: IconButton(
+                onPressed: controller.addTagFromInput,
+                icon: const Icon(Icons.add),
+                tooltip: 'Add tag',
+              ),
+            ),
+            onFieldSubmitted: controller.addTagFromInput,
+          ),
+          const SizedBox(height: 8),
+          Obx(() {
+            final tags = controller.formTags;
+            if (tags.isEmpty) return const SizedBox.shrink();
+
+            return Align(
+              alignment: Alignment.centerLeft,
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: tags
+                    .map(
+                      (tag) => InputChip(
+                        label: Text(tag),
+                        onDeleted: () => controller.removeTag(tag),
+                      ),
+                    )
+                    .toList(),
+              ),
+            );
+          }),
           const SizedBox(height: 12),
           Obx(() {
             final isActive = controller.selectedIsActive.value == 1;

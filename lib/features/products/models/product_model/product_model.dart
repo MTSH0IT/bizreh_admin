@@ -11,6 +11,8 @@ class ProductModel {
   int? brandId;
   int? isActive;
   int? position;
+  String? tags;
+  List<String>? tagsArray;
   DateTime? createdAt;
   String? brandName;
   String? arBrandName;
@@ -29,6 +31,8 @@ class ProductModel {
     this.brandId,
     this.isActive,
     this.position,
+    this.tags,
+    this.tagsArray,
     this.createdAt,
     this.brandName,
     this.arBrandName,
@@ -48,6 +52,10 @@ class ProductModel {
     brandId: json['brand_id'] as int?,
     isActive: json['is_active'] as int?,
     position: json['position'] as int?,
+    tags: json['tags'] as String?,
+    tagsArray: (json['tags_array'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList(),
     createdAt: json['created_at'] == null
         ? null
         : DateTime.parse(json['created_at'] as String),
@@ -71,6 +79,8 @@ class ProductModel {
     'brand_id': brandId,
     'is_active': isActive,
     'position': position,
+    'tags': tags,
+    'tags_array': tagsArray,
     'created_at': createdAt?.toIso8601String(),
     'brand_name': brandName,
     'ar_brand_name': arBrandName,
