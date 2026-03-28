@@ -79,6 +79,10 @@ class AdminSidebar extends StatelessWidget {
         title: 'Offers Cart',
         icon: Icons.shopping_bag_outlined,
       ),
+      const AdminSidebarItemData(
+        title: 'Colletion',
+        icon: Icons.collections_bookmark_outlined,
+      ),
     ];
 
     return Container(

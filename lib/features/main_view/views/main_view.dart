@@ -1,6 +1,7 @@
 import 'package:bizreh_admin/features/Brands/views/brands_view.dart';
 import 'package:bizreh_admin/features/Driver/views/drivers_view.dart';
 import 'package:bizreh_admin/features/category/views/all_category_view.dart';
+import 'package:bizreh_admin/features/collections/views/collection_view.dart';
 import 'package:bizreh_admin/features/color_family/views/color_family_view.dart';
 import 'package:bizreh_admin/features/discounts/views/discounts_view.dart';
 import 'package:bizreh_admin/features/gifts/views/gifts_view.dart';
@@ -127,6 +128,9 @@ class _MainviewState extends State<Mainview> {
 
       case 17:
         return const MainNavEntry(title: 'Offers Cart', page: OffersCartView());
+
+      case 18:
+        return const MainNavEntry(title: 'Collection', page: CollectionView());
 
       default:
         return const MainNavEntry(
