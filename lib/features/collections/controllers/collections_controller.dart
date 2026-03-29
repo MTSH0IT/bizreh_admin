@@ -272,6 +272,7 @@ class CollectionsController extends GetxController {
 
   Future<void> createParentCollection() async {
     try {
+      if (!_validateForm(requireImage: true)) return;
       isCreating.value = true;
 
       final parent = selectedParentId.value;
@@ -300,6 +301,7 @@ class CollectionsController extends GetxController {
 
   Future<void> createCollection() async {
     try {
+      if (!_validateForm(requireImage: true)) return;
       isCreating.value = true;
       _syncPendingTagInput();
 
@@ -337,6 +339,8 @@ class CollectionsController extends GetxController {
     if (model?.id == null) return;
 
     try {
+      final hasExistingImage = (model?.image ?? '').trim().isNotEmpty;
+      if (!_validateForm(requireImage: !hasExistingImage)) return;
       isUpdating.value = true;
 
       final parent = selectedParentId.value;
@@ -507,6 +511,49 @@ class CollectionsController extends GetxController {
 
   void removeTag(String tag) {
     formTags.removeWhere((t) => t.toLowerCase() == tag.toLowerCase());
+  }
+
+  bool _validateForm({required bool requireImage}) {
+    final titleError = _validateTitle(titleController.text);
+    if (titleError != null) {
+      showMassage(titleError, false);
+      return false;
+    }
+
+    final arTitleError = _validateArTitle(arTitleController.text);
+    if (arTitleError != null) {
+      showMassage(arTitleError, false);
+      return false;
+    }
+
+    final imageError = _validateImagePath(
+      selectedImagePath.value,
+      requireImage: requireImage,
+    );
+    if (imageError != null) {
+      showMassage(imageError, false);
+      return false;
+    }
+
+    return true;
+  }
+
+  String? _validateTitle(String value) {
+    final v = value.trim();
+    if (v.isEmpty) return 'Title is required';
+    return null;
+  }
+
+  String? _validateArTitle(String value) {
+    final v = value.trim();
+    if (v.isEmpty) return 'Arabic title is required';
+    return null;
+  }
+
+  String? _validateImagePath(String value, {required bool requireImage}) {
+    final v = value.trim();
+    if (requireImage && v.isEmpty) return 'Image is required';
+    return null;
   }
 }
 

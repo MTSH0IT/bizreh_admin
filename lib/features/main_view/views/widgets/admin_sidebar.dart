@@ -10,81 +10,19 @@ class AdminSidebarItemData {
 class AdminSidebar extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onSelect;
+  final List<AdminSidebarItemData> items;
 
   const AdminSidebar({
     super.key,
     required this.selectedIndex,
     required this.onSelect,
+    required this.items,
   });
 
   static const double width = 200;
 
   @override
   Widget build(BuildContext context) {
-    final items = <AdminSidebarItemData>[
-      const AdminSidebarItemData(title: 'Users', icon: Icons.group_outlined),
-      const AdminSidebarItemData(
-        title: 'Brands',
-        icon: Icons.local_offer_outlined,
-      ),
-      const AdminSidebarItemData(
-        title: 'Super Categories',
-        icon: Icons.category_outlined,
-      ),
-      const AdminSidebarItemData(title: 'Categories', icon: Icons.list_alt),
-      const AdminSidebarItemData(
-        title: 'Sub Categories',
-        icon: Icons.subdirectory_arrow_right_rounded,
-      ),
-      const AdminSidebarItemData(
-        title: 'Products',
-        icon: Icons.inventory_2_outlined,
-      ),
-      const AdminSidebarItemData(
-        title: 'Color Family',
-        icon: Icons.palette_outlined,
-      ),
-      const AdminSidebarItemData(title: 'Top Selling', icon: Icons.star_border),
-      const AdminSidebarItemData(
-        title: 'Packagings',
-        icon: Icons.all_inbox_outlined,
-      ),
-      const AdminSidebarItemData(
-        title: 'Drivers',
-        icon: Icons.local_shipping_outlined,
-      ),
-      const AdminSidebarItemData(
-        title: 'Cities',
-        icon: Icons.location_city_outlined,
-      ),
-      const AdminSidebarItemData(
-        title: 'Suppliers',
-        icon: Icons.store_outlined,
-      ),
-      const AdminSidebarItemData(
-        title: 'Orders',
-        icon: Icons.shopping_cart_outlined,
-      ),
-      const AdminSidebarItemData(
-        title: 'Discounts',
-        icon: Icons.percent_outlined,
-      ),
-      const AdminSidebarItemData(title: 'Points', icon: Icons.point_of_sale),
-      const AdminSidebarItemData(
-        title: 'Gifts',
-        icon: Icons.card_giftcard_outlined,
-      ),
-      const AdminSidebarItemData(title: 'Ads', icon: Icons.campaign_outlined),
-      const AdminSidebarItemData(
-        title: 'Offers Cart',
-        icon: Icons.shopping_bag_outlined,
-      ),
-      const AdminSidebarItemData(
-        title: 'Colletion',
-        icon: Icons.collections_bookmark_outlined,
-      ),
-    ];
-
     return Container(
       width: width,
       color: Colors.white,

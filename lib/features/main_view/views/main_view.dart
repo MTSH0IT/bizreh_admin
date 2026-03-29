@@ -33,6 +33,112 @@ class Mainview extends StatefulWidget {
 class _MainviewState extends State<Mainview> {
   int _selectedIndex = 0;
   late final MainNavController _nav = Get.put(MainNavController());
+  late final List<_MainMenuItem> _menuItems = [
+    _MainMenuItem(
+      title: 'Users',
+      icon: Icons.group_outlined,
+      entry: const MainNavEntry(title: 'Users', page: UsersView()),
+    ),
+    _MainMenuItem(
+      title: 'Brands',
+      icon: Icons.local_offer_outlined,
+      entry: const MainNavEntry(title: 'Brands', page: BrandsView()),
+    ),
+    _MainMenuItem(
+      title: 'Super Categories',
+      icon: Icons.category_outlined,
+      entry: const MainNavEntry(
+        title: 'Super Categories',
+        page: SuperCategoryView(),
+      ),
+    ),
+    _MainMenuItem(
+      title: 'Categories',
+      icon: Icons.list_alt,
+      entry: const MainNavEntry(title: 'Categories', page: AllCategoryView()),
+    ),
+    _MainMenuItem(
+      title: 'Sub Categories',
+      icon: Icons.subdirectory_arrow_right_rounded,
+      entry: const MainNavEntry(
+        title: 'Sub Categories',
+        page: AllSubCategoryView(),
+      ),
+    ),
+    _MainMenuItem(
+      title: 'Collection',
+      icon: Icons.collections_bookmark_outlined,
+      entry: const MainNavEntry(title: 'Collection', page: CollectionView()),
+    ),
+    _MainMenuItem(
+      title: 'Products',
+      icon: Icons.inventory_2_outlined,
+      entry: const MainNavEntry(title: 'Products', page: ProductsView()),
+    ),
+    _MainMenuItem(
+      title: 'Color Family',
+      icon: Icons.palette_outlined,
+      entry: const MainNavEntry(title: 'Color Family', page: ColorFamilyView()),
+    ),
+    _MainMenuItem(
+      title: 'Top Selling',
+      icon: Icons.star_border,
+      entry: const MainNavEntry(
+        title: 'Top Selling',
+        page: ProductTopSellingView(),
+      ),
+    ),
+    _MainMenuItem(
+      title: 'Packagings',
+      icon: Icons.all_inbox_outlined,
+      entry: const MainNavEntry(title: 'Packagings', page: PackagingsView()),
+    ),
+    _MainMenuItem(
+      title: 'Drivers',
+      icon: Icons.local_shipping_outlined,
+      entry: const MainNavEntry(title: 'Drivers', page: DriversView()),
+    ),
+    _MainMenuItem(
+      title: 'Cities',
+      icon: Icons.location_city_outlined,
+      entry: const MainNavEntry(title: 'Cities', page: CitiesView()),
+    ),
+    _MainMenuItem(
+      title: 'Suppliers',
+      icon: Icons.store_outlined,
+      entry: const MainNavEntry(title: 'Suppliers', page: SuppliersView()),
+    ),
+    _MainMenuItem(
+      title: 'Orders',
+      icon: Icons.shopping_cart_outlined,
+      entry: const MainNavEntry(title: 'Orders', page: OrdersView()),
+    ),
+    _MainMenuItem(
+      title: 'Discounts',
+      icon: Icons.percent_outlined,
+      entry: const MainNavEntry(title: 'Discounts', page: DiscountsView()),
+    ),
+    _MainMenuItem(
+      title: 'Points',
+      icon: Icons.point_of_sale,
+      entry: const MainNavEntry(title: 'Points', page: PointsView()),
+    ),
+    _MainMenuItem(
+      title: 'Gifts',
+      icon: Icons.card_giftcard_outlined,
+      entry: const MainNavEntry(title: 'Gifts', page: GiftsView()),
+    ),
+    _MainMenuItem(
+      title: 'Ads',
+      icon: Icons.campaign_outlined,
+      entry: const MainNavEntry(title: 'Ads', page: AdsView()),
+    ),
+    _MainMenuItem(
+      title: 'Offers Cart',
+      icon: Icons.shopping_bag_outlined,
+      entry: const MainNavEntry(title: 'Offers Cart', page: OffersCartView()),
+    ),
+  ];
   @override
   void initState() {
     super.initState();
@@ -49,6 +155,11 @@ class _MainviewState extends State<Mainview> {
           children: [
             AdminSidebar(
               selectedIndex: _selectedIndex,
+              items: _menuItems
+                  .map(
+                    (e) => AdminSidebarItemData(title: e.title, icon: e.icon),
+                  )
+                  .toList(),
               onSelect: (i) {
                 setState(() => _selectedIndex = i);
                 _nav.resetTo(_buildRootEntry(i));
@@ -77,68 +188,26 @@ class _MainviewState extends State<Mainview> {
   }
 
   MainNavEntry _buildRootEntry(int selectedIndex) {
-    switch (selectedIndex) {
-      case 0:
-        return const MainNavEntry(title: 'Users', page: UsersView());
-      case 1:
-        return const MainNavEntry(title: 'Brands', page: BrandsView());
-      case 2:
-        return const MainNavEntry(
-          title: 'Super Categories',
-          page: SuperCategoryView(),
-        );
-      case 3:
-        return const MainNavEntry(title: 'Categories', page: AllCategoryView());
-      case 4:
-        return const MainNavEntry(
-          title: 'Sub Categories',
-          page: AllSubCategoryView(),
-        );
-      case 5:
-        return const MainNavEntry(title: 'Products', page: ProductsView());
-      case 6:
-        return const MainNavEntry(
-          title: 'Color Family',
-          page: ColorFamilyView(),
-        );
-      case 7:
-        return const MainNavEntry(
-          title: 'Top Selling',
-          page: ProductTopSellingView(),
-        );
-      case 8:
-        return const MainNavEntry(title: 'Packagings', page: PackagingsView());
-      case 9:
-        return const MainNavEntry(title: 'Drivers', page: DriversView());
-      case 10:
-        return const MainNavEntry(title: 'Cities', page: CitiesView());
-      case 11:
-        return const MainNavEntry(title: 'Suppliers', page: SuppliersView());
-      case 12:
-        return const MainNavEntry(title: 'Orders', page: OrdersView());
-      case 13:
-        return const MainNavEntry(title: 'Discounts', page: DiscountsView());
-      case 14:
-        return const MainNavEntry(title: 'Points', page: PointsView());
-      case 15:
-        return const MainNavEntry(title: 'Gifts', page: GiftsView());
-
-      case 16:
-        return const MainNavEntry(title: 'Ads', page: AdsView());
-
-      case 17:
-        return const MainNavEntry(title: 'Offers Cart', page: OffersCartView());
-
-      case 18:
-        return const MainNavEntry(title: 'Collection', page: CollectionView());
-
-      default:
-        return const MainNavEntry(
-          title: 'Page',
-          page: _PlaceholderPage(title: 'Page'),
-        );
+    if (selectedIndex >= 0 && selectedIndex < _menuItems.length) {
+      return _menuItems[selectedIndex].entry;
     }
+    return const MainNavEntry(
+      title: 'Page',
+      page: _PlaceholderPage(title: 'Page'),
+    );
   }
+}
+
+class _MainMenuItem {
+  final String title;
+  final IconData icon;
+  final MainNavEntry entry;
+
+  const _MainMenuItem({
+    required this.title,
+    required this.icon,
+    required this.entry,
+  });
 }
 
 class _PlaceholderPage extends StatelessWidget {
