@@ -27,14 +27,11 @@ class CollectionView extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         ToolbarRow(
-          onAdd: () => _openCreateDialog(controller),
           onRefresh: controller.getCollections,
-          addText: 'Add Collection',
           refreshText: 'Refresh',
           extraActions: [
             OutlinedButton.icon(
-              onPressed: () =>
-                  _openCreateDialog(controller, useParentApi: true),
+              onPressed: () => _openCreateDialog(controller),
               icon: const Icon(Icons.account_tree_outlined),
               label: const Text('Add Parent Collection'),
             ),
@@ -93,16 +90,9 @@ class CollectionView extends StatelessWidget {
   void _openCreateDialog(
     CollectionsController controller, {
     int? parentId,
-    bool useParentApi = false,
   }) {
     openFormDialog<void>(
-      onBeforeOpen: () {
-        if (useParentApi) {
-          controller.setForCreateParent(parentId: parentId);
-        } else {
-          controller.setForCreate(parentId: parentId);
-        }
-      },
+      onBeforeOpen: () => controller.setForCreateParent(parentId: parentId),
       dialogBuilder: (_) => CollectionFormDialog(controller: controller),
     );
   }
@@ -164,20 +154,26 @@ class _CollectionModelTileState extends State<_CollectionModelTile> {
   @override
   void initState() {
     super.initState();
-    _expanded = widget.depth == 0;
+    _expanded = false;
   }
 
   @override
   Widget build(BuildContext context) {
     final model = widget.model;
     final children = model.subCollections ?? const <CollectionModel>[];
-    final products = model.products ?? const [];
+    final products = _resolveProducts(model);
     final hasChildren = children.isNotEmpty;
-    final hasProducts = products.isNotEmpty;
     final productsCount = model.productsCount ?? products.length;
+    final hasProducts = products.isNotEmpty || productsCount > 0;
+    final canExpand = hasChildren || hasProducts;
     final title = model.title?.trim().isNotEmpty == true
         ? model.title!
         : (model.arTitle ?? 'Collection #${model.id ?? '-'}');
+    final collectionType = (model.type ?? '').trim().toLowerCase();
+    final isProductsType = collectionType == 'products';
+    final typeLabel = collectionType.isNotEmpty
+        ? collectionType
+        : 'collections';
     final isActive = model.status == 1;
 
     return Container(
@@ -206,7 +202,7 @@ class _CollectionModelTileState extends State<_CollectionModelTile> {
                     ),
                     child: Row(
                       children: [
-                        if (hasChildren)
+                        if (canExpand)
                           InkWell(
                             borderRadius: BorderRadius.circular(14),
                             onTap: () => setState(() => _expanded = !_expanded),
@@ -252,6 +248,15 @@ class _CollectionModelTileState extends State<_CollectionModelTile> {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
+                              const SizedBox(height: 1),
+                              Text(
+                                'type: $typeLabel',
+                                style: const TextStyle(
+                                  color: Color(0xFF94A3B8),
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -281,11 +286,12 @@ class _CollectionModelTileState extends State<_CollectionModelTile> {
                   flex: 2,
                   child: Row(
                     children: [
-                      _ActionIcon(
-                        icon: Icons.add,
-                        color: const Color(0xFF2563EB),
-                        onTap: () => widget.onCreateChild(model.id),
-                      ),
+                      if (!isProductsType)
+                        _ActionIcon(
+                          icon: Icons.add,
+                          color: const Color(0xFF2563EB),
+                          onTap: () => widget.onCreateChild(model.id),
+                        ),
                       _ActionIcon(
                         icon: Icons.edit_outlined,
                         color: const Color(0xFF334155),
@@ -330,6 +336,45 @@ class _CollectionModelTileState extends State<_CollectionModelTile> {
     );
   }
 
+  List<dynamic> _resolveProducts(CollectionModel model) {
+    final direct = model.products;
+    if (direct != null && direct.isNotEmpty) return direct;
+
+    final ids = model.productIds;
+    if (ids != null && ids.isNotEmpty) {
+      return ids
+          .map(
+            (id) => <String, dynamic>{
+              'id': id,
+              'title': 'Product #$id',
+            },
+          )
+          .toList();
+    }
+
+    final custom = model.customProductsArray;
+    if (custom != null && custom.isNotEmpty) {
+      return custom
+          .map(
+            (id) => <String, dynamic>{
+              'id': id,
+              'title': 'Product #$id',
+            },
+          )
+          .toList();
+    }
+
+    if ((model.productsCount ?? 0) > 0) {
+      return <Map<String, dynamic>>[
+        <String, dynamic>{
+          'title': '${model.productsCount} products available',
+        },
+      ];
+    }
+
+    return const <dynamic>[];
+  }
+
   String _formatNumber(int value) {
     final text = value.toString();
     final buffer = StringBuffer();
@@ -361,7 +406,13 @@ class _CollectionImage extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(6),
-        child: ImageNetwork(image: image!),
+        child: (image != null && image!.trim().isNotEmpty)
+            ? ImageNetwork(image: image!)
+            : const Icon(
+                Icons.collections_bookmark_outlined,
+                size: 18,
+                color: Color(0xFF64748B),
+              ),
       ),
     );
   }

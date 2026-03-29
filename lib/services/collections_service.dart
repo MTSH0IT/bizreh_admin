@@ -98,7 +98,6 @@ class CollectionsService {
     String? subCategory,
     String? tags,
     String? customProducts,
-    String? type,
   }) async {
     try {
       final formData = FormData.fromMap({
@@ -107,7 +106,6 @@ class CollectionsService {
         if (parentCollectionId != null)
           'parent_collection_id': parentCollectionId,
         if (conditionType != null) 'condition_type': conditionType,
-        if (type != null) 'type': type,
         'status': status,
         'image': await MultipartFile.fromFile(imagePath),
         if (brand != null) 'brand': brand,
@@ -141,7 +139,50 @@ class CollectionsService {
     }
   }
 
-  Future<void> updateCollection({
+  Future<void> updateParentCollection({
+    required int id,
+    String? title,
+    String? arTitle,
+    int? parentCollectionId,
+    int? status,
+    String? imagePath,
+  }) async {
+    try {
+      final map = <String, dynamic>{
+        if (title != null) 'title': title,
+        if (arTitle != null) 'ar_title': arTitle,
+        if (parentCollectionId != null)
+          'parent_collection_id': parentCollectionId,
+        if (status != null) 'status': status,
+        if (imagePath != null) 'image': await MultipartFile.fromFile(imagePath),
+      };
+
+      final formData = FormData.fromMap(map);
+
+      final response = await _dioClient.put(
+        ApiEndpoint.updateParentCollection(id),
+        data: formData,
+      );
+
+      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      if (!apiResponse.success) {
+        throw Exception(apiResponse.message ?? 'Failed to update collection');
+      }
+    } on DioException catch (e) {
+      final err = e.error;
+      if (err is AppException) {
+        log('collections service AppException updateParentCollection : ${err.message}${err.statusCode}');
+        throw err;
+      }
+      log('collections service DioException updateParentCollection : ${e.message}');
+      throw Exception(e.message);
+    } catch (e) {
+      log('collections service catch updateParentCollection : ${e.toString()}');
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> updateProductsCollection({
     required int id,
     String? title,
     String? arTitle,
@@ -153,7 +194,6 @@ class CollectionsService {
     String? subCategory,
     String? tags,
     String? customProducts,
-    String? type,
   }) async {
     try {
       final map = <String, dynamic>{
@@ -167,14 +207,13 @@ class CollectionsService {
         if (subCategory != null) 'sub_category': subCategory,
         if (tags != null) 'tags': tags,
         if (customProducts != null) 'custom_products': customProducts,
-        if (type != null) 'type': type,
         if (imagePath != null) 'image': await MultipartFile.fromFile(imagePath),
       };
 
       final formData = FormData.fromMap(map);
 
       final response = await _dioClient.put(
-        ApiEndpoint.updateCollection(id),
+        ApiEndpoint.updateProductsCollection(id),
         data: formData,
       );
 
@@ -185,15 +224,13 @@ class CollectionsService {
     } on DioException catch (e) {
       final err = e.error;
       if (err is AppException) {
-        log(
-          'collections service AppException updateCollection : ${err.message}${err.statusCode}',
-        );
+        log('collections service AppException updateProductsCollection : ${err.message}${err.statusCode}');
         throw err;
       }
-      log('collections service DioException updateCollection : ${e.message}');
+      log('collections service DioException updateProductsCollection : ${e.message}');
       throw Exception(e.message);
     } catch (e) {
-      log('collections service catch updateCollection : ${e.toString()}');
+      log('collections service catch updateProductsCollection : ${e.toString()}');
       throw Exception(e.toString());
     }
   }

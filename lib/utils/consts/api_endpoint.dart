@@ -157,6 +157,7 @@ class ApiEndpoint {
   static const String getCollections = "/admin/collection";
   static const String createCollection = "/admin/collection";
   static const String createParentCollection = "/admin/collection/parent";
-  static String updateCollection(int id) => "/admin/collection/$id";
+  static String updateParentCollection(int id) => "/admin/collection/$id";
+  static String updateProductsCollection(int id) => "/admin/collection/products/$id";
   static String deleteCollection(int id) => "/admin/collection/$id";
 }

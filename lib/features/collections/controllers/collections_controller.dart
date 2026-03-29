@@ -1,20 +1,37 @@
 import 'dart:developer';
 
+import 'package:bizreh_admin/features/Brands/controllers/brands_controler.dart';
+import 'package:bizreh_admin/features/Brands/models/brands_model.dart';
 import 'package:bizreh_admin/features/collections/models/collection_model/collection_model.dart';
+import 'package:bizreh_admin/features/products/controllers/products_controller.dart';
+import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
+import 'package:bizreh_admin/features/sub_category/controllers/all_sub_category_crud_controller.dart';
+import 'package:bizreh_admin/features/sub_category/models/all_sub_category_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
+import 'package:bizreh_admin/services/brands_service.dart';
 import 'package:bizreh_admin/services/collections_service.dart';
+import 'package:bizreh_admin/services/products_service.dart';
+import 'package:bizreh_admin/services/sub_category_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CollectionsController extends GetxController {
   final CollectionsService _service = CollectionsService();
+  final ProductsService _productsService = ProductsService();
+  final BrandsService _brandsService = BrandsService();
+  final SubCategoryService _subCategoryService = SubCategoryService();
 
   final RxList<CollectionModel> collections = <CollectionModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxBool isCreating = false.obs;
   final RxBool isUpdating = false.obs;
   final RxBool isDeleting = false.obs;
+
+  final RxBool isMetaLoading = false.obs;
+  final RxList<ProductModel> products = <ProductModel>[].obs;
+  final RxList<BrandsModel> brands = <BrandsModel>[].obs;
+  final RxList<AllSubCategoryModel> subCategories = <AllSubCategoryModel>[].obs;
 
   final RxString searchQuery = ''.obs;
 
@@ -23,15 +40,14 @@ class CollectionsController extends GetxController {
 
   final TextEditingController titleController = TextEditingController();
   final TextEditingController arTitleController = TextEditingController();
-  final TextEditingController brandController = TextEditingController();
-  final TextEditingController subCategoryController = TextEditingController();
   final TextEditingController tagInputController = TextEditingController();
-  final TextEditingController customProductsController =
-      TextEditingController();
   final RxList<String> formTags = <String>[].obs;
 
+  final RxList<int> selectedBrandIds = <int>[].obs;
+  final RxList<int> selectedSubCategoryIds = <int>[].obs;
+  final RxList<int> selectedCustomProductIds = <int>[].obs;
+
   final RxString conditionType = 'and'.obs;
-  final RxString type = 'collections'.obs;
   final RxInt status = 1.obs;
   final RxString selectedImagePath = ''.obs;
 
@@ -41,17 +57,101 @@ class CollectionsController extends GetxController {
   void onInit() {
     super.onInit();
     getCollections();
+    getMeta();
   }
 
   @override
   void onClose() {
     titleController.dispose();
     arTitleController.dispose();
-    brandController.dispose();
-    subCategoryController.dispose();
     tagInputController.dispose();
-    customProductsController.dispose();
     super.onClose();
+  }
+
+  Future<void> getMeta() async {
+    final productsController = Get.isRegistered<ProductsController>()
+        ? Get.find<ProductsController>()
+        : null;
+    final brandsController = Get.isRegistered<BrandsController>()
+        ? Get.find<BrandsController>()
+        : null;
+    final subCategoriesController =
+        Get.isRegistered<AllSubCategoryCrudController>()
+        ? Get.find<AllSubCategoryCrudController>()
+        : null;
+
+    if (productsController != null && productsController.products.isNotEmpty) {
+      products.assignAll(productsController.products);
+    }
+
+    if (brandsController != null && brandsController.brands.isNotEmpty) {
+      brands.assignAll(brandsController.brands);
+    }
+
+    if (subCategoriesController != null &&
+        subCategoriesController.allSubCategories.isNotEmpty) {
+      subCategories.assignAll(subCategoriesController.allSubCategories);
+    }
+
+    if (products.isNotEmpty && brands.isNotEmpty && subCategories.isNotEmpty) {
+      return;
+    }
+
+    try {
+      isMetaLoading.value = true;
+
+      final futures = <Future<dynamic>>[];
+      final keys = <String>[];
+
+      if (products.isEmpty) {
+        futures.add(_productsService.getProducts());
+        keys.add('products');
+      }
+      if (brands.isEmpty) {
+        futures.add(_brandsService.getBrands());
+        keys.add('brands');
+      }
+      if (subCategories.isEmpty) {
+        futures.add(_subCategoryService.getAllSubCategories());
+        keys.add('subCategories');
+      }
+
+      final results = await Future.wait(futures);
+
+      for (var i = 0; i < results.length; i++) {
+        switch (keys[i]) {
+          case 'products':
+            products.assignAll(results[i] as List<ProductModel>);
+            break;
+          case 'brands':
+            brands.assignAll(results[i] as List<BrandsModel>);
+            break;
+          case 'subCategories':
+            subCategories.assignAll(results[i] as List<AllSubCategoryModel>);
+            break;
+        }
+      }
+    } on AppException catch (e) {
+      showMassage(e.message, false);
+      log('AppException in getMeta: ${e.message}');
+    } catch (e) {
+      showMassage('Failed to load products/brands/sub categories', false);
+      log('Error in getMeta: $e');
+    } finally {
+      isMetaLoading.value = false;
+    }
+  }
+
+  void setSelectedBrands(List<int> ids) {
+    selectedBrandIds.assignAll(ids);
+  }
+
+  void setSelectedSubCategories(List<int> ids) {
+    selectedSubCategoryIds.assignAll(ids);
+  }
+
+  void setSelectedCustomProducts(List<int> ids) {
+    selectedCustomProductIds.assignAll(ids);
   }
 
   Future<void> getCollections() async {
@@ -119,17 +219,18 @@ class CollectionsController extends GetxController {
   }
 
   bool get isEditing => selectedCollection.value != null;
+  bool get isEditingProductsType =>
+      (selectedCollection.value?.type ?? '').toLowerCase() == 'products';
 
   void clearForm() {
     titleController.clear();
     arTitleController.clear();
-    brandController.clear();
-    subCategoryController.clear();
     tagInputController.clear();
     formTags.clear();
-    customProductsController.clear();
+    selectedBrandIds.clear();
+    selectedSubCategoryIds.clear();
+    selectedCustomProductIds.clear();
     conditionType.value = 'and';
-    type.value = 'collections';
     status.value = 1;
     selectedImagePath.value = '';
     isParentApi.value = false;
@@ -155,14 +256,14 @@ class CollectionsController extends GetxController {
     selectedCollection.value = model;
     titleController.text = model.title ?? '';
     arTitleController.text = model.arTitle ?? '';
-    brandController.text = model.conditions?.brand?.toString() ?? '';
-    subCategoryController.text =
-        model.conditions?.subCategory?.toString() ?? '';
+    selectedBrandIds.assignAll(_parseIntIds(model.conditions?.brand));
+    selectedSubCategoryIds.assignAll(
+      _parseIntIds(model.conditions?.subCategory),
+    );
     formTags.assignAll(model.conditions?.tags ?? const <String>[]);
     tagInputController.clear();
-    customProductsController.text = _extractCustomProducts(model);
+    _assignCustomProductIdsFromModel(model);
     conditionType.value = (model.conditionType ?? 'and').toString();
-    type.value = (model.type ?? 'collections').toString();
     status.value = model.status ?? 1;
     selectedImagePath.value = '';
     isParentApi.value = false;
@@ -200,6 +301,7 @@ class CollectionsController extends GetxController {
   Future<void> createCollection() async {
     try {
       isCreating.value = true;
+      _syncPendingTagInput();
 
       final parent = selectedParentId.value;
       await _service.createCollection(
@@ -207,13 +309,12 @@ class CollectionsController extends GetxController {
         arTitle: _trimmedOrNull(arTitleController.text) ?? '',
         parentCollectionId: parent == 0 ? null : parent,
         conditionType: conditionType.value,
-        type: type.value,
         status: status.value,
         imagePath: selectedImagePath.value,
-        brand: _trimmedOrNull(brandController.text),
-        subCategory: _trimmedOrNull(subCategoryController.text),
+        brand: _idsCsvOrNull(selectedBrandIds),
+        subCategory: _idsCsvOrNull(selectedSubCategoryIds),
         tags: _effectiveTagsOrNull,
-        customProducts: _trimmedOrNull(customProductsController.text),
+        customProducts: _idsCsvOrNull(selectedCustomProductIds),
       );
 
       await getCollections();
@@ -239,22 +340,37 @@ class CollectionsController extends GetxController {
       isUpdating.value = true;
 
       final parent = selectedParentId.value;
-      await _service.updateCollection(
-        id: model!.id!,
-        title: _trimmedOrNull(titleController.text),
-        arTitle: _trimmedOrNull(arTitleController.text),
-        parentCollectionId: parent == 0 ? null : parent,
-        conditionType: conditionType.value,
-        type: type.value,
-        status: status.value,
-        imagePath: selectedImagePath.value.isEmpty
-            ? null
-            : selectedImagePath.value,
-        brand: _trimmedOrNull(brandController.text),
-        subCategory: _trimmedOrNull(subCategoryController.text),
-        tags: _effectiveTagsOrNull,
-        customProducts: _trimmedOrNull(customProductsController.text),
-      );
+      final isProductsType = (model!.type ?? '').toLowerCase() == 'products';
+
+      if (isProductsType) {
+        _syncPendingTagInput();
+        await _service.updateProductsCollection(
+          id: model.id!,
+          title: _trimmedOrNull(titleController.text),
+          arTitle: _trimmedOrNull(arTitleController.text),
+          parentCollectionId: parent == 0 ? null : parent,
+          conditionType: conditionType.value,
+          status: status.value,
+          imagePath: selectedImagePath.value.isEmpty
+              ? null
+              : selectedImagePath.value,
+          brand: selectedBrandIds.join(','),
+          subCategory: selectedSubCategoryIds.join(','),
+          tags: _tagsForUpdatePayload,
+          customProducts: selectedCustomProductIds.join(','),
+        );
+      } else {
+        await _service.updateParentCollection(
+          id: model.id!,
+          title: _trimmedOrNull(titleController.text),
+          arTitle: _trimmedOrNull(arTitleController.text),
+          parentCollectionId: parent == 0 ? null : parent,
+          status: status.value,
+          imagePath: selectedImagePath.value.isEmpty
+              ? null
+              : selectedImagePath.value,
+        );
+      }
 
       await getCollections();
       clearForm();
@@ -299,6 +415,7 @@ class CollectionsController extends GetxController {
   }
 
   String get tagsApiValue => formTags.join(',');
+  String get _tagsForUpdatePayload => tagsApiValue.trim();
 
   String? get _effectiveTagsOrNull {
     final fromChips = tagsApiValue.trim();
@@ -311,12 +428,66 @@ class CollectionsController extends GetxController {
     return trimmed.isEmpty ? null : trimmed;
   }
 
-  String _extractCustomProducts(CollectionModel model) {
+  String _normalizeConditionValue(dynamic value) {
+    if (value == null) return '';
+    if (value is List) {
+      return value
+          .map((e) => e?.toString().trim() ?? '')
+          .where((e) => e.isNotEmpty)
+          .join(',');
+    }
+
+    final raw = value.toString().trim();
+    if (raw.isEmpty) return '';
+    if (raw.startsWith('[') && raw.endsWith(']')) {
+      return raw
+          .substring(1, raw.length - 1)
+          .split(',')
+          .map((e) => e.trim())
+          .where((e) => e.isNotEmpty)
+          .join(',');
+    }
+    return raw;
+  }
+
+  List<int> _parseIntIds(dynamic value) {
+    final normalized = _normalizeConditionValue(value);
+    if (normalized.isEmpty) return [];
+    return normalized
+        .split(',')
+        .map((e) => int.tryParse(e.trim()))
+        .whereType<int>()
+        .toList();
+  }
+
+  void _assignCustomProductIdsFromModel(CollectionModel model) {
     final list = model.customProductsArray;
     if (list != null && list.isNotEmpty) {
-      return list.map((e) => e.toString()).join(',');
+      selectedCustomProductIds.assignAll(
+        list.map((e) => int.tryParse(e.toString())).whereType<int>(),
+      );
+      return;
     }
-    return model.customProducts ?? '';
+    final raw = model.customProducts?.toString().trim() ?? '';
+    if (raw.isNotEmpty) {
+      selectedCustomProductIds.assignAll(
+        raw.split(',').map((e) => int.tryParse(e.trim())).whereType<int>(),
+      );
+      return;
+    }
+    final pids = model.productIds;
+    if (pids != null && pids.isNotEmpty) {
+      selectedCustomProductIds.assignAll(
+        pids.map((e) => int.tryParse(e.toString())).whereType<int>(),
+      );
+      return;
+    }
+    selectedCustomProductIds.clear();
+  }
+
+  String? _idsCsvOrNull(RxList<int> ids) {
+    if (ids.isEmpty) return null;
+    return ids.join(',');
   }
 
   void addTagFromInput([String? value]) {
@@ -326,6 +497,12 @@ class CollectionsController extends GetxController {
     if (incoming.isEmpty) return;
     formTags.addAll(incoming);
     tagInputController.clear();
+  }
+
+  void _syncPendingTagInput() {
+    final pending = tagInputController.text.trim();
+    if (pending.isEmpty) return;
+    addTagFromInput(pending);
   }
 
   void removeTag(String tag) {
@@ -345,7 +522,7 @@ class CollectionParentOption {
   });
 
   String get displayTitle {
-    final prefix = depth <= 0 ? '' : '${'  ' * depth}- ';
+    final prefix = depth <= 0 ? '' : '${'  ' * depth}|_ ';
     return '$prefix$title';
   }
 }

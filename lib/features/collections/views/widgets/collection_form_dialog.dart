@@ -4,6 +4,7 @@ import 'package:bizreh_admin/utils/widgets/form_dialog_actions.dart';
 import 'package:bizreh_admin/utils/widgets/form_image_picker_section.dart';
 import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
 import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
+import 'package:bizreh_admin/utils/widgets/loading_multi_select_dropdown_form_field2.dart';
 import 'package:bizreh_admin/utils/widgets/tags_input_section.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,16 +48,35 @@ class CollectionFormDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!isEditing)
+          if (!isEditing) ...[
             Obx(
-              () => SwitchListTile.adaptive(
-                value: controller.isParentApi.value,
-                onChanged: (value) => controller.isParentApi.value = value,
-                title: const Text('Create as Parent Collection API'),
-                contentPadding: EdgeInsets.zero,
+              () => LoadingDropdownFormField2<String>(
+                isLoading: false,
+                items: const [
+                  DropdownMenuItem(
+                    value: 'parent',
+                    child: Text('Parent Collection'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'products',
+                    child: Text('Products Collection'),
+                  ),
+                ],
+                value: controller.isParentApi.value ? 'parent' : 'products',
+                onChanged: (v) {
+                  final mode = v ?? 'parent';
+                  if (mode == 'parent') {
+                    controller.isParentApi.value = true;
+                  } else {
+                    controller.isParentApi.value = false;
+                  }
+                },
+                labelText: 'Collection Mode',
+                hintText: 'Select collection mode',
               ),
             ),
-          const SizedBox(height: 4),
+            const SizedBox(height: 12),
+          ],
           LabeledTextField(
             label: 'Title',
             hint: 'Enter collection title',
@@ -94,7 +114,9 @@ class CollectionFormDialog extends StatelessWidget {
           }),
           const SizedBox(height: 12),
           Obx(() {
-            final showAdvanced = isEditing || !controller.isParentApi.value;
+            final showAdvanced = isEditing
+                ? controller.isEditingProductsType
+                : !controller.isParentApi.value;
             if (!showAdvanced) return const SizedBox.shrink();
 
             return Column(
@@ -114,44 +136,92 @@ class CollectionFormDialog extends StatelessWidget {
                   hintText: 'Select condition type',
                 ),
                 const SizedBox(height: 12),
-                LoadingDropdownFormField2<String>(
-                  isLoading: false,
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'collections',
-                      child: Text('collections'),
-                    ),
-                    DropdownMenuItem(value: 'products', child: Text('products')),
-                  ],
-                  value: controller.type.value,
-                  onChanged: (v) {
-                    controller.type.value = v ?? 'collections';
-                  },
-                  labelText: 'Type',
-                  hintText: 'Select type',
-                ),
-                LabeledTextField(
-                  label: 'Brand',
-                  hint: 'Comma-separated brand IDs',
-                  controller: controller.brandController,
-                ),
-                LabeledTextField(
-                  label: 'Sub Category',
-                  hint: 'Comma-separated sub category IDs',
-                  controller: controller.subCategoryController,
-                ),
-                Obx(
-                  () => TagsInputSection(
-                    inputController: controller.tagInputController,
-                    tags: controller.formTags.toList(),
-                    onAddTag: controller.addTagFromInput,
-                    onRemoveTag: controller.removeTag,
-                  ),
-                ),
-                LabeledTextField(
-                  label: 'Custom Products',
-                  hint: 'Comma-separated product IDs',
-                  controller: controller.customProductsController,
+                Obx(() {
+                  final items = controller.brands
+                      .where((b) => b.id != null)
+                      .map(
+                        (b) => DropdownMenuItem<int>(
+                          value: b.id,
+                          child: Text(
+                            b.title?.isNotEmpty == true
+                                ? b.title!
+                                : b.arTitle ?? '-',
+                          ),
+                        ),
+                      )
+                      .toList();
+
+                  return LoadingMultiSelectDropdownFormField2<int>(
+                    isLoading: controller.isMetaLoading.value,
+                    items: items,
+                    values: controller.selectedBrandIds.toList(),
+                    onChanged: controller.setSelectedBrands,
+                    labelText: 'Brands',
+                    hintText: 'Select brands',
+                    enableSearch: true,
+                    searchHintText: 'Search brands...',
+                  );
+                }),
+                const SizedBox(height: 12),
+                Obx(() {
+                  final items = controller.subCategories
+                      .where((c) => c.id != null)
+                      .map(
+                        (c) => DropdownMenuItem<int>(
+                          value: c.id,
+                          child: Text(
+                            c.title?.isNotEmpty == true
+                                ? c.title!
+                                : c.arTitle ?? '-',
+                          ),
+                        ),
+                      )
+                      .toList();
+
+                  return LoadingMultiSelectDropdownFormField2<int>(
+                    isLoading: controller.isMetaLoading.value,
+                    items: items,
+                    values: controller.selectedSubCategoryIds.toList(),
+                    onChanged: controller.setSelectedSubCategories,
+                    labelText: 'Sub Categories',
+                    hintText: 'Select sub categories',
+                    enableSearch: true,
+                    searchHintText: 'Search sub categories...',
+                  );
+                }),
+                const SizedBox(height: 12),
+                Obx(() {
+                  final items = controller.products
+                      .where((p) => p.id != null)
+                      .map(
+                        (p) => DropdownMenuItem<int>(
+                          value: p.id,
+                          child: Text(
+                            p.title?.isNotEmpty == true
+                                ? p.title!
+                                : p.arTitle ?? '-',
+                          ),
+                        ),
+                      )
+                      .toList();
+
+                  return LoadingMultiSelectDropdownFormField2<int>(
+                    isLoading: controller.isMetaLoading.value,
+                    items: items,
+                    values: controller.selectedCustomProductIds.toList(),
+                    onChanged: controller.setSelectedCustomProducts,
+                    labelText: 'Custom Products',
+                    hintText: 'Select products',
+                    enableSearch: true,
+                    searchHintText: 'Search products...',
+                  );
+                }),
+                const SizedBox(height: 12),
+                TagsInputSection(
+                  inputController: controller.tagInputController,
+                  tags: controller.formTags.toList(),
+                  onAddTag: controller.addTagFromInput,
+                  onRemoveTag: controller.removeTag,
                 ),
               ],
             );

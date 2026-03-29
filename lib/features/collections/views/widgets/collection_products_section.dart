@@ -1,4 +1,6 @@
+import 'package:bizreh_admin/utils/widgets/image_network.dart';
 import 'package:flutter/material.dart';
+import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
 
 class CollectionProductsSection extends StatefulWidget {
   final List<dynamic> products;
@@ -31,11 +33,18 @@ class _CollectionProductsSectionState extends State<CollectionProductsSection> {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(top: 6),
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
       decoration: BoxDecoration(
         color: const Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(color: const Color(0xFFE2E8F0)),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0A0F172A),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,39 +52,43 @@ class _CollectionProductsSectionState extends State<CollectionProductsSection> {
           Row(
             children: [
               Container(
-                width: 24,
-                height: 24,
+                width: 28,
+                height: 28,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEFF6FF),
-                  borderRadius: BorderRadius.circular(6),
+                  color: const Color(0xFFEEF2FF),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: const Color(0xFFC7D2FE)),
                 ),
                 child: const Icon(
                   Icons.inventory_2_outlined,
-                  size: 14,
-                  color: Color(0xFF2563EB),
+                  size: 15,
+                  color: Color(0xFF4F46E5),
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 10),
               const Text(
                 'Products',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
-                  fontSize: 13.5,
+                  fontSize: 14,
                   color: Color(0xFF0F172A),
                 ),
               ),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(100),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                  border: Border.all(color: const Color(0xFFCBD5E1)),
                 ),
                 child: Text(
                   '${items.length} Items',
                   style: const TextStyle(
-                    color: Color(0xFF475569),
+                    color: Color(0xFF334155),
                     fontWeight: FontWeight.w700,
                     fontSize: 11.5,
                   ),
@@ -83,7 +96,7 @@ class _CollectionProductsSectionState extends State<CollectionProductsSection> {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           ...visibleItems.asMap().entries.map(
             (entry) => Padding(
               padding: EdgeInsets.only(
@@ -93,16 +106,30 @@ class _CollectionProductsSectionState extends State<CollectionProductsSection> {
             ),
           ),
           if (hasMore) ...[
-            const SizedBox(height: 8),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton.icon(
+            const SizedBox(height: 10),
+            Center(
+              child: OutlinedButton.icon(
                 onPressed: () => setState(() => _expanded = !_expanded),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 8,
+                  ),
+                  side: const BorderSide(color: Color(0xFFCBD5E1)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
                 icon: Icon(
-                  _expanded ? Icons.expand_less : Icons.expand_more,
+                  _expanded
+                      ? Icons.keyboard_arrow_up_rounded
+                      : Icons.keyboard_arrow_down_rounded,
                   size: 18,
                 ),
-                label: Text(_expanded ? 'Show less' : 'Show more'),
+                label: Text(
+                  _expanded ? 'Show less' : 'Show more',
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
               ),
             ),
           ],
@@ -112,32 +139,25 @@ class _CollectionProductsSectionState extends State<CollectionProductsSection> {
   }
 
   _ProductItem _toProductItem(dynamic product) {
-    if (product is Map<String, dynamic>) {
-      final title = product['title']?.toString().trim() ?? '';
-      final arTitle = product['ar_title']?.toString().trim() ?? '';
-      final id = product['id']?.toString().trim() ?? '';
-      final brand = product['brand_name']?.toString().trim() ?? '';
-      final category = product['category_name']?.toString().trim() ?? '';
-      final image = product['image']?.toString().trim() ?? '';
-
-      final effectiveTitle = title.isNotEmpty
-          ? title
-          : arTitle.isNotEmpty
-          ? arTitle
-          : id.isNotEmpty
-          ? 'Product #$id'
-          : '-';
-
-      final subtitleParts = <String>[
-        if (brand.isNotEmpty) brand,
-        if (category.isNotEmpty) category,
-      ];
-
+    if (product is ProductModel) {
+      final title = (product.title ?? '').trim();
+      final arTitle = (product.arTitle ?? '').trim();
+      final id = product.id?.toString() ?? '';
+      final brand = (product.brandName ?? product.arBrandName ?? '').trim();
+      final category =
+          (product.subCategoryName ?? product.arSubCategoryName ?? '').trim();
       return _ProductItem(
-        title: effectiveTitle,
-        subtitle: subtitleParts.join(' | '),
+        title: title.isNotEmpty
+            ? title
+            : arTitle.isNotEmpty
+            ? arTitle
+            : (id.isNotEmpty ? 'Product #$id' : '-'),
+        subtitle: [
+          if (brand.isNotEmpty) brand,
+          if (category.isNotEmpty) category,
+        ].join(' | '),
         id: id,
-        image: image,
+        image: (product.image ?? '').trim(),
       );
     }
 
@@ -160,16 +180,23 @@ class _ProductTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFDCE3EE)),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x080F172A),
+            blurRadius: 6,
+            offset: Offset(0, 1),
+          ),
+        ],
       ),
       child: Row(
         children: [
           _ProductThumb(image: item.image),
-          const SizedBox(width: 8),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,17 +209,19 @@ class _ProductTile extends StatelessWidget {
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     color: Color(0xFF0F172A),
+                    fontSize: 13.5,
                   ),
                 ),
                 if (item.subtitle.isNotEmpty) ...[
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 3),
                   Text(
                     item.subtitle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 11.5,
-                      color: Color(0xFF64748B),
+                      fontSize: 11.8,
+                      color: Color(0xFF5B6B82),
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
@@ -201,17 +230,17 @@ class _ProductTile extends StatelessWidget {
           ),
           if (item.id.isNotEmpty)
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
               decoration: BoxDecoration(
-                color: const Color(0xFFF8FAFC),
+                color: const Color(0xFFF1F5F9),
                 borderRadius: BorderRadius.circular(100),
-                border: Border.all(color: const Color(0xFFE2E8F0)),
+                border: Border.all(color: const Color(0xFFCBD5E1)),
               ),
               child: Text(
                 '#${item.id}',
                 style: const TextStyle(
-                  fontSize: 11,
-                  color: Color(0xFF475569),
+                  fontSize: 11.2,
+                  color: Color(0xFF334155),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -230,28 +259,15 @@ class _ProductThumb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 28,
-      height: 28,
+      width: 30,
+      height: 30,
       decoration: BoxDecoration(
-        color: const Color(0xFFF1F5F9),
-        borderRadius: BorderRadius.circular(8),
+        color: const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(9),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
       ),
       clipBehavior: Clip.antiAlias,
-      child: image.isNotEmpty
-          ? Image.network(
-              image,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => const Icon(
-                Icons.shopping_bag_outlined,
-                size: 14,
-                color: Color(0xFF64748B),
-              ),
-            )
-          : const Icon(
-              Icons.shopping_bag_outlined,
-              size: 14,
-              color: Color(0xFF64748B),
-            ),
+      child: ImageNetwork(image: image),
     );
   }
 }
