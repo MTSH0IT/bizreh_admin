@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class ProductsDataTable extends StatelessWidget {
   final List<ProductModel> rows;
+  final ValueChanged<ProductModel>? onDetails;
   final ValueChanged<ProductModel>? onEdit;
   final ValueChanged<ProductModel>? onDelete;
   final ValueChanged<ProductModel>? onOptions;
@@ -14,6 +15,7 @@ class ProductsDataTable extends StatelessWidget {
   const ProductsDataTable({
     super.key,
     required this.rows,
+    this.onDetails,
     this.onEdit,
     this.onDelete,
     this.onOptions,
@@ -102,16 +104,11 @@ class ProductsDataTable extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  onPressed: onEdit == null ? null : () => onEdit!(product),
-                  icon: const Icon(Icons.edit, size: 16),
-                  color: kprimaryColor,
-                  tooltip: 'Edit',
-                ),
-                IconButton(
-                  onPressed: onDelete == null ? null : () => onDelete!(product),
-                  icon: const Icon(Icons.delete_outline, size: 16),
-                  color: Colors.red,
-                  tooltip: 'Delete',
+                  onPressed: onDetails == null
+                      ? null
+                      : () => onDetails!(product),
+                  icon: const Icon(Icons.remove_red_eye_outlined, size: 16),
+                  tooltip: 'Details',
                 ),
                 IconButton(
                   onPressed: onOptions == null
@@ -119,6 +116,49 @@ class ProductsDataTable extends StatelessWidget {
                       : () => onOptions!(product),
                   icon: const Icon(Icons.tune, size: 16),
                   tooltip: 'Options',
+                ),
+                PopupMenuButton<String>(
+                  tooltip: 'More',
+                  onSelected: (value) {
+                    if (value == 'edit' && onEdit != null) {
+                      onEdit!(product);
+                    }
+                    if (value == 'delete' && onDelete != null) {
+                      onDelete!(product);
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    if (onEdit != null)
+                      PopupMenuItem<String>(
+                        value: 'edit',
+                        child: Row(
+                          children: [
+                            Icon(Icons.edit, size: 16, color: kprimaryColor),
+                            const SizedBox(width: 8),
+                            const Text('Edit'),
+                          ],
+                        ),
+                      ),
+                    if (onDelete != null)
+                      const PopupMenuItem<String>(
+                        value: 'delete',
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.delete_outline,
+                              size: 16,
+                              color: Colors.red,
+                            ),
+                            SizedBox(width: 8),
+                            Text('Delete'),
+                          ],
+                        ),
+                      ),
+                  ],
+                  child: const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Icon(Icons.more_horiz, size: 16),
+                  ),
                 ),
               ],
             ),

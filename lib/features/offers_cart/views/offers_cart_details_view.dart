@@ -1,60 +1,51 @@
-import 'package:bizreh_admin/features/orders/models/order_model/item.dart';
-import 'package:bizreh_admin/features/orders/models/order_model/order_model.dart';
+import 'package:bizreh_admin/features/offers_cart/models/offers_cart_model/item.dart';
+import 'package:bizreh_admin/features/offers_cart/models/offers_cart_model/offers_cart_model.dart';
 import 'package:bizreh_admin/utils/func/date_format.dart';
-import 'package:bizreh_admin/utils/func/status_color.dart';
 import 'package:bizreh_admin/utils/widgets/details_key_value.dart';
 import 'package:bizreh_admin/utils/widgets/details_section_card.dart';
 import 'package:bizreh_admin/utils/widgets/image_network.dart';
 import 'package:flutter/material.dart';
 
-class OrderDetailsView extends StatelessWidget {
-  final OrderModel order;
+class OffersCartDetailsView extends StatelessWidget {
+  final OffersCartModel offer;
 
-  const OrderDetailsView({super.key, required this.order});
+  const OffersCartDetailsView({super.key, required this.offer});
 
   @override
   Widget build(BuildContext context) {
-    final items = order.items ?? const <Item>[];
+    final items = offer.items ?? const <Item>[];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _Header(order: order),
+        _Header(offer: offer),
         const SizedBox(height: 16),
         LayoutBuilder(
           builder: (context, constraints) {
             final wide = constraints.maxWidth >= 900;
-            final leftContent = Column(
+
+            final left = Column(
               children: [
-                _OrderSummaryCard(order: order),
+                _SummaryCard(offer: offer),
                 const SizedBox(height: 12),
-                _CustomerCard(order: order),
-                const SizedBox(height: 12),
-                _DriverCard(order: order),
+                _DescriptionCard(offer: offer),
               ],
             );
-            final rightContent = Column(
-              children: [
-                _PaymentCard(order: order),
-                const SizedBox(height: 12),
-                _AddressCard(order: order),
-              ],
-            );
+
+            final right = Column(children: [_StatusCard(offer: offer)]);
 
             if (wide) {
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child: leftContent),
+                  Expanded(child: left),
                   const SizedBox(width: 12),
-                  Expanded(child: rightContent),
+                  Expanded(child: right),
                 ],
               );
             }
 
-            return Column(
-              children: [leftContent, const SizedBox(height: 12), rightContent],
-            );
+            return Column(children: [left, const SizedBox(height: 12), right]);
           },
         ),
         const SizedBox(height: 12),
@@ -65,18 +56,17 @@ class OrderDetailsView extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  final OrderModel order;
+  final OffersCartModel offer;
 
-  const _Header({required this.order});
+  const _Header({required this.offer});
 
   @override
   Widget build(BuildContext context) {
-    final title = (order.orderNumber ?? '').trim().isEmpty
-        ? 'Order'
-        : 'Order #${order.orderNumber}';
-
-    final status = (order.status ?? '-').trim();
-    final payment = (order.paymentStatus ?? '-').trim();
+    final title = (offer.name ?? offer.arName ?? 'Offer').trim();
+    final status = (offer.isActive ?? 0) == 1 ? 'Active' : 'Inactive';
+    final statusColor = (offer.isActive ?? 0) == 1
+        ? const Color(0xFF059669)
+        : const Color(0xFF6B7280);
 
     return DetailsSectionCard(
       child: Row(
@@ -87,7 +77,7 @@ class _Header extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  title.isEmpty ? 'Offer' : title,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
@@ -95,44 +85,27 @@ class _Header extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Created: ${formatDate(order.createdAt)}',
+                  'Created: ${formatDate(offer.createdAt)}',
                   style: const TextStyle(color: Color(0xFF6B7280)),
                 ),
               ],
             ),
           ),
           const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              _Badge(
-                label: status.isEmpty ? '-' : status,
-                color: getOrderStatusColor(status),
-              ),
-              const SizedBox(height: 8),
-              _Badge(
-                label: payment.isEmpty ? '-' : payment,
-                color: getPaymentStatusColor(payment),
-              ),
-            ],
-          ),
+          _Badge(label: status, color: statusColor),
         ],
       ),
     );
   }
 }
 
-class _OrderSummaryCard extends StatelessWidget {
-  final OrderModel order;
+class _SummaryCard extends StatelessWidget {
+  final OffersCartModel offer;
 
-  const _OrderSummaryCard({required this.order});
+  const _SummaryCard({required this.offer});
 
   @override
   Widget build(BuildContext context) {
-    final total = order.financialSummary?.total;
-    final subtotal = order.financialSummary?.subTotal;
-    final discount = order.financialSummary?.totalDiscount;
-
     return DetailsSectionCard(
       title: 'Summary',
       child: Column(
@@ -141,14 +114,14 @@ class _OrderSummaryCard extends StatelessWidget {
             children: [
               Expanded(
                 child: DetailsKeyValue(
-                  label: 'Total',
-                  value: total == null ? '-' : total.toStringAsFixed(2),
+                  label: 'Price',
+                  value: offer.price ?? '-',
                 ),
               ),
               Expanded(
                 child: DetailsKeyValue(
-                  label: 'Items',
-                  value: order.totalItemsCount?.toString() ?? '-',
+                  label: 'Quantity',
+                  value: offer.quantity?.toString() ?? '-',
                 ),
               ),
             ],
@@ -158,14 +131,31 @@ class _OrderSummaryCard extends StatelessWidget {
             children: [
               Expanded(
                 child: DetailsKeyValue(
-                  label: 'Sub total',
-                  value: subtotal == null ? '-' : subtotal.toStringAsFixed(2),
+                  label: 'Items count',
+                  value: offer.itemsCount?.toString() ?? '-',
                 ),
               ),
               Expanded(
                 child: DetailsKeyValue(
-                  label: 'Discount',
-                  value: discount == null ? '-' : discount.toStringAsFixed(2),
+                  label: 'Calculated total',
+                  value: offer.calculatedTotal?.toString() ?? '-',
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: DetailsKeyValue(
+                  label: 'Savings',
+                  value: offer.savings?.toString() ?? '-',
+                ),
+              ),
+              Expanded(
+                child: DetailsKeyValue(
+                  label: 'ID',
+                  value: offer.id?.toString() ?? '-',
                 ),
               ),
             ],
@@ -176,89 +166,30 @@ class _OrderSummaryCard extends StatelessWidget {
   }
 }
 
-class _CustomerCard extends StatelessWidget {
-  final OrderModel order;
+class _DescriptionCard extends StatelessWidget {
+  final OffersCartModel offer;
 
-  const _CustomerCard({required this.order});
+  const _DescriptionCard({required this.offer});
 
   @override
   Widget build(BuildContext context) {
     return DetailsSectionCard(
-      title: 'Customer',
+      title: 'Description',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: DetailsKeyValue(
-                  label: 'Name',
-                  value: order.userName ?? '-',
-                ),
-              ),
-              Expanded(
-                child: DetailsKeyValue(
-                  label: 'Phone',
-                  value: order.userPhone ?? '-',
-                ),
-              ),
-            ],
+          DetailsKeyValue(
+            label: 'English',
+            value: (offer.description ?? '-').trim().isEmpty
+                ? '-'
+                : offer.description!,
           ),
           const SizedBox(height: 8),
-          DetailsKeyValue(label: 'Email', value: order.userEmail ?? '-'),
-        ],
-      ),
-    );
-  }
-}
-
-class _AddressCard extends StatelessWidget {
-  final OrderModel order;
-
-  const _AddressCard({required this.order});
-
-  @override
-  Widget build(BuildContext context) {
-    final city = (order.arCityName ?? order.cityName ?? '-').trim();
-
-    return DetailsSectionCard(
-      title: 'Delivery address',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: DetailsKeyValue(label: 'City', value: city),
-              ),
-              Expanded(
-                child: DetailsKeyValue(
-                  label: 'Address ID',
-                  value: '${order.addressId ?? '-'}',
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          DetailsKeyValue(label: 'Line', value: order.addressLine ?? '-'),
-          const SizedBox(height: 8),
-          DetailsKeyValue(label: 'Note', value: order.addressNote ?? '-'),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: DetailsKeyValue(
-                  label: 'Latitude',
-                  value: order.latitude?.toString() ?? '-',
-                ),
-              ),
-              Expanded(
-                child: DetailsKeyValue(
-                  label: 'Longitude',
-                  value: order.longitude?.toString() ?? '-',
-                ),
-              ),
-            ],
+          DetailsKeyValue(
+            label: 'Arabic',
+            value: (offer.arDescription ?? '-').trim().isEmpty
+                ? '-'
+                : offer.arDescription!,
           ),
         ],
       ),
@@ -266,66 +197,46 @@ class _AddressCard extends StatelessWidget {
   }
 }
 
-class _PaymentCard extends StatelessWidget {
-  final OrderModel order;
+class _StatusCard extends StatelessWidget {
+  final OffersCartModel offer;
 
-  const _PaymentCard({required this.order});
+  const _StatusCard({required this.offer});
 
   @override
   Widget build(BuildContext context) {
-    final status = (order.paymentStatus ?? '-').trim();
-
     return DetailsSectionCard(
-      title: 'Payment',
+      title: 'Status & Dates',
       child: Column(
         children: [
           Row(
             children: [
               Expanded(
                 child: DetailsKeyValue(
-                  label: 'Status',
-                  value: status.isEmpty ? '-' : status,
+                  label: 'Active',
+                  value: (offer.isActive ?? 0) == 1 ? 'Yes' : 'No',
                 ),
               ),
               Expanded(
                 child: DetailsKeyValue(
-                  label: 'Total',
-                  value: order.financialSummary?.total == null
-                      ? '-'
-                      : order.financialSummary!.total!.toStringAsFixed(2),
+                  label: 'Updated',
+                  value: formatDate(offer.updatedAt),
                 ),
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _DriverCard extends StatelessWidget {
-  final OrderModel order;
-
-  const _DriverCard({required this.order});
-
-  @override
-  Widget build(BuildContext context) {
-    return DetailsSectionCard(
-      title: 'Driver',
-      child: Column(
-        children: [
+          const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
                 child: DetailsKeyValue(
-                  label: 'Name',
-                  value: order.driverName ?? '-',
+                  label: 'Created',
+                  value: formatDate(offer.createdAt),
                 ),
               ),
               Expanded(
                 child: DetailsKeyValue(
-                  label: 'Phone',
-                  value: order.driverPhone ?? '-',
+                  label: 'Name (AR)',
+                  value: offer.arName ?? '-',
                 ),
               ),
             ],
@@ -350,9 +261,9 @@ class _ItemsCard extends StatelessWidget {
           : Column(
               children: [
                 ...items.map(
-                  (it) => Padding(
+                  (item) => Padding(
                     padding: const EdgeInsets.only(bottom: 12),
-                    child: _ItemTile(item: it),
+                    child: _ItemTile(item: item),
                   ),
                 ),
               ],
@@ -368,10 +279,25 @@ class _ItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = (item.arTitle ?? item.title ?? '-').trim();
-    final option = (item.arOptionName ?? item.optionName ?? '-').trim();
-    final packaging = (item.packagingArTitle ?? item.packagingTitle ?? '-')
+    final title = (item.product?.arTitle ?? item.product?.title ?? '-').trim();
+    final option =
+        (item.productOption?.arName ?? item.productOption?.name ?? '-').trim();
+    final packaging = (item.packaging?.arTitle ?? item.packaging?.title ?? '-')
         .trim();
+    final brand =
+        (item.product?.brand?.arTitle ?? item.product?.brand?.title ?? '-')
+            .trim();
+    final category =
+        (item.product?.category?.arTitle ??
+                item.product?.category?.title ??
+                '-')
+            .trim();
+    final supCategory =
+        (item.product?.subCategory?.arTitle ??
+                item.product?.subCategory?.title ??
+                '-')
+            .trim();
+    final image = item.productOption?.mainImage ?? item.product?.image ?? '';
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -388,7 +314,7 @@ class _ItemTile extends StatelessWidget {
             height: 64,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: ImageNetwork(image: item.image ?? ''),
+              child: ImageNetwork(image: image),
             ),
           ),
           const SizedBox(width: 12),
@@ -397,7 +323,7 @@ class _ItemTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  title.isEmpty ? '-' : title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontWeight: FontWeight.w700),
@@ -407,32 +333,36 @@ class _ItemTile extends StatelessWidget {
                   spacing: 12,
                   runSpacing: 6,
                   children: [
-                    _InlineMeta(label: 'SKU', value: item.productSku ?? '-'),
+                    _InlineMeta(
+                      label: 'SKU',
+                      value: item.packaging?.sku ?? '-',
+                    ),
                     _InlineMeta(label: 'Option', value: option),
                     _InlineMeta(label: 'Packaging', value: packaging),
                     _InlineMeta(
-                      label: 'Qty/Unit',
-                      value: item.quantityPerUnit?.toString() ?? '-',
-                    ),
-                    _InlineMeta(label: 'Brand', value: item.brandTitle ?? '-'),
-                    _InlineMeta(
-                      label: 'Category',
-                      value: item.categoryTitle ?? '-',
+                      label: 'Qty',
+                      value: item.quantity?.toString() ?? '-',
                     ),
                     _InlineMeta(
                       label: 'Stock Qty',
                       value: item.stockQuantity?.toString() ?? '-',
                     ),
+                    _InlineMeta(
+                      label: 'Brand',
+                      value: brand.isEmpty ? '-' : brand,
+                    ),
+                    _InlineMeta(
+                      label: 'Category',
+                      value: category.isEmpty ? '-' : category,
+                    ),
+                    _InlineMeta(
+                      label: 'Sub-category',
+                      value: supCategory.isEmpty ? '-' : supCategory,
+                    ),
                     if (item.color != null)
                       _InlineMeta(
                         label: 'Color',
-                        value: item.color!.name ?? '-',
-                      ),
-                    if (item.appliedDiscountName != null &&
-                        item.appliedDiscountName!.isNotEmpty)
-                      _InlineMeta(
-                        label: 'Discount',
-                        value: item.appliedDiscountName!,
+                        value: item.color?.arName ?? item.color?.name ?? '-',
                       ),
                   ],
                 ),
@@ -444,16 +374,12 @@ class _ItemTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                item.finalItemPrice == null
-                    ? '-'
-                    : item.finalItemPrice!.toStringAsFixed(2),
+                item.totalPrice?.toString() ?? '-',
                 style: const TextStyle(fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 4),
               Text(
-                item.unitPrice == null
-                    ? '-'
-                    : 'Unit: ${item.unitPrice!.toStringAsFixed(2)}',
+                item.pricePerUnit == null ? '-' : 'Unit: ${item.pricePerUnit}',
                 style: const TextStyle(color: Color(0xFF6B7280)),
               ),
             ],

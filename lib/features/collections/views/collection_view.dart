@@ -2,6 +2,9 @@ import 'package:bizreh_admin/features/collections/controllers/collections_contro
 import 'package:bizreh_admin/features/collections/models/collection_model/collection_model.dart';
 import 'package:bizreh_admin/features/collections/views/widgets/collection_form_dialog.dart';
 import 'package:bizreh_admin/features/collections/views/widgets/collection_products_section.dart';
+import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
+import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
+import 'package:bizreh_admin/features/products/views/product_details_view.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/image_network.dart';
@@ -329,9 +332,24 @@ class _CollectionModelTileState extends State<_CollectionModelTile> {
                 end: 12,
                 bottom: 10,
               ),
-              child: CollectionProductsSection(products: products),
+              child: CollectionProductsSection(
+                products: products,
+                onProductTap: _openProductDetails,
+              ),
             ),
         ],
+      ),
+    );
+  }
+
+  void _openProductDetails(ProductModel product) {
+    final title = (product.title ?? product.arTitle ?? '').trim();
+    final id = product.id;
+
+    Get.find<MainNavController>().push(
+      MainNavEntry(
+        title: title.isNotEmpty ? title : 'Product ${id ?? ''}',
+        page: ProductDetailsView(product: product),
       ),
     );
   }

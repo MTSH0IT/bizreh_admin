@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bizreh_admin/features/offers_cart/models/offers_cart_model.dart';
+import 'package:bizreh_admin/features/offers_cart/models/offers_cart_model/offers_cart_model.dart';
 import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/offers_cart_service.dart';
@@ -77,12 +77,16 @@ class OffersCartController extends GetxController {
               ? m.packagingTitle!
               : (m.arPackagingTitle ?? '-'));
           final skuLabel = m.optionSku?.isNotEmpty == true ? m.optionSku! : '-';
+          final mainLine = '$productLabel / $optLabel / $pkgLabel';
+          final metaLine = 'SKU: $skuLabel  |  #$id';
           out.add(
             DropdownMenuItem<int>(
               value: id,
               child: Text(
-                '$productLabel / $optLabel / $pkgLabel (SKU:$skuLabel) [#$id]',
-                // overflow: TextOverflow.ellipsis,
+                '$mainLine\n$metaLine',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(height: 1.25),
               ),
             ),
           );
@@ -219,7 +223,18 @@ class OffersCartController extends GetxController {
       i.dispose();
     }
     items.clear();
-    addItemRow();
+
+    final currentItems = offer.items ?? const [];
+    if (currentItems.isEmpty) {
+      addItemRow();
+    } else {
+      for (final item in currentItems) {
+        addItemRow(
+          optionPackagingId: item.optionPackagingId,
+          quantity: item.quantity,
+        );
+      }
+    }
   }
 
   void setIsActive(int? v) {

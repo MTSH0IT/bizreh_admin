@@ -1,6 +1,7 @@
 import 'package:bizreh_admin/features/products/controllers/products_controller.dart';
 import 'package:bizreh_admin/features/product_top_silling/controllers/product_top_selling_controller.dart';
 import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
+import 'package:bizreh_admin/features/products/views/product_details_view.dart';
 import 'package:bizreh_admin/features/products/views/widgets/products_data_table.dart';
 import 'package:bizreh_admin/features/products/views/widgets/product_form_dialog.dart';
 import 'package:bizreh_admin/features/option_packaging/views/option_packaging_view.dart';
@@ -48,6 +49,7 @@ class ProductsView extends StatelessWidget {
 
           return ProductsDataTable(
             rows: filtered,
+            onDetails: (product) => _openDetailsPage(nav, product),
             onEdit: (product) => _openEditDialog(context, controller, product),
             onDelete: (product) => _confirmDelete(context, controller, product),
             onOptions: (product) => _openOptionsPage(nav, product),
@@ -101,6 +103,15 @@ class ProductsView extends StatelessWidget {
       MainNavEntry(
         title: product.title ?? 'product',
         page: OptionPackagingView(product: product),
+      ),
+    );
+  }
+
+  void _openDetailsPage(MainNavController nav, ProductModel product) {
+    nav.push(
+      MainNavEntry(
+        title: product.title ?? product.arTitle ?? 'Product Details',
+        page: ProductDetailsView(product: product),
       ),
     );
   }

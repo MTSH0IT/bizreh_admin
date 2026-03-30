@@ -1,4 +1,5 @@
 import 'package:bizreh_admin/features/discounts/models/discount_model/discount_model.dart';
+import 'package:bizreh_admin/utils/consts/colors.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -21,8 +22,7 @@ class DiscountsDataTable extends StatelessWidget {
     return DataTableWidget<DiscountModel>(
       rows: rows,
       emptyMessage: 'No discounts found',
-      onEdit: onEdit,
-      onDelete: onDelete,
+      showActions: false,
       columns: const [
         DataColumn(
           label: Text('Title', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -82,7 +82,7 @@ class DiscountsDataTable extends StatelessWidget {
           ),
         ),
         DataColumn(
-          label: Text('Details', style: TextStyle(fontWeight: FontWeight.bold)),
+          label: Text('Actions', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
       ],
       buildCells: (d, index) {
@@ -102,10 +102,27 @@ class DiscountsDataTable extends StatelessWidget {
           DataCell(DataTableNumberCell(number: d.categoriesCount)),
           DataCell(DataTableDateCell(date: d.createdAt)),
           DataCell(
-            IconButton(
-              onPressed: onDetails == null ? null : () => onDetails!(d),
-              icon: const Icon(Icons.visibility_outlined, size: 18),
-              tooltip: 'Details',
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  onPressed: onDetails == null ? null : () => onDetails!(d),
+                  icon: const Icon(Icons.visibility_outlined, size: 18),
+                  tooltip: 'Details',
+                ),
+                IconButton(
+                  onPressed: onEdit == null ? null : () => onEdit!(d),
+                  icon: const Icon(Icons.edit, size: 16),
+                  color: kprimaryColor,
+                  tooltip: 'Edit',
+                ),
+                IconButton(
+                  onPressed: onDelete == null ? null : () => onDelete!(d),
+                  icon: const Icon(Icons.delete_outline, size: 16),
+                  color: Colors.red,
+                  tooltip: 'Delete',
+                ),
+              ],
             ),
           ),
         ];

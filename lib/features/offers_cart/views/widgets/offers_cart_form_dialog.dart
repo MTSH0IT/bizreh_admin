@@ -78,6 +78,21 @@ class OffersCartFormDialog extends StatelessWidget {
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           ),
+          const SizedBox(height: 8),
+          Obx(() {
+            return DropdownButtonFormField<int>(
+              value: controller.selectedIsActive.value,
+              decoration: const InputDecoration(
+                labelText: 'Status',
+                border: OutlineInputBorder(),
+              ),
+              items: const [
+                DropdownMenuItem<int>(value: 1, child: Text('Active')),
+                DropdownMenuItem<int>(value: 0, child: Text('Inactive')),
+              ],
+              onChanged: controller.setIsActive,
+            );
+          }),
           const SizedBox(height: 12),
           Row(
             children: [
@@ -117,8 +132,20 @@ class OffersCartFormDialog extends StatelessWidget {
                             labelText: 'Option packaging',
                             hintText: 'Select option packaging',
                             enableSearch: true,
+                            menuItemHeight: 68,
                             searchHintText:
                                 'Search by product/option/packaging/sku...',
+                            selectedItemTextBuilder: (menuItem) {
+                              final child = menuItem.child;
+                              if (child is Text) {
+                                final raw = child.data ?? '';
+                                if (raw.isEmpty) {
+                                  return menuItem.value?.toString() ?? '-';
+                                }
+                                return raw.split('\n').first.trim();
+                              }
+                              return menuItem.value?.toString() ?? '-';
+                            },
                           );
                         }),
                       ),

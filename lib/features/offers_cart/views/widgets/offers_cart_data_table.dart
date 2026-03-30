@@ -1,4 +1,4 @@
-import 'package:bizreh_admin/features/offers_cart/models/offers_cart_model.dart';
+import 'package:bizreh_admin/features/offers_cart/models/offers_cart_model/offers_cart_model.dart';
 import 'package:bizreh_admin/utils/widgets/active_switch.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 class OffersCartDataTable extends StatelessWidget {
   final List<OffersCartModel> rows;
+  final ValueChanged<OffersCartModel>? onDetails;
   final RxBool? isUpdatingStatus;
   final ValueChanged<OffersCartModel>? onEdit;
   final ValueChanged<OffersCartModel>? onDelete;
@@ -14,6 +15,7 @@ class OffersCartDataTable extends StatelessWidget {
   const OffersCartDataTable({
     super.key,
     required this.rows,
+    this.onDetails,
     this.isUpdatingStatus,
     this.onEdit,
     this.onDelete,
@@ -58,6 +60,9 @@ class OffersCartDataTable extends StatelessWidget {
         DataColumn(
           label: Text('Toggle', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
+        DataColumn(
+          label: Text('Details', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
       ],
       buildCells: (o, index) {
         final bool active = (o.isActive ?? 0) == 1;
@@ -81,6 +86,12 @@ class OffersCartDataTable extends StatelessWidget {
                 onChanged: onToggle == null ? null : (_) => onToggle!(o),
               );
             }),
+          ),
+          DataCell(
+            OutlinedButton(
+              onPressed: onDetails == null ? null : () => onDetails!(o),
+              child: const Text('View'),
+            ),
           ),
         ];
       },

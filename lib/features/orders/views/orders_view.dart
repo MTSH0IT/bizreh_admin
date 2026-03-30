@@ -1,5 +1,4 @@
 import 'package:bizreh_admin/features/orders/controllers/orders_controller.dart';
-import 'package:bizreh_admin/features/orders/views/widgets/change_order_status_dialog.dart';
 import 'package:bizreh_admin/features/orders/views/widgets/orders_data_table.dart';
 import 'package:bizreh_admin/features/orders/views/order_details_view.dart';
 import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
@@ -77,16 +76,16 @@ class OrdersView extends StatelessWidget {
             //     );
             //   }
             // },
-            onChangeStatus: (order) {
-              controller.selectedStatus.value = (order.status ?? '').trim();
-              showDialog<void>(
-                context: context,
-                builder: (_) => ChangeOrderStatusDialog(
-                  controller: controller,
-                  orderId: order.id ?? 0,
-                ),
-              );
-            },
+            // onChangeStatus: (order) {
+            //   controller.selectedStatus.value = (order.status ?? '').trim();
+            //   showDialog<void>(
+            //     context: context,
+            //     builder: (_) => ChangeOrderStatusDialog(
+            //       controller: controller,
+            //       orderId: order.id ?? 0,
+            //     ),
+            //   );
+            // },
             onDetails: (order) {
               final nav = Get.find<MainNavController>();
               nav.push(

@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bizreh_admin/features/offers_cart/models/offers_cart_model.dart';
+import 'package:bizreh_admin/features/offers_cart/models/offers_cart_model/offers_cart_model.dart';
 import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';

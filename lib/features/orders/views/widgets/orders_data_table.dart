@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 class OrdersDataTable extends StatelessWidget {
   final List<OrderModel> rows;
   //final ValueChanged<OrderModel> onAssign;
-  final ValueChanged<OrderModel> onChangeStatus;
+  //final ValueChanged<OrderModel> onChangeStatus;
   final ValueChanged<OrderModel> onDetails;
 
   const OrdersDataTable({
     super.key,
     required this.rows,
     //required this.onAssign,
-    required this.onChangeStatus,
+    //required this.onChangeStatus,
     required this.onDetails,
   });
 
@@ -58,9 +58,9 @@ class OrdersDataTable extends StatelessWidget {
         // DataColumn(
         //   label: Text('Assign', style: TextStyle(fontWeight: FontWeight.bold)),
         // ),
-        DataColumn(
-          label: Text('Status', style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
+        // DataColumn(
+        //   label: Text('Status', style: TextStyle(fontWeight: FontWeight.bold)),
+        // ),
         DataColumn(
           label: Text('Details', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
@@ -103,13 +103,13 @@ class OrdersDataTable extends StatelessWidget {
           //     child: const Text('Assign'),
           //   ),
           // ),
-          DataCell(
-            OutlinedButton(
-              onPressed: (o.id == null) ? null : () => onChangeStatus(o),
-              style: OutlinedButton.styleFrom(foregroundColor: kprimaryColor),
-              child: const Text('Change'),
-            ),
-          ),
+          // DataCell(
+          //   OutlinedButton(
+          //     onPressed: (o.id == null) ? null : () => onChangeStatus(o),
+          //     style: OutlinedButton.styleFrom(foregroundColor: kprimaryColor),
+          //     child: const Text('Change'),
+          //   ),
+          // ),
           DataCell(
             OutlinedButton(
               onPressed: (o.id == null) ? null : () => onDetails(o),

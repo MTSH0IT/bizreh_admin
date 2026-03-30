@@ -1,6 +1,8 @@
 import 'package:bizreh_admin/features/offers_cart/controllers/offers_cart_controller.dart';
-import 'package:bizreh_admin/features/offers_cart/models/offers_cart_model.dart';
+import 'package:bizreh_admin/features/offers_cart/models/offers_cart_model/offers_cart_model.dart';
+import 'package:bizreh_admin/features/offers_cart/views/offers_cart_details_view.dart';
 import 'package:bizreh_admin/features/offers_cart/views/widgets/offers_cart_data_table.dart';
+import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:bizreh_admin/features/offers_cart/views/widgets/offers_cart_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
@@ -16,6 +18,7 @@ class OffersCartView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final OffersCartController controller = Get.put(OffersCartController());
+    final MainNavController nav = Get.find<MainNavController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,6 +44,7 @@ class OffersCartView extends StatelessWidget {
 
           return OffersCartDataTable(
             rows: rows,
+            onDetails: (o) => _openDetailsPage(nav, o),
             isUpdatingStatus: controller.isToggling,
             onEdit: (o) => _openEditDialog(context, controller, o),
             onDelete: (o) => _confirmDelete(context, controller, o),
@@ -52,6 +56,15 @@ class OffersCartView extends StatelessWidget {
           );
         }),
       ],
+    );
+  }
+
+  void _openDetailsPage(MainNavController nav, OffersCartModel offer) {
+    nav.push(
+      MainNavEntry(
+        title: offer.name ?? offer.arName ?? 'Offer Details',
+        page: OffersCartDetailsView(offer: offer),
+      ),
     );
   }
 

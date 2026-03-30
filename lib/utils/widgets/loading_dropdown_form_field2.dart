@@ -10,6 +10,8 @@ class LoadingDropdownFormField2<T> extends StatefulWidget {
   final String hintText;
   final bool enableSearch;
   final String searchHintText;
+  final double? menuItemHeight;
+  final String Function(DropdownMenuItem<T> item)? selectedItemTextBuilder;
 
   const LoadingDropdownFormField2({
     super.key,
@@ -21,6 +23,8 @@ class LoadingDropdownFormField2<T> extends StatefulWidget {
     required this.hintText,
     this.enableSearch = false,
     this.searchHintText = 'Search...',
+    this.menuItemHeight,
+    this.selectedItemTextBuilder,
   });
 
   @override
@@ -95,8 +99,24 @@ class _LoadingDropdownFormField2State<T>
       ),
       hint: widget.isLoading ? const Text('Loading...') : Text(widget.hintText),
       items: widget.items,
+      selectedItemBuilder: widget.selectedItemTextBuilder == null
+          ? null
+          : (context) => widget.items.map((item) {
+              final text = widget.selectedItemTextBuilder!(item);
+              return Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  text,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              );
+            }).toList(),
       onChanged: widget.isLoading ? null : widget.onChanged,
       dropdownSearchData: dropdownSearchData,
+      menuItemStyleData: MenuItemStyleData(
+        height: widget.menuItemHeight ?? kMinInteractiveDimension,
+      ),
     );
   }
 }
