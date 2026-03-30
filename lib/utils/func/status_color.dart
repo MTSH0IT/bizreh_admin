@@ -8,6 +8,8 @@ Color getOrderStatusColor(String statusLabel) {
       return const Color(0xFF2563EB);
     case 'assigned_to_driver':
       return const Color(0xFFF59E0B);
+    case 'failed':
+      return const Color.fromARGB(255, 172, 17, 138);
     case 'cancelled':
       return const Color(0xFFD81D10);
     default:

@@ -21,7 +21,7 @@ class ChangeOrderStatusDialog extends StatelessWidget {
       content: SizedBox(
         width: 520,
         child: Obx(() {
-          const statuses = <String>['delivered', 'cancelled'];
+          const statuses = <String>['delivered', 'failed', 'cancelled'];
 
           final selected = controller.selectedStatus.value.trim().isEmpty
               ? null

@@ -17,6 +17,7 @@ class OrdersView extends StatelessWidget {
     'delivered',
     'pending',
     'assigned_to_driver',
+    'failed',
     'cancelled',
   ];
 
