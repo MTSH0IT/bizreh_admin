@@ -105,11 +105,7 @@ class _LoadingDropdownFormField2State<T>
               final text = widget.selectedItemTextBuilder!(item);
               return Align(
                 alignment: Alignment.centerLeft,
-                child: Text(
-                  text,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis),
               );
             }).toList(),
       onChanged: widget.isLoading ? null : widget.onChanged,

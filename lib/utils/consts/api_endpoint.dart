@@ -123,8 +123,6 @@ class ApiEndpoint {
   static const String createPointsOffer = "/admin/points";
   static String updatePointsOffer(int id) => "/admin/points/$id";
   static String deletePointsOffer(int id) => "/admin/points/$id";
-  static String getUserPointsBalance(int userId) =>
-      "/admin/points/$userId/balance";
   static String getUserPointsHistory(int userId) =>
       "/admin/points/$userId/history";
 
@@ -158,6 +156,7 @@ class ApiEndpoint {
   static const String createCollection = "/admin/collection";
   static const String createParentCollection = "/admin/collection/parent";
   static String updateParentCollection(int id) => "/admin/collection/$id";
-  static String updateProductsCollection(int id) => "/admin/collection/products/$id";
+  static String updateProductsCollection(int id) =>
+      "/admin/collection/products/$id";
   static String deleteCollection(int id) => "/admin/collection/$id";
 }

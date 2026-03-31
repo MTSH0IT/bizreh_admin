@@ -71,7 +71,11 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final name = _pickFirst(product.title, product.arTitle, fallback: 'Product');
+    final name = _pickFirst(
+      product.title,
+      product.arTitle,
+      fallback: 'Product',
+    );
     final id = product.id == null ? '' : ' #${product.id}';
     final active = (product.isActive ?? 0) == 1;
 
@@ -96,7 +100,10 @@ class _Header extends StatelessWidget {
                   '$name$id',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
                 const SizedBox(height: 6),
                 Text(
@@ -305,10 +312,7 @@ class _OptionsCard extends StatelessWidget {
     return DetailsSectionCard(
       title: 'Options',
       child: options.isEmpty
-          ? const Text(
-              'No options',
-              style: TextStyle(color: Color(0xFF6B7280)),
-            )
+          ? const Text('No options', style: TextStyle(color: Color(0xFF6B7280)))
           : Column(
               children: options
                   .map(
@@ -330,7 +334,11 @@ class _OptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final optionTitle = _pickFirst(option.optionName, option.arOptionName, fallback: '-');
+    final optionTitle = _pickFirst(
+      option.optionName,
+      option.arOptionName,
+      fallback: '-',
+    );
     final packs = option.packagingOptions ?? const <PackagingOption>[];
 
     return Container(
@@ -368,7 +376,10 @@ class _OptionTile extends StatelessWidget {
                       spacing: 10,
                       runSpacing: 6,
                       children: [
-                        _InlineMeta(label: 'ID', value: option.id?.toString() ?? '-'),
+                        _InlineMeta(
+                          label: 'ID',
+                          value: option.id?.toString() ?? '-',
+                        ),
                         _InlineMeta(
                           label: 'Stock',
                           value: option.stockQuantity?.toString() ?? '-',
@@ -386,14 +397,19 @@ class _OptionTile extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           if (packs.isEmpty)
-            const Text('No packaging options', style: TextStyle(color: Color(0xFF6B7280)))
+            const Text(
+              'No packaging options',
+              style: TextStyle(color: Color(0xFF6B7280)),
+            )
           else
             Column(
               children: packs
-                  .map((pack) => Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: _PackagingRow(pack: pack),
-                      ))
+                  .map(
+                    (pack) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: _PackagingRow(pack: pack),
+                    ),
+                  )
                   .toList(),
             ),
         ],
@@ -409,8 +425,16 @@ class _PackagingRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = _pickFirst(pack.packagingTitle, pack.arPackagingTitle, fallback: '-');
-    final colorTitle = _pickFirst(pack.color?.name, pack.color?.arName, fallback: '-');
+    final title = _pickFirst(
+      pack.packagingTitle,
+      pack.arPackagingTitle,
+      fallback: '-',
+    );
+    final colorTitle = _pickFirst(
+      pack.color?.name,
+      pack.color?.arName,
+      fallback: '-',
+    );
 
     return Container(
       width: double.infinity,
@@ -426,8 +450,14 @@ class _PackagingRow extends StatelessWidget {
         children: [
           _InlineMeta(label: 'Packaging', value: title),
           _InlineMeta(label: 'SKU', value: pack.optionSku ?? '-'),
-          _InlineMeta(label: 'Price', value: pack.pricePerUnit?.toString() ?? '-'),
-          _InlineMeta(label: 'Stock', value: pack.stockQuantity?.toString() ?? '-'),
+          _InlineMeta(
+            label: 'Price',
+            value: pack.pricePerUnit?.toString() ?? '-',
+          ),
+          _InlineMeta(
+            label: 'Stock',
+            value: pack.stockQuantity?.toString() ?? '-',
+          ),
           _InlineMeta(label: 'Color', value: colorTitle),
         ],
       ),

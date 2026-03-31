@@ -1,5 +1,5 @@
 import 'package:bizreh_admin/features/users/models/user_model.dart';
-import 'package:bizreh_admin/features/points/views/user_points_balance_view.dart';
+import 'package:bizreh_admin/features/points/views/user_points_history_view.dart';
 import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:bizreh_admin/utils/widgets/active_switch.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
@@ -102,7 +102,7 @@ class UsersDataTable extends StatelessWidget {
                 Get.find<MainNavController>().push(
                   MainNavEntry(
                     title: 'Points Details : $name',
-                    page: UserPointsBalanceView(userId: userId),
+                    page: UserPointsHistoryView(userId: userId),
                   ),
                 );
               },

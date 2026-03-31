@@ -90,10 +90,7 @@ class CollectionView extends StatelessWidget {
     );
   }
 
-  void _openCreateDialog(
-    CollectionsController controller, {
-    int? parentId,
-  }) {
+  void _openCreateDialog(CollectionsController controller, {int? parentId}) {
     openFormDialog<void>(
       onBeforeOpen: () => controller.setForCreateParent(parentId: parentId),
       dialogBuilder: (_) => CollectionFormDialog(controller: controller),
@@ -361,32 +358,20 @@ class _CollectionModelTileState extends State<_CollectionModelTile> {
     final ids = model.productIds;
     if (ids != null && ids.isNotEmpty) {
       return ids
-          .map(
-            (id) => <String, dynamic>{
-              'id': id,
-              'title': 'Product #$id',
-            },
-          )
+          .map((id) => <String, dynamic>{'id': id, 'title': 'Product #$id'})
           .toList();
     }
 
     final custom = model.customProductsArray;
     if (custom != null && custom.isNotEmpty) {
       return custom
-          .map(
-            (id) => <String, dynamic>{
-              'id': id,
-              'title': 'Product #$id',
-            },
-          )
+          .map((id) => <String, dynamic>{'id': id, 'title': 'Product #$id'})
           .toList();
     }
 
     if ((model.productsCount ?? 0) > 0) {
       return <Map<String, dynamic>>[
-        <String, dynamic>{
-          'title': '${model.productsCount} products available',
-        },
+        <String, dynamic>{'title': '${model.productsCount} products available'},
       ];
     }
 

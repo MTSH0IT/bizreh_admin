@@ -139,11 +139,7 @@ class CollectionsService {
         if (tags != null) 'tags': tags,
         if (customProducts != null) 'custom_products': customProducts,
       };
-      _logRequest(
-        'POST',
-        ApiEndpoint.createCollection,
-        payload: payloadForLog,
-      );
+      _logRequest('POST', ApiEndpoint.createCollection, payload: payloadForLog);
 
       final formData = FormData.fromMap({
         'title': title,
@@ -230,10 +226,14 @@ class CollectionsService {
     } on DioException catch (e) {
       final err = e.error;
       if (err is AppException) {
-        log('collections service AppException updateParentCollection : ${err.message}${err.statusCode}');
+        log(
+          'collections service AppException updateParentCollection : ${err.message}${err.statusCode}',
+        );
         throw err;
       }
-      log('collections service DioException updateParentCollection : ${e.message}');
+      log(
+        'collections service DioException updateParentCollection : ${e.message}',
+      );
       throw Exception(e.message);
     } catch (e) {
       log('collections service catch updateParentCollection : ${e.toString()}');
@@ -302,13 +302,19 @@ class CollectionsService {
     } on DioException catch (e) {
       final err = e.error;
       if (err is AppException) {
-        log('collections service AppException updateProductsCollection : ${err.message}${err.statusCode}');
+        log(
+          'collections service AppException updateProductsCollection : ${err.message}${err.statusCode}',
+        );
         throw err;
       }
-      log('collections service DioException updateProductsCollection : ${e.message}');
+      log(
+        'collections service DioException updateProductsCollection : ${e.message}',
+      );
       throw Exception(e.message);
     } catch (e) {
-      log('collections service catch updateProductsCollection : ${e.toString()}');
+      log(
+        'collections service catch updateProductsCollection : ${e.toString()}',
+      );
       throw Exception(e.toString());
     }
   }
