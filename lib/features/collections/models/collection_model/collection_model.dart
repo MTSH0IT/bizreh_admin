@@ -6,7 +6,6 @@ class CollectionModel {
   String? title;
   String? arTitle;
   int? parentCollectionId;
-  String? conditionLogic;
   Conditions? conditions;
   String? conditionType;
   String? type;
@@ -18,18 +17,18 @@ class CollectionModel {
   String? parentTitle;
   String? parentArTitle;
   int? subCollectionsCount;
-  List<dynamic>? customProductsArray;
+  int? totalProductsCount;
+  List<int>? customProductsArray;
   List<CollectionModel>? subCollections;
   List<ProductModel>? products;
   int? productsCount;
-  List<dynamic>? productIds;
+  List<int>? productIds;
 
   CollectionModel({
     this.id,
     this.title,
     this.arTitle,
     this.parentCollectionId,
-    this.conditionLogic,
     this.conditions,
     this.conditionType,
     this.type,
@@ -41,6 +40,7 @@ class CollectionModel {
     this.parentTitle,
     this.parentArTitle,
     this.subCollectionsCount,
+    this.totalProductsCount,
     this.customProductsArray,
     this.subCollections,
     this.products,
@@ -54,7 +54,6 @@ class CollectionModel {
       title: json['title'] as String?,
       arTitle: json['ar_title'] as String?,
       parentCollectionId: json['parent_collection_id'] as int?,
-      conditionLogic: json['condition_logic'] as String?,
       conditions: json['conditions'] == null
           ? null
           : Conditions.fromJson(json['conditions']),
@@ -72,7 +71,10 @@ class CollectionModel {
       parentTitle: json['parent_title'] as String?,
       parentArTitle: json['parent_ar_title'] as String?,
       subCollectionsCount: json['sub_collections_count'] as int?,
-      customProductsArray: json['custom_products_array'] as List<dynamic>?,
+      totalProductsCount: json['total_products_count'] as int?,
+      customProductsArray: json['custom_products_array'] != null
+          ? List<int>.from(json['custom_products_array'].map((x) => x as int))
+          : null,
       subCollections: (json['sub_collections'] as List<dynamic>?)
           ?.map((e) => CollectionModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -80,7 +82,9 @@ class CollectionModel {
           ?.map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       productsCount: json['products_count'] as int?,
-      productIds: json['product_ids'] as List<dynamic>?,
+      productIds: json['product_ids'] != null
+          ? List<int>.from(json['product_ids'].map((x) => x as int))
+          : null,
     );
   }
 }
