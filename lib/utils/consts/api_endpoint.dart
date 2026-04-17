@@ -159,4 +159,15 @@ class ApiEndpoint {
   static String updateProductsCollection(int id) =>
       "/admin/collection/products/$id";
   static String deleteCollection(int id) => "/admin/collection/$id";
+
+  // Payments
+  static const String getPayments = "/admin/payment";
+  static const String createPayment = "/admin/payment";
+  static String updatePayment(int id) => "/admin/payment/$id";
+  static String deletePayment(int id) => "/admin/payment/$id";
+  static String getUserReportByYear(int year) =>
+      "/admin/payment/user-report/$year";
+  static String getPaymentsByUserId(int userId) => "/admin/payment/$userId";
+
+  // ... rest of the code remains the same ...
 }

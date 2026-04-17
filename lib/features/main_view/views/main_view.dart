@@ -5,6 +5,7 @@ import 'package:bizreh_admin/features/collections/views/collection_view.dart';
 import 'package:bizreh_admin/features/color_family/views/color_family_view.dart';
 import 'package:bizreh_admin/features/discounts/views/discounts_view.dart';
 import 'package:bizreh_admin/features/gifts/views/gifts_view.dart';
+import 'package:bizreh_admin/features/payment/views/payments_view.dart';
 import 'package:bizreh_admin/features/ads/views/ads_view.dart';
 import 'package:bizreh_admin/features/main_view/views/widgets/admin_topbar.dart';
 import 'package:bizreh_admin/features/orders/views/orders_view.dart';
@@ -127,6 +128,11 @@ class _MainviewState extends State<Mainview> {
       title: 'Gifts',
       icon: Icons.card_giftcard_outlined,
       entry: const MainNavEntry(title: 'Gifts', page: GiftsView()),
+    ),
+    _MainMenuItem(
+      title: 'Payments',
+      icon: Icons.payments_outlined,
+      entry: const MainNavEntry(title: 'Payments', page: PaymentsView()),
     ),
     _MainMenuItem(
       title: 'Ads',

@@ -1,5 +1,6 @@
 import 'package:bizreh_admin/features/users/models/user_model.dart';
 import 'package:bizreh_admin/features/points/views/user_points_history_view.dart';
+import 'package:bizreh_admin/features/payment/views/user_payments_view.dart';
 import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:bizreh_admin/utils/widgets/active_switch.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
@@ -29,7 +30,7 @@ class UsersDataTable extends StatelessWidget {
     return DataTableWidget<UserModel>(
       rows: rows,
       emptyMessage: 'No users found',
-      showActions: true,
+      showActions: false, // We use custom actions column
       onEdit: onEdit,
       onDelete: onDelete,
       columns: const [
@@ -61,7 +62,7 @@ class UsersDataTable extends StatelessWidget {
           ),
         ),
         DataColumn(
-          label: Text('Points', style: TextStyle(fontWeight: FontWeight.bold)),
+          label: Text('Actions', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
       ],
       buildCells: (user, index) {
@@ -95,22 +96,84 @@ class UsersDataTable extends StatelessWidget {
             ),
           ),
           DataCell(
-            ElevatedButton.icon(
-              onPressed: () {
-                final userId = user.id;
-                if (userId == null) return;
-                Get.find<MainNavController>().push(
-                  MainNavEntry(
-                    title: 'Points Details : $name',
-                    page: UserPointsHistoryView(userId: userId),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (onEdit != null)
+                  IconButton(
+                    onPressed: () => onEdit!(user),
+                    icon: const Icon(Icons.edit, size: 16),
+                    tooltip: 'Edit',
+                    color: Colors.blue,
                   ),
-                );
-              },
-              icon: const Icon(Icons.stars_rounded, size: 14),
-              label: const Text('Points details'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-              ),
+                if (onDelete != null)
+                  IconButton(
+                    onPressed: () => onDelete!(user),
+                    icon: const Icon(Icons.delete_outline, size: 16),
+                    tooltip: 'Delete',
+                    color: Colors.red,
+                  ),
+                PopupMenuButton<String>(
+                  tooltip: 'More',
+                  onSelected: (value) {
+                    final userId = user.id;
+                    if (userId == null) return;
+
+                    if (value == 'points') {
+                      Get.find<MainNavController>().push(
+                        MainNavEntry(
+                          title: 'Points Details : $name',
+                          page: UserPointsHistoryView(userId: userId),
+                        ),
+                      );
+                    } else if (value == 'payments') {
+                      Get.find<MainNavController>().push(
+                        MainNavEntry(
+                          title: 'Payments : $name',
+                          page: UserPaymentsView(
+                            userId: userId,
+                            userName: name,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    const PopupMenuItem<String>(
+                      value: 'points',
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.stars_rounded,
+                            size: 16,
+                            color: Colors.amber,
+                          ),
+                          SizedBox(width: 8),
+                          Text('Points details'),
+                        ],
+                      ),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'payments',
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.payments_outlined,
+                            size: 16,
+                            color: Colors.green,
+                          ),
+                          SizedBox(width: 8),
+                          Text('Payments'),
+                        ],
+                      ),
+                    ),
+                  ],
+                  child: const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Icon(Icons.more_horiz, size: 16),
+                  ),
+                ),
+              ],
             ),
           ),
         ];
