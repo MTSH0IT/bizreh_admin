@@ -29,15 +29,15 @@ class OrderDetailsView extends StatelessWidget {
                 _OrderSummaryCard(order: order),
                 const SizedBox(height: 12),
                 _CustomerCard(order: order),
-                const SizedBox(height: 12),
-                _DriverCard(order: order),
               ],
             );
             final rightContent = Column(
               children: [
-                _PaymentCard(order: order),
-                const SizedBox(height: 12),
+                // _PaymentCard(order: order), // Disabled: payment-related UI
+                // const SizedBox(height: 12), // Disabled: payment-related spacing
                 _AddressCard(order: order),
+                const SizedBox(height: 12),
+                _DriverCard(order: order),
               ],
             );
 
@@ -76,7 +76,7 @@ class _Header extends StatelessWidget {
         : 'Order #${order.orderNumber}';
 
     final status = (order.status ?? '-').trim();
-    final payment = (order.paymentStatus ?? '-').trim();
+    // final payment = (order.paymentStatus ?? '-').trim(); // Disabled: payment-related status
 
     return DetailsSectionCard(
       child: Row(
@@ -109,11 +109,11 @@ class _Header extends StatelessWidget {
                 label: status.isEmpty ? '-' : status,
                 color: getOrderStatusColor(status),
               ),
-              const SizedBox(height: 8),
-              _Badge(
-                label: payment.isEmpty ? '-' : payment,
-                color: getPaymentStatusColor(payment),
-              ),
+              // const SizedBox(height: 8), // Disabled: payment-related badge spacing
+              // _Badge(
+              //   label: payment.isEmpty ? '-' : payment,
+              //   color: getPaymentStatusColor(payment),
+              // ), // Disabled: payment-related badge
             ],
           ),
         ],
@@ -266,42 +266,42 @@ class _AddressCard extends StatelessWidget {
   }
 }
 
-class _PaymentCard extends StatelessWidget {
-  final OrderModel order;
-
-  const _PaymentCard({required this.order});
-
-  @override
-  Widget build(BuildContext context) {
-    final status = (order.paymentStatus ?? '-').trim();
-
-    return DetailsSectionCard(
-      title: 'Payment',
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: DetailsKeyValue(
-                  label: 'Status',
-                  value: status.isEmpty ? '-' : status,
-                ),
-              ),
-              Expanded(
-                child: DetailsKeyValue(
-                  label: 'Total',
-                  value: order.financialSummary?.total == null
-                      ? '-'
-                      : order.financialSummary!.total!.toStringAsFixed(2),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class _PaymentCard extends StatelessWidget {
+//   final OrderModel order;
+//
+//   const _PaymentCard({required this.order});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final status = (order.paymentStatus ?? '-').trim();
+//
+//     return DetailsSectionCard(
+//       title: 'Payment',
+//       child: Column(
+//         children: [
+//           Row(
+//             children: [
+//               Expanded(
+//                 child: DetailsKeyValue(
+//                   label: 'Status',
+//                   value: status.isEmpty ? '-' : status,
+//                 ),
+//               ),
+//               Expanded(
+//                 child: DetailsKeyValue(
+//                   label: 'Total',
+//                   value: order.financialSummary?.total == null
+//                       ? '-'
+//                       : order.financialSummary!.total!.toStringAsFixed(2),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class _DriverCard extends StatelessWidget {
   final OrderModel order;

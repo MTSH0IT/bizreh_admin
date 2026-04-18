@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:bizreh_admin/features/payment/models/payment_model.dart';
 import 'package:bizreh_admin/features/payment/models/user_payment_and_order_model/user_payment_and_order_model.dart';
-import 'package:bizreh_admin/features/payment/models/user_payment_model/user_payment_model.dart';
+//import 'package:bizreh_admin/features/payment/models/user_payment_model/user_payment_model.dart';
 import 'package:bizreh_admin/features/payment/models/user_payment_py_year/user_payment_py_year.dart';
 import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
@@ -174,36 +174,36 @@ class PaymentService {
     }
   }
 
-  Future<UserPaymentModel> getPaymentsByUserId(int userId) async {
-    try {
-      final response = await _dioClient.get(
-        ApiEndpoint.getPaymentsByUserId(userId),
-      );
+  // Future<UserPaymentModel> getPaymentsByUserId(int userId) async {
+  //   try {
+  //     final response = await _dioClient.get(
+  //       ApiEndpoint.getPaymentsByUserId(userId),
+  //     );
 
-      final apiResponse = ApiResponse.fromJson(
-        response.data,
-        (data) => UserPaymentModel.fromJson(data as Map<String, dynamic>),
-      );
+  //     final apiResponse = ApiResponse.fromJson(
+  //       response.data,
+  //       (data) => UserPaymentModel.fromJson(data as Map<String, dynamic>),
+  //     );
 
-      if (apiResponse.success && apiResponse.data != null) {
-        return apiResponse.data as UserPaymentModel;
-      }
-      throw Exception(apiResponse.message ?? 'Something went wrong');
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'payment service AppException getPaymentsByUserId : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('payment service DioException getPaymentsByUserId : ${e.message}');
-      throw Exception(e.message);
-    } catch (e) {
-      log('payment service catch getPaymentsByUserId : ${e.toString()}');
-      throw Exception(e.toString());
-    }
-  }
+  //     if (apiResponse.success && apiResponse.data != null) {
+  //       return apiResponse.data as UserPaymentModel;
+  //     }
+  //     throw Exception(apiResponse.message ?? 'Something went wrong');
+  //   } on DioException catch (e) {
+  //     final err = e.error;
+  //     if (err is AppException) {
+  //       log(
+  //         'payment service AppException getPaymentsByUserId : ${err.message}${err.statusCode}',
+  //       );
+  //       throw err;
+  //     }
+  //     log('payment service DioException getPaymentsByUserId : ${e.message}');
+  //     throw Exception(e.message);
+  //   } catch (e) {
+  //     log('payment service catch getPaymentsByUserId : ${e.toString()}');
+  //     throw Exception(e.toString());
+  //   }
+  // }
 
   Future<UserPaymentAndOrderModel> getPaymentsAndOrdersByUserId(
     int userId,

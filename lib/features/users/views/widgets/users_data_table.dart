@@ -1,7 +1,7 @@
 import 'package:bizreh_admin/features/users/models/user_model.dart';
 import 'package:bizreh_admin/features/points/views/user_points_history_view.dart';
 import 'package:bizreh_admin/features/payment/views/user_payments_and_orders_view.dart';
-import 'package:bizreh_admin/features/payment/views/user_payments_view.dart';
+// import 'package:bizreh_admin/features/payment/views/user_payments_view.dart';
 import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:bizreh_admin/utils/widgets/active_switch.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
@@ -127,16 +127,6 @@ class UsersDataTable extends StatelessWidget {
                           page: UserPointsHistoryView(userId: userId),
                         ),
                       );
-                    } else if (value == 'payments') {
-                      Get.find<MainNavController>().push(
-                        MainNavEntry(
-                          title: 'Payments : $name',
-                          page: UserPaymentsView(
-                            userId: userId,
-                            userName: name,
-                          ),
-                        ),
-                      );
                     } else if (value == 'payments_orders') {
                       Get.find<MainNavController>().push(
                         MainNavEntry(
@@ -164,20 +154,20 @@ class UsersDataTable extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const PopupMenuItem<String>(
-                      value: 'payments',
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.payments_outlined,
-                            size: 16,
-                            color: Colors.green,
-                          ),
-                          SizedBox(width: 8),
-                          Text('Payments'),
-                        ],
-                      ),
-                    ),
+                    // const PopupMenuItem<String>(
+                    //   value: 'payments',
+                    //   child: Row(
+                    //     children: [
+                    //       Icon(
+                    //         Icons.payments_outlined,
+                    //         size: 16,
+                    //         color: Colors.green,
+                    //       ),
+                    //       SizedBox(width: 8),
+                    //       Text('Payments'),
+                    //     ],
+                    //   ),
+                    // ),
                     const PopupMenuItem<String>(
                       value: 'payments_orders',
                       child: Row(
