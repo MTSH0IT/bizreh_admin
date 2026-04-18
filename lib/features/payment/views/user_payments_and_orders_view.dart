@@ -1,9 +1,11 @@
 import 'package:bizreh_admin/features/payment/controllers/user_payments_and_orders_controller.dart';
+import 'package:bizreh_admin/features/payment/views/widgets/user_add_payment_form_dialog.dart';
 import 'package:bizreh_admin/features/payment/views/widgets/user_orders_table.dart';
 import 'package:bizreh_admin/features/payment/views/widgets/user_payments_and_orders_summary_cards.dart';
 import 'package:bizreh_admin/features/payment/views/widgets/user_payments_v2_table.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/details_section_card.dart';
+import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
 import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +58,9 @@ class _UserPaymentsAndOrdersViewState extends State<UserPaymentsAndOrdersView> {
         ),
         const SizedBox(height: 12),
         ToolbarRow(
+          onAdd: _openCreatePaymentDialog,
           onRefresh: () => controller.load(widget.userId),
+          addText: 'Add Payment',
           refreshText: 'Refresh',
         ),
         const SizedBox(height: 16),
@@ -137,6 +141,15 @@ class _UserPaymentsAndOrdersViewState extends State<UserPaymentsAndOrdersView> {
           );
         }),
       ],
+    );
+  }
+
+  void _openCreatePaymentDialog() {
+    openFormDialog<void>(
+      onBeforeOpen: () {
+        controller.prepareCreatePaymentForUser(widget.userId);
+      },
+      dialogBuilder: (_) => UserAddPaymentFormDialog(controller: controller),
     );
   }
 }

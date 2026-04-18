@@ -11,6 +11,7 @@ import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/orders_service.dart';
 import 'package:bizreh_admin/services/payment_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 enum PaymentTableType { orders, payments }
@@ -26,6 +27,12 @@ class UserPaymentsAndOrdersController extends GetxController {
   final RxString searchQuery = ''.obs;
   final Rx<PaymentTableType> selectedTable = PaymentTableType.orders.obs;
   final RxBool isOpeningOrder = false.obs;
+  final RxBool isCreatingPayment = false.obs;
+
+  final TextEditingController paymentAmountController = TextEditingController();
+  final TextEditingController paymentTypeController = TextEditingController();
+  final TextEditingController paymentNotesController = TextEditingController();
+  int? _selectedUserIdForCreate;
 
   Future<void> load(int userId) async {
     try {
@@ -119,9 +126,73 @@ class UserPaymentsAndOrdersController extends GetxController {
     }
   }
 
+  void prepareCreatePaymentForUser(int userId) {
+    _selectedUserIdForCreate = userId;
+    clearPaymentForm();
+  }
+
+  Future<void> createPaymentForSelectedUser() async {
+    final selectedUserId = _selectedUserIdForCreate;
+    if (selectedUserId == null) {
+      showMassage('User is not selected', false);
+      return;
+    }
+    if (!_validateCreatePaymentForm()) return;
+
+    try {
+      isCreatingPayment.value = true;
+      await _paymentService.createPayment(
+        userId: selectedUserId,
+        amount: double.parse(paymentAmountController.text.trim()),
+        type: paymentTypeController.text.trim(),
+        notes: paymentNotesController.text.trim(),
+      );
+      await load(selectedUserId);
+      clearPaymentForm();
+      Get.back();
+      showMassage('Payment created successfully', true);
+    } on AppException catch (e) {
+      showMassage(e.message, false);
+      log('AppException in createPaymentForSelectedUser: ${e.message}');
+    } catch (e) {
+      showMassage('Failed to create payment', false);
+      log('Error in createPaymentForSelectedUser: $e');
+    } finally {
+      isCreatingPayment.value = false;
+    }
+  }
+
+  bool _validateCreatePaymentForm() {
+    if (paymentAmountController.text.trim().isEmpty) {
+      showMassage('Please enter amount', false);
+      return false;
+    }
+    if (paymentTypeController.text.trim().isEmpty) {
+      showMassage('Please select payment type', false);
+      return false;
+    }
+    try {
+      double.parse(paymentAmountController.text.trim());
+    } catch (_) {
+      showMassage('Please enter a valid amount', false);
+      return false;
+    }
+    return true;
+  }
+
+  void clearPaymentForm() {
+    paymentAmountController.clear();
+    paymentTypeController.clear();
+    paymentNotesController.clear();
+  }
+
   @override
   void onClose() {
     clearSearch();
+    clearPaymentForm();
+    paymentAmountController.dispose();
+    paymentTypeController.dispose();
+    paymentNotesController.dispose();
     super.onClose();
   }
 }
