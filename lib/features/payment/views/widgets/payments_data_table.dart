@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 
 class PaymentsDataTable extends StatelessWidget {
   final List<PaymentModel> rows;
-  final ValueChanged<PaymentModel>? onDetails;
   final ValueChanged<PaymentModel>? onEdit;
   final ValueChanged<PaymentModel>? onDelete;
 
   const PaymentsDataTable({
     super.key,
     required this.rows,
-    this.onDetails,
     this.onEdit,
     this.onDelete,
   });
@@ -24,10 +22,10 @@ class PaymentsDataTable extends StatelessWidget {
       showActions: false, // We'll use custom actions column
       columns: const [
         DataColumn(
-          label: Text('ID', style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
-        DataColumn(
-          label: Text('User ID', style: TextStyle(fontWeight: FontWeight.bold)),
+          label: Text(
+            'Full Name',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         DataColumn(
           label: Text('Amount', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -50,8 +48,16 @@ class PaymentsDataTable extends StatelessWidget {
       ],
       buildCells: (payment, index) {
         return [
-          DataCell(DataTableTextCell(text: payment.id?.toString() ?? '-')),
-          DataCell(DataTableTextCell(text: payment.userId?.toString() ?? '-')),
+          DataCell(
+            DataTableTextCell(
+              text:
+                  '${payment.firstName ?? ''} ${payment.lastName ?? ''}'
+                          .trim() ==
+                      ''
+                  ? '-'
+                  : '${payment.firstName} ${payment.lastName}',
+            ),
+          ),
           DataCell(DataTableTextCell(text: payment.amount ?? '-')),
           DataCell(DataTableTextCell(text: payment.type ?? '-')),
           DataCell(DataTableTextCell(text: payment.notes ?? '-')),
@@ -60,12 +66,6 @@ class PaymentsDataTable extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (onDetails != null)
-                  IconButton(
-                    onPressed: () => onDetails!(payment),
-                    icon: const Icon(Icons.remove_red_eye_outlined, size: 16),
-                    tooltip: 'Details',
-                  ),
                 if (onEdit != null)
                   IconButton(
                     onPressed: () => onEdit!(payment),

@@ -1,57 +1,73 @@
-import 'package:bizreh_admin/features/payment/controllers/payment_controller.dart';
-import 'package:bizreh_admin/features/payment/views/widgets/suggested_bonus_card.dart';
+import 'package:bizreh_admin/features/payment/controllers/user_reports_controller.dart';
 import 'package:bizreh_admin/features/payment/views/widgets/user_report_by_year_table.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
-import 'package:bizreh_admin/utils/widgets/details_section_card.dart';
-import 'package:bizreh_admin/utils/widgets/labeled_text_field.dart';
+import 'package:bizreh_admin/utils/widgets/search_field.dart';
+import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class UserPaymentsReportByYearView extends StatelessWidget {
+class UserPaymentsReportByYearView extends StatefulWidget {
   const UserPaymentsReportByYearView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final PaymentController controller = Get.put(PaymentController());
+  State<UserPaymentsReportByYearView> createState() =>
+      _UserPaymentsReportByYearViewState();
+}
 
+class _UserPaymentsReportByYearViewState
+    extends State<UserPaymentsReportByYearView> {
+  late final String tag;
+  late final UserReportsController controller;
+  int? currentYear;
+
+  @override
+  void initState() {
+    super.initState();
+    tag = 'user_reports_${DateTime.now().millisecondsSinceEpoch}';
+    controller = Get.put(UserReportsController(), tag: tag);
+
+    // Initialize with current year
+    currentYear = DateTime.now().year;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getUserReportsByYear(currentYear!);
+    });
+  }
+
+  @override
+  void dispose() {
+    Get.delete<UserReportsController>(tag: tag);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        DetailsSectionCard(
-          title: 'User Payment Report by Year',
-          child: Row(
-            children: [
-              Expanded(
-                child: LabeledTextField(
-                  label: 'Year',
-                  hint: 'Enter year (e.g., 2024)',
-                  controller: controller.yearController,
-                  keyboardType: TextInputType.number,
-                ),
+        SearchField(
+          hintText: 'Search reports...',
+          onChanged: controller.setUserReportSearchQuery,
+        ),
+        const SizedBox(height: 12),
+        ToolbarRow(
+          onRefresh: () => controller.getUserReportsByYear(currentYear!),
+          addText: null,
+          refreshText: 'Refresh',
+          extraActions: [
+            Text(
+              'Year: ${currentYear ?? 'N/A'}',
+              style: const TextStyle(
+                color: Color(0xFF6B7280),
+                fontWeight: FontWeight.w600,
               ),
-              const SizedBox(width: 16),
-              ElevatedButton.icon(
-                onPressed: () => controller.getUserReportsByYear(),
-                icon: const Icon(Icons.search),
-                label: const Text('Load Report'),
-              ),
-              const SizedBox(width: 8),
-              Obx(() {
-                if (controller.isLoadingUserReports.value) {
-                  return const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  );
-                }
-                return IconButton(
-                  onPressed: () => controller.getUserReportsByYear(),
-                  icon: const Icon(Icons.refresh),
-                  tooltip: 'Refresh',
-                );
-              }),
-            ],
-          ),
+            ),
+            const SizedBox(width: 8),
+            ElevatedButton.icon(
+              onPressed: _selectYear,
+              icon: const Icon(Icons.date_range_outlined),
+              label: const Text('Change Year'),
+            ),
+          ],
         ),
         const SizedBox(height: 12),
         Obx(() {
@@ -62,61 +78,76 @@ class UserPaymentsReportByYearView extends StatelessWidget {
           final reports = controller.filteredUserReports;
 
           if (reports.isEmpty) {
-            return _EmptyState(
-              onRetry: controller.getUserReportsByYear,
+            return const Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.assessment_outlined,
+                    color: Color(0xFF6B7280),
+                    size: 48,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'No reports found for the specified year',
+                    style: TextStyle(color: Color(0xFF6B7280)),
+                  ),
+                ],
+              ),
             );
           }
 
-          return Column(
-            children: [
-              // Show first suggested bonus if available
-              if (reports.first.suggestedBonus != null) ...[
-                SuggestedBonusCard(suggestedBonus: reports.first.suggestedBonus),
-                const SizedBox(height: 12),
-              ],
-              // Reports table
-              DetailsSectionCard(
-                title: 'User Reports',
-                child: UserReportByYearTable(
-                  reports: reports,
-                  searchQuery: controller.userReportSearchQuery.value.trim().isEmpty
-                      ? null
-                      : controller.userReportSearchQuery.value.trim(),
-                ),
-              ),
-            ],
-          );
+          return UserReportByYearTable(reports: reports);
         }),
       ],
     );
   }
-}
 
-class _EmptyState extends StatelessWidget {
-  final VoidCallback onRetry;
+  Future<void> _selectYear() async {
+    final now = DateTime.now();
+    final startYear = now.year - 5;
+    final endYear = now.year + 1;
 
-  const _EmptyState({required this.onRetry});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.assessment_outlined, color: Color(0xFF6B7280), size: 48),
-          const SizedBox(height: 16),
-          const Text(
-            'No reports found for the specified year',
-            style: TextStyle(color: Color(0xFF6B7280)),
+    final selectedYear = await showDialog<int>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Select Year'),
+        content: SizedBox(
+          width: 200,
+          height: 300,
+          child: ListView.builder(
+            itemCount: endYear - startYear + 1,
+            itemBuilder: (context, index) {
+              final year = startYear + index;
+              final isSelected = year == (currentYear ?? now.year);
+              return ListTile(
+                title: Text(
+                  year.toString(),
+                  style: TextStyle(
+                    fontWeight: isSelected
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                    color: isSelected ? Theme.of(context).primaryColor : null,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.of(context).pop(year);
+                },
+              );
+            },
           ),
-          const SizedBox(height: 12),
-          ElevatedButton.icon(
-            onPressed: onRetry,
-            icon: const Icon(Icons.refresh),
-            label: const Text('Retry'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
           ),
         ],
       ),
     );
+
+    if (selectedYear != null) {
+      controller.getUserReportsByYear(selectedYear);
+    }
   }
 }

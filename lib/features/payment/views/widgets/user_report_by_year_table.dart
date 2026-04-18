@@ -4,13 +4,8 @@ import 'package:flutter/material.dart';
 
 class UserReportByYearTable extends StatelessWidget {
   final List<UserPaymentPyYear> reports;
-  final String? searchQuery;
 
-  const UserReportByYearTable({
-    super.key,
-    required this.reports,
-    this.searchQuery,
-  });
+  const UserReportByYearTable({super.key, required this.reports});
 
   @override
   Widget build(BuildContext context) {
@@ -28,74 +23,69 @@ class UserReportByYearTable extends StatelessWidget {
         ),
       );
     }
-
-    List<UserPaymentPyYear> filteredReports = reports;
-    if (searchQuery != null && searchQuery!.isNotEmpty) {
-      final q = searchQuery!.toLowerCase();
-      filteredReports = reports.where((report) {
-        final userName = (report.user?.name ?? '').toLowerCase();
-        final userEmail = (report.user?.email ?? '').toLowerCase();
-        final userPhone = (report.user?.phone ?? '').toLowerCase();
-        final year = (report.summary?.year?.toString() ?? '').toLowerCase();
-        final totalPayments = (report.summary?.totalPayments?.toString() ?? '').toLowerCase();
-        final totalBonus = (report.summary?.totalBonus?.toString() ?? '').toLowerCase();
-        final ordersCount = (report.summary?.ordersCount?.toString() ?? '').toLowerCase();
-        final ordersTotal = (report.summary?.ordersTotal?.toString() ?? '').toLowerCase();
-
-        return userName.contains(q) ||
-            userEmail.contains(q) ||
-            userPhone.contains(q) ||
-            year.contains(q) ||
-            totalPayments.contains(q) ||
-            totalBonus.contains(q) ||
-            ordersCount.contains(q) ||
-            ordersTotal.contains(q);
-      }).toList();
-    }
-
     return DataTableWidget<UserPaymentPyYear>(
-      rows: filteredReports,
+      rows: reports,
       emptyMessage: 'No reports match your search',
       showActions: false,
       columns: const [
         DataColumn(
           label: Text('User', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
+        // DataColumn(
+        //   label: Text('Year', style: TextStyle(fontWeight: FontWeight.bold)),
+        // ),
         DataColumn(
-          label: Text('Year', style: TextStyle(fontWeight: FontWeight.bold)),
+          label: Text(
+            'Total Payments',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         DataColumn(
-          label: Text('Total Payments', style: TextStyle(fontWeight: FontWeight.bold)),
+          label: Text(
+            'Total Bonus',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         DataColumn(
-          label: Text('Total Bonus', style: TextStyle(fontWeight: FontWeight.bold)),
+          label: Text(
+            'Orders Count',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         DataColumn(
-          label: Text('Orders Count', style: TextStyle(fontWeight: FontWeight.bold)),
+          label: Text(
+            'Orders Total',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         DataColumn(
-          label: Text('Orders Total', style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
-        DataColumn(
-          label: Text('Suggested Bonus', style: TextStyle(fontWeight: FontWeight.bold)),
+          label: Text(
+            'Suggested Bonus',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
       ],
       buildCells: (report, index) {
         final userName = report.user?.name ?? '-';
         final userEmail = report.user?.email ?? '';
-        final year = report.summary?.year?.toString() ?? '-';
+        //final year = report.summary?.year?.toString() ?? '-';
         final totalPayments = report.summary?.totalPayments?.toString() ?? '-';
         final totalBonus = report.summary?.totalBonus?.toString() ?? '-';
         final ordersCount = report.summary?.ordersCount?.toString() ?? '-';
         final ordersTotal = report.summary?.ordersTotal?.toString() ?? '-';
-        final suggestedBonus = '${report.suggestedBonus?.percentage ?? 0}% (${report.suggestedBonus?.calculatedAmount ?? '-'})';
+        final suggestedBonus =
+            '${report.suggestedBonus?.percentage ?? 0}% (${report.suggestedBonus?.calculatedAmount ?? '-'})';
 
         return [
           DataCell(
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(userName, style: const TextStyle(fontWeight: FontWeight.w600)),
+                Text(
+                  userName,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
                 if (userEmail.isNotEmpty)
                   Text(
                     userEmail,
@@ -107,7 +97,7 @@ class UserReportByYearTable extends StatelessWidget {
               ],
             ),
           ),
-          DataCell(DataTableTextCell(text: year)),
+          //DataCell(DataTableTextCell(text: year)),
           DataCell(DataTableTextCell(text: totalPayments)),
           DataCell(DataTableTextCell(text: totalBonus)),
           DataCell(DataTableTextCell(text: ordersCount)),

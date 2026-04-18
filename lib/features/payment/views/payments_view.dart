@@ -1,6 +1,5 @@
 import 'package:bizreh_admin/features/payment/controllers/payment_controller.dart';
 import 'package:bizreh_admin/features/payment/models/payment_model.dart';
-import 'package:bizreh_admin/features/payment/views/payment_details_view.dart';
 import 'package:bizreh_admin/features/payment/views/widgets/payment_form_dialog.dart';
 import 'package:bizreh_admin/features/payment/views/widgets/payments_data_table.dart';
 import 'package:bizreh_admin/features/payment/views/user_payments_report_by_year_view.dart';
@@ -37,7 +36,7 @@ class PaymentsView extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: () => _openUserReportByYear(context),
               icon: const Icon(Icons.assessment_outlined),
-              label: const Text('User Report by Year'),
+              label: const Text('Custom Report'),
             ),
           ],
         ),
@@ -51,7 +50,6 @@ class PaymentsView extends StatelessWidget {
 
           return PaymentsDataTable(
             rows: rows,
-            onDetails: (payment) => _openDetailsPage(context, payment),
             onEdit: (payment) => _openEditDialog(context, controller, payment),
             onDelete: (payment) => _confirmDelete(context, controller, payment),
           );
@@ -95,16 +93,6 @@ class PaymentsView extends StatelessWidget {
 
     if (!ok) return;
     await controller.deletePayment(id);
-  }
-
-  void _openDetailsPage(BuildContext context, PaymentModel payment) {
-    final MainNavController nav = Get.find<MainNavController>();
-    nav.push(
-      MainNavEntry(
-        title: 'Payment Details #${payment.id ?? '-'}',
-        page: PaymentDetailsView(payment: payment),
-      ),
-    );
   }
 
   void _openUserReportByYear(BuildContext context) {

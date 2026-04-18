@@ -2,19 +2,14 @@ import 'package:bizreh_admin/features/payment/models/user_payment_model/payment.
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
 
-class UserPaymentsPaymentsTable extends StatelessWidget {
-  final List<Payment>? payments;
-  final String? searchQuery;
+class UserPaymentsTable extends StatelessWidget {
+  final List<Payment> payments;
 
-  const UserPaymentsPaymentsTable({
-    super.key,
-    required this.payments,
-    this.searchQuery,
-  });
+  const UserPaymentsTable({super.key, required this.payments});
 
   @override
   Widget build(BuildContext context) {
-    if (payments == null || payments!.isEmpty) {
+    if (payments.isEmpty) {
       return Container(
         width: double.infinity,
         padding: const EdgeInsets.all(32),
@@ -24,29 +19,16 @@ class UserPaymentsPaymentsTable extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         child: const Center(
-          child: Text('No payments found', style: TextStyle(color: Colors.grey)),
+          child: Text(
+            'No payments found',
+            style: TextStyle(color: Colors.grey),
+          ),
         ),
       );
     }
 
-    List<Payment> filteredPayments = payments!;
-    if (searchQuery != null && searchQuery!.isNotEmpty) {
-      final q = searchQuery!.toLowerCase();
-      filteredPayments = payments!.where((payment) {
-        final amount = (payment.amount ?? '').toLowerCase();
-        final type = (payment.type ?? '').toLowerCase();
-        final notes = (payment.notes ?? '').toLowerCase();
-        final createdAt = (payment.createdAt?.toString() ?? '').toLowerCase();
-        
-        return amount.contains(q) ||
-            type.contains(q) ||
-            notes.contains(q) ||
-            createdAt.contains(q);
-      }).toList();
-    }
-
     return DataTableWidget<Payment>(
-      rows: filteredPayments,
+      rows: payments,
       emptyMessage: 'No payments match your search',
       showActions: false,
       columns: const [
@@ -63,7 +45,10 @@ class UserPaymentsPaymentsTable extends StatelessWidget {
           label: Text('Notes', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         DataColumn(
-          label: Text('Created At', style: TextStyle(fontWeight: FontWeight.bold)),
+          label: Text(
+            'Created At',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
       ],
       buildCells: (payment, index) {

@@ -43,9 +43,9 @@ class OrdersDataTable extends StatelessWidget {
         DataColumn(
           label: Text('Status', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
-        DataColumn(
-          label: Text('Payment', style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
+        // DataColumn(
+        //   label: Text('Payment', style: TextStyle(fontWeight: FontWeight.bold)),
+        // ),
         DataColumn(
           label: Text('Driver', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
@@ -86,14 +86,14 @@ class OrdersDataTable extends StatelessWidget {
               style: TextStyle(color: getOrderStatusColor(o.status ?? "")),
             ),
           ),
-          DataCell(
-            DataTableTextCell(
-              text: o.paymentStatus,
-              style: TextStyle(
-                color: getPaymentStatusColor(o.paymentStatus ?? ""),
-              ),
-            ),
-          ),
+          // DataCell(
+          //   DataTableTextCell(
+          //     text: o.paymentStatus,
+          //     style: TextStyle(
+          //       color: getPaymentStatusColor(o.paymentStatus ?? ""),
+          //     ),
+          //   ),
+          // ),
           DataCell(DataTableTextCell(text: driverText)),
           DataCell(DataTableDateCell(date: o.createdAt)),
           // DataCell(

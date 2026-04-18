@@ -1,8 +1,6 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/payment/models/payment_model.dart';
-import 'package:bizreh_admin/features/payment/models/user_payment_py_year/user_payment_py_year.dart';
-import 'package:bizreh_admin/features/payment/models/user_payment_model/user_payment_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/payment_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
@@ -13,26 +11,18 @@ class PaymentController extends GetxController {
   final PaymentService _service = PaymentService();
 
   final RxList<PaymentModel> payments = <PaymentModel>[].obs;
-  final RxList<UserPaymentPyYear> userReports = <UserPaymentPyYear>[].obs;
-  final Rx<UserPaymentModel?> userPayment = Rx<UserPaymentModel?>(null);
   final RxBool isLoading = false.obs;
   final RxBool isCreating = false.obs;
   final RxBool isUpdating = false.obs;
   final RxBool isDeleting = false.obs;
-  final RxBool isLoadingUserReports = false.obs;
-  final RxBool isLoadingUserPayments = false.obs;
 
   final TextEditingController userIdController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   final TextEditingController typeController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
-  final TextEditingController yearController = TextEditingController();
-  final TextEditingController searchUserIdController = TextEditingController();
 
   final Rx<PaymentModel?> selectedPayment = Rx<PaymentModel?>(null);
   final RxString searchQuery = ''.obs;
-  final RxString userReportSearchQuery = ''.obs;
-  final RxString userPaymentSearchQuery = ''.obs;
 
   @override
   void onInit() {
@@ -46,8 +36,6 @@ class PaymentController extends GetxController {
     amountController.dispose();
     typeController.dispose();
     notesController.dispose();
-    yearController.dispose();
-    searchUserIdController.dispose();
     super.onClose();
   }
 
@@ -207,107 +195,4 @@ class PaymentController extends GetxController {
   }
 
   bool get isEditing => selectedPayment.value != null;
-
-  Future<void> getUserReportsByYear() async {
-    if (yearController.text.trim().isEmpty) {
-      showMassage('Please enter year', false);
-      return;
-    }
-
-    try {
-      isLoadingUserReports.value = true;
-      final year = int.parse(yearController.text.trim());
-      final data = await _service.getUserReportByYear(year);
-      userReports.assignAll(data);
-    } on AppException catch (e) {
-      showMassage(e.message, false);
-      log('AppException in getUserReportsByYear: ${e.message}');
-    } catch (e) {
-      showMassage('Failed to fetch user reports', false);
-      log('Error in getUserReportsByYear: $e');
-    } finally {
-      isLoadingUserReports.value = false;
-    }
-  }
-
-  void setUserReportSearchQuery(String q) {
-    userReportSearchQuery.value = q;
-  }
-
-  List<UserPaymentPyYear> get filteredUserReports {
-    final q = userReportSearchQuery.value.trim().toLowerCase();
-    if (q.isEmpty) return userReports.toList();
-
-    return userReports.where((report) {
-      final userName = (report.user?.name ?? '').toLowerCase();
-      final userEmail = (report.user?.email ?? '').toLowerCase();
-      final userPhone = (report.user?.phone ?? '').toLowerCase();
-      final year = (report.summary?.year?.toString() ?? '').toLowerCase();
-      final totalPayments = (report.summary?.totalPayments?.toString() ?? '')
-          .toLowerCase();
-      final totalBonus = (report.summary?.totalBonus?.toString() ?? '')
-          .toLowerCase();
-      final ordersCount = (report.summary?.ordersCount?.toString() ?? '')
-          .toLowerCase();
-      final ordersTotal = (report.summary?.ordersTotal?.toString() ?? '')
-          .toLowerCase();
-
-      return userName.contains(q) ||
-          userEmail.contains(q) ||
-          userPhone.contains(q) ||
-          year.contains(q) ||
-          totalPayments.contains(q) ||
-          totalBonus.contains(q) ||
-          ordersCount.contains(q) ||
-          ordersTotal.contains(q);
-    }).toList();
-  }
-
-  Future<void> getPaymentsByUserId() async {
-    if (searchUserIdController.text.trim().isEmpty) {
-      showMassage('Please enter user ID', false);
-      return;
-    }
-
-    try {
-      isLoadingUserPayments.value = true;
-      final userId = int.parse(searchUserIdController.text.trim());
-      final data = await _service.getPaymentsByUserId(userId);
-      userPayment.value = data;
-    } on AppException catch (e) {
-      showMassage(e.message, false);
-      log('AppException in getPaymentsByUserId: ${e.message}');
-    } catch (e) {
-      showMassage('Failed to fetch user payments', false);
-      log('Error in getPaymentsByUserId: $e');
-    } finally {
-      isLoadingUserPayments.value = false;
-    }
-  }
-
-  void setUserPaymentSearchQuery(String q) {
-    userPaymentSearchQuery.value = q;
-  }
-
-  UserPaymentModel? get filteredUserPayment {
-    final q = userPaymentSearchQuery.value.trim().toLowerCase();
-    if (q.isEmpty || userPayment.value == null) return userPayment.value;
-
-    final data = userPayment.value!;
-    final userId = (data.userId ?? '').toLowerCase();
-    final totalRegularPayments =
-        (data.summary?.totalRegularPayments?.toString() ?? '').toLowerCase();
-    final totalBonus = (data.summary?.totalBonus?.toString() ?? '')
-        .toLowerCase();
-    final totalTransactions =
-        (data.summary?.totalTransactions?.toString() ?? '').toLowerCase();
-
-    final matches =
-        userId.contains(q) ||
-        totalRegularPayments.contains(q) ||
-        totalBonus.contains(q) ||
-        totalTransactions.contains(q);
-
-    return matches ? data : null;
-  }
 }
