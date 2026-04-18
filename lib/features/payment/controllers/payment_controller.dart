@@ -179,13 +179,17 @@ class PaymentController extends GetxController {
     if (q.isEmpty) return payments.toList();
 
     return payments.where((p) {
+      final id = (p.id?.toString() ?? '').toLowerCase();
+      final userId = (p.userId?.toString() ?? '').toLowerCase();
       final fn = (p.firstName ?? '').toLowerCase();
       final ln = (p.lastName ?? '').toLowerCase();
       final email = (p.email ?? '').toLowerCase();
       final type = (p.type ?? '').toLowerCase();
       final notes = (p.notes ?? '').toLowerCase();
       final amount = (p.amount ?? '').toLowerCase();
-      return fn.contains(q) ||
+      return id.contains(q) ||
+          userId.contains(q) ||
+          fn.contains(q) ||
           ln.contains(q) ||
           email.contains(q) ||
           type.contains(q) ||

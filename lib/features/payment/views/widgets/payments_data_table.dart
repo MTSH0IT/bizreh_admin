@@ -22,6 +22,12 @@ class PaymentsDataTable extends StatelessWidget {
       showActions: false, // We'll use custom actions column
       columns: const [
         DataColumn(
+          label: Text('ID', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        DataColumn(
+          label: Text('User ID', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        DataColumn(
           label: Text(
             'Full Name',
             style: TextStyle(fontWeight: FontWeight.bold),
@@ -48,6 +54,8 @@ class PaymentsDataTable extends StatelessWidget {
       ],
       buildCells: (payment, index) {
         return [
+          DataCell(DataTableTextCell(text: payment.id?.toString() ?? '-')),
+          DataCell(DataTableTextCell(text: payment.userId?.toString() ?? '-')),
           DataCell(
             DataTableTextCell(
               text:
