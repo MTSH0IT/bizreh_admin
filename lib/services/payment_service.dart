@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/payment/models/payment_model.dart';
+import 'package:bizreh_admin/features/payment/models/user_payment_and_order_model/user_payment_and_order_model.dart';
 import 'package:bizreh_admin/features/payment/models/user_payment_model/user_payment_model.dart';
 import 'package:bizreh_admin/features/payment/models/user_payment_py_year/user_payment_py_year.dart';
 import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
@@ -200,6 +201,44 @@ class PaymentService {
       throw Exception(e.message);
     } catch (e) {
       log('payment service catch getPaymentsByUserId : ${e.toString()}');
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<UserPaymentAndOrderModel> getPaymentsAndOrdersByUserId(
+    int userId,
+  ) async {
+    try {
+      final response = await _dioClient.get(
+        ApiEndpoint.getPaymentsAndOrdersByUserId(userId),
+      );
+
+      final apiResponse = ApiResponse.fromJson(
+        response.data,
+        (data) =>
+            UserPaymentAndOrderModel.fromJson(data as Map<String, dynamic>),
+      );
+
+      if (apiResponse.success && apiResponse.data != null) {
+        return apiResponse.data as UserPaymentAndOrderModel;
+      }
+      throw Exception(apiResponse.message ?? 'Something went wrong');
+    } on DioException catch (e) {
+      final err = e.error;
+      if (err is AppException) {
+        log(
+          'payment service AppException getPaymentsAndOrdersByUserId : ${err.message}${err.statusCode}',
+        );
+        throw err;
+      }
+      log(
+        'payment service DioException getPaymentsAndOrdersByUserId : ${e.message}',
+      );
+      throw Exception(e.message);
+    } catch (e) {
+      log(
+        'payment service catch getPaymentsAndOrdersByUserId : ${e.toString()}',
+      );
       throw Exception(e.toString());
     }
   }

@@ -168,6 +168,8 @@ class ApiEndpoint {
   static String getUserReportByYear(int year) =>
       "/admin/payment/user-report/$year";
   static String getPaymentsByUserId(int userId) => "/admin/payment/$userId";
+  static String getPaymentsAndOrdersByUserId(int userId) =>
+      "/admin/payment/customer-orders/$userId";
 
   // ... rest of the code remains the same ...
 }

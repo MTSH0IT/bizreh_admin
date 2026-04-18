@@ -1,33 +1,37 @@
-import 'package:bizreh_admin/features/payment/models/user_payment_model/user_payment_model.dart';
+import 'package:bizreh_admin/features/payment/models/user_payment_and_order_model/user_payment_and_order_model.dart';
 import 'package:bizreh_admin/utils/widgets/details_section_card.dart';
 import 'package:flutter/material.dart';
 
-class UserPaymentsSummaryCards extends StatelessWidget {
-  final UserPaymentModel? userPayment;
+class UserPaymentsAndOrdersSummaryCards extends StatelessWidget {
+  final UserPaymentAndOrderModel? data;
 
-  const UserPaymentsSummaryCards({super.key, required this.userPayment});
+  const UserPaymentsAndOrdersSummaryCards({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
-    if (userPayment == null) {
+    if (data == null) {
       return const DetailsSectionCard(
         child: Text(
-          'No payment data available',
+          'No payment and order data available',
           style: TextStyle(color: Colors.grey),
         ),
       );
     }
 
-    final summary = userPayment!.summary;
-    final userId = userPayment!.userId ?? '-';
-
+    final summary = data!.summary;
     return LayoutBuilder(
       builder: (context, constraints) {
         final cards = [
           _SummaryCard(
-            label: 'User ID',
-            value: userId,
-            icon: Icons.person_outline,
+            label: 'Total Bonus',
+            value: '${summary?.totalBonus ?? 0}',
+            icon: Icons.card_giftcard_outlined,
+            valueColor: const Color(0xFF7C3AED),
+          ),
+          _SummaryCard(
+            label: 'Orders Amount',
+            value: '${summary?.totalOrdersAmount ?? 0}',
+            icon: Icons.receipt_long_outlined,
           ),
           _SummaryCard(
             label: 'Regular Payments',
@@ -36,15 +40,10 @@ class UserPaymentsSummaryCards extends StatelessWidget {
             valueColor: const Color(0xFF15803D),
           ),
           _SummaryCard(
-            label: 'Total Bonus',
-            value: '${summary?.totalBonus ?? 0}',
-            icon: Icons.card_giftcard_outlined,
-            valueColor: const Color(0xFF7C3AED),
-          ),
-          _SummaryCard(
-            label: 'Transactions',
-            value: '${summary?.totalTransactions ?? 0}',
-            icon: Icons.receipt_long_outlined,
+            label: 'Balance Due',
+            value: '${summary?.balanceDue ?? 0}',
+            icon: Icons.account_balance_wallet_outlined,
+            valueColor: const Color(0xFFB91C1C),
           ),
         ];
 

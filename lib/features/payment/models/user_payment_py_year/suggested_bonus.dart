@@ -3,11 +3,7 @@ class SuggestedBonus {
   String? calculatedAmount;
   String? note;
 
-  SuggestedBonus({
-    this.percentage,
-    this.calculatedAmount,
-    this.note,
-  });
+  SuggestedBonus({this.percentage, this.calculatedAmount, this.note});
 
   factory SuggestedBonus.fromJson(Map<String, dynamic> json) => SuggestedBonus(
     percentage: json['percentage'] as int?,
