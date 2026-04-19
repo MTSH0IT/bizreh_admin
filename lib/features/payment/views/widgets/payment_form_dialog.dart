@@ -58,80 +58,74 @@ class PaymentFormDialog extends StatelessWidget {
           submitText: controller.isEditing ? 'Update' : 'Create',
         ),
       ],
-      child: GetBuilder<UsersController>(
-        init: UsersController(),
-        builder: (usersController) {
-          return Form(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                LoadingDropdownFormField2<int>(
-                  isLoading: usersController.isLoading.value,
-                  labelText: 'User',
-                  hintText: 'Select user',
-                  value: controller.selectedPayment.value?.userId != null
-                      ? int.tryParse(controller.userIdController.text)
-                      : null,
-                  onChanged: (value) {
-                    if (value != null) {
-                      controller.userIdController.text = value.toString();
-                    }
-                  },
-                  items: _buildUserDropdownItems(usersController),
-                  enableSearch: true,
-                  // menuItemHeight: 50,
-                  searchHintText: 'Search by name or email...',
-                  selectedItemTextBuilder: (menuItem) {
-                    final child = menuItem.child;
-                    if (child is Text) {
-                      final raw = child.data ?? '';
-                      if (raw.isEmpty) {
-                        return menuItem.value?.toString() ?? '-';
-                      }
-                      return raw.split('\n').first.trim();
-                    }
+      child: Obx(() {
+        final usersController = Get.put(UsersController());
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            LoadingDropdownFormField2<int>(
+              isLoading: usersController.isLoading.value,
+              labelText: 'User',
+              hintText: 'Select user',
+              value: controller.selectedPayment.value?.userId != null
+                  ? int.tryParse(controller.userIdController.text)
+                  : null,
+              onChanged: (value) {
+                if (value != null) {
+                  controller.userIdController.text = value.toString();
+                }
+              },
+              items: _buildUserDropdownItems(usersController),
+              enableSearch: true,
+              // menuItemHeight: 50,
+              searchHintText: 'Search by name or email...',
+              selectedItemTextBuilder: (menuItem) {
+                final child = menuItem.child;
+                if (child is Text) {
+                  final raw = child.data ?? '';
+                  if (raw.isEmpty) {
                     return menuItem.value?.toString() ?? '-';
-                  },
-                ),
-                const SizedBox(height: 16),
-                LabeledTextField(
-                  label: 'Amount',
-                  hint: 'Enter amount',
-                  controller: controller.amountController,
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'^\d+\.?\d{0,2}'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                LoadingDropdownFormField2<String>(
-                  isLoading: false,
-                  labelText: 'Payment Type',
-                  hintText: 'Select payment type',
-                  value: controller.typeController.text.isNotEmpty
-                      ? controller.typeController.text
-                      : null,
-                  onChanged: (value) {
-                    if (value != null) {
-                      controller.typeController.text = value;
-                    }
-                  },
-                  items: _buildPaymentTypeItems(),
-                ),
-                const SizedBox(height: 16),
-                LabeledTextField(
-                  label: 'Notes',
-                  hint: 'Enter notes (optional)',
-                  controller: controller.notesController,
-                  maxLines: 3,
-                ),
+                  }
+                  return raw.split('\n').first.trim();
+                }
+                return menuItem.value?.toString() ?? '-';
+              },
+            ),
+            const SizedBox(height: 16),
+            LabeledTextField(
+              label: 'Amount',
+              hint: 'Enter amount',
+              controller: controller.amountController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
               ],
             ),
-          );
-        },
-      ),
+            const SizedBox(height: 16),
+            LoadingDropdownFormField2<String>(
+              isLoading: false,
+              labelText: 'Payment Type',
+              hintText: 'Select payment type',
+              value: controller.typeController.text.isNotEmpty
+                  ? controller.typeController.text
+                  : null,
+              onChanged: (value) {
+                if (value != null) {
+                  controller.typeController.text = value;
+                }
+              },
+              items: _buildPaymentTypeItems(),
+            ),
+            const SizedBox(height: 16),
+            LabeledTextField(
+              label: 'Notes',
+              hint: 'Enter notes (optional)',
+              controller: controller.notesController,
+              maxLines: 3,
+            ),
+          ],
+        );
+      }),
     );
   }
 }
