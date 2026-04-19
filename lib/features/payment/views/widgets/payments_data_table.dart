@@ -1,6 +1,9 @@
 import 'package:bizreh_admin/features/payment/models/payment_model.dart';
+import 'package:bizreh_admin/features/payment/views/user_payments_and_orders_view.dart';
+import 'package:bizreh_admin/features/main_view/controllers/main_nav_controller.dart';
 import 'package:bizreh_admin/utils/widgets/data_table_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PaymentsDataTable extends StatelessWidget {
   final List<PaymentModel> rows;
@@ -34,6 +37,9 @@ class PaymentsDataTable extends StatelessWidget {
           ),
         ),
         DataColumn(
+          label: Text('Phone', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        DataColumn(
           label: Text('Amount', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         DataColumn(
@@ -53,19 +59,44 @@ class PaymentsDataTable extends StatelessWidget {
         ),
       ],
       buildCells: (payment, index) {
+        final name = '${payment.firstName ?? ''} ${payment.lastName ?? ''}'
+            .trim();
+        final displayName = name.isEmpty ? '-' : name;
+
         return [
           DataCell(DataTableTextCell(text: payment.id?.toString() ?? '-')),
           DataCell(DataTableTextCell(text: payment.userId?.toString() ?? '-')),
           DataCell(
-            DataTableTextCell(
-              text:
-                  '${payment.firstName ?? ''} ${payment.lastName ?? ''}'
-                          .trim() ==
-                      ''
-                  ? '-'
-                  : '${payment.firstName} ${payment.lastName}',
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  displayName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF111827),
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  payment.email?.trim().isNotEmpty == true
+                      ? payment.email!.trim()
+                      : '-',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: Color(0xFF6B7280),
+                  ),
+                ),
+              ],
             ),
           ),
+          DataCell(DataTableTextCell(text: payment.phone ?? '-')),
           DataCell(DataTableTextCell(text: payment.amount ?? '-')),
           DataCell(DataTableTextCell(text: payment.type ?? '-')),
           DataCell(DataTableTextCell(text: payment.notes ?? '-')),
@@ -87,6 +118,23 @@ class PaymentsDataTable extends StatelessWidget {
                     icon: const Icon(Icons.delete_outline, size: 16),
                     tooltip: 'Delete',
                     color: Colors.red,
+                  ),
+                if (payment.userId != null)
+                  IconButton(
+                    onPressed: () {
+                      Get.find<MainNavController>().push(
+                        MainNavEntry(
+                          title: 'Payments & Orders : $displayName',
+                          page: UserPaymentsAndOrdersView(
+                            userId: payment.userId!,
+                            userName: displayName,
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.visibility_outlined, size: 16),
+                    tooltip: 'Details',
+                    color: Colors.indigo,
                   ),
               ],
             ),

@@ -2,7 +2,7 @@ import 'package:bizreh_admin/features/payment/controllers/user_payments_and_orde
 import 'package:bizreh_admin/features/payment/views/widgets/user_add_payment_form_dialog.dart';
 import 'package:bizreh_admin/features/payment/views/widgets/user_orders_table.dart';
 import 'package:bizreh_admin/features/payment/views/widgets/user_payments_and_orders_summary_cards.dart';
-import 'package:bizreh_admin/features/payment/views/widgets/user_payments_v2_table.dart';
+import 'package:bizreh_admin/features/payment/views/widgets/user_payments_table.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/details_section_card.dart';
 import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
@@ -135,7 +135,7 @@ class _UserPaymentsAndOrdersViewState extends State<UserPaymentsAndOrdersView> {
                         isOpeningOrder: controller.isOpeningOrder.value,
                         onOpenOrderDetails: controller.openOrderDetails,
                       )
-                    : UserPaymentsV2Table(payments: payments),
+                    : UserPaymentsTable(payments: payments),
               ),
             ],
           );
