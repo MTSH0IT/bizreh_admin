@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/category/models/all_category_model.dart';
+import 'package:bizreh_admin/features/super_category/controllers/super_category_controller.dart';
 import 'package:bizreh_admin/features/super_category/models/super_category_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/category_service.dart';
@@ -66,6 +67,16 @@ class AllCategoryCrudController extends GetxController {
   }
 
   Future<void> getSuperCategories() async {
+    final superCategoryController = Get.isRegistered<SuperCategoryController>()
+        ? Get.find<SuperCategoryController>()
+        : null;
+
+    if (superCategoryController != null &&
+        superCategoryController.superCategories.isNotEmpty) {
+      superCategories.assignAll(superCategoryController.superCategories);
+      return;
+    }
+
     try {
       isSuperCategoriesLoading.value = true;
       final fetched = await _superCategoryService.getSuperCategories();

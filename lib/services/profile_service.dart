@@ -45,4 +45,34 @@ class ProfileService {
       throw UnknownException(message: 'Failed to load profile');
     }
   }
+
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    try {
+      final response = await _dioClient.patch(
+        ApiEndpoint.changePassword,
+        data: {
+          "current_password": currentPassword,
+          "new_password": newPassword,
+        },
+      );
+      final apiResponse = ApiResponse.fromJson(response.data, null);
+      if (apiResponse.success) {
+        log("user service change password : ${apiResponse.message}");
+        return;
+      } else {
+        throw Exception(apiResponse.message ?? 'Something went wrong');
+      }
+    } on DioException catch (e) {
+      final err = e.error;
+      if (err is AppException) {
+        throw err;
+      }
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }

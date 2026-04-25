@@ -1,5 +1,7 @@
 import 'package:bizreh_admin/features/auth/controllers/auth_controller.dart';
 import 'package:bizreh_admin/features/profile/controllers/profile_controller.dart';
+import 'package:bizreh_admin/features/profile/views/widgets/change_password_dialog.dart';
+
 import 'package:bizreh_admin/utils/func/date_format.dart';
 import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +77,11 @@ class ProfileView extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              IconButton(
+                onPressed: () => Get.dialog(ChangePasswordDialog(controller: controller)),
+                icon: const Icon(Icons.lock_reset, color: Color(0xFF3B82F6)),
+                tooltip: 'تغيير كلمة المرور',
               ),
               IconButton(
                 onPressed: controller.getProfile,

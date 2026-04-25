@@ -60,7 +60,10 @@ class AllSubCategoryView extends StatelessWidget {
     AllSubCategoryCrudController controller,
   ) {
     openFormDialog<void>(
-      onBeforeOpen: controller.clearForm,
+      onBeforeOpen: () {
+        controller.clearForm();
+        controller.getCategories();
+      },
       dialogBuilder: (_) => AllSubCategoryFormDialog(controller: controller),
     );
   }
@@ -71,7 +74,10 @@ class AllSubCategoryView extends StatelessWidget {
     AllSubCategoryModel subCategory,
   ) {
     openFormDialog<void>(
-      onBeforeOpen: () => controller.setSubCategoryForEdit(subCategory),
+      onBeforeOpen: () {
+        controller.setSubCategoryForEdit(subCategory);
+        controller.getCategories();
+      },
       dialogBuilder: (_) => AllSubCategoryFormDialog(controller: controller),
     );
   }

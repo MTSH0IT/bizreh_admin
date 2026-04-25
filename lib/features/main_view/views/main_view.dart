@@ -24,14 +24,14 @@ import 'package:flutter/material.dart';
 import 'package:bizreh_admin/features/main_view/views/widgets/admin_sidebar.dart';
 import 'package:get/get.dart';
 
-class Mainview extends StatefulWidget {
-  const Mainview({super.key});
+class mainView extends StatefulWidget {
+  const mainView({super.key});
 
   @override
-  State<Mainview> createState() => _MainviewState();
+  State<mainView> createState() => _mainViewState();
 }
 
-class _MainviewState extends State<Mainview> {
+class _mainViewState extends State<mainView> {
   int _selectedIndex = 0;
   late final MainNavController _nav = Get.put(MainNavController());
   late final List<_MainMenuItem> _menuItems = [

@@ -48,7 +48,7 @@ class _RootDeciderState extends State<_RootDecider> {
     if (!mounted) return;
 
     if (success) {
-      Get.offAll(() => Mainview());
+      Get.offAll(() => mainView());
     } else {
       Get.offAll(() => const LoginView());
     }

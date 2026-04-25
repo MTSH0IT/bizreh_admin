@@ -65,12 +65,23 @@ class LoginCard extends StatelessWidget {
             controller: authController.loginEmailCtrl,
           ),
           const SizedBox(height: 16),
-          LoginTextField(
-            label: 'Password',
-            hintText: 'Enter your password',
-            icon: Icons.lock_outline,
-            obscureText: true,
-            controller: authController.loginPasswordCtrl,
+          Obx(
+            () => LoginTextField(
+              label: 'Password',
+              hintText: 'Enter your password',
+              icon: Icons.lock_outline,
+              obscureText: !authController.isPasswordVisible.value,
+              suffixIcon: IconButton(
+                onPressed: () => authController.isPasswordVisible.toggle(),
+                icon: Icon(
+                  authController.isPasswordVisible.value
+                      ? Icons.visibility_off
+                      : Icons.visibility,
+                  color: const Color(0xFF6B7280),
+                ),
+              ),
+              controller: authController.loginPasswordCtrl,
+            ),
           ),
           const SizedBox(height: 12),
           Obx(

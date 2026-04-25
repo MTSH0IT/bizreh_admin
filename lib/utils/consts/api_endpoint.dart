@@ -88,6 +88,7 @@ class ApiEndpoint {
 
   //profile
   static String getProfile = "/admin/profile";
+  static const String changePassword = "/admin/profile/change-password";
 
   // Address - Cities
   static const String getCities = "/admin/address/cities";

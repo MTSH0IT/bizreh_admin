@@ -24,6 +24,7 @@ class AuthController extends GetxController {
 
   final RxBool isLoading = false.obs;
   final RxBool isForgettingPassword = false.obs;
+  final RxBool isPasswordVisible = false.obs;
 
   String get loginEmail => loginEmailCtrl.text.trim();
   String get loginPassword => loginPasswordCtrl.text.trim();
@@ -77,7 +78,7 @@ class AuthController extends GetxController {
         await _storage.remove(StorageKey.email);
         await _storage.remove(StorageKey.password);
       }
-      Get.offAll(() => Mainview());
+      Get.offAll(() => mainView());
       clearCtrl();
       Get.snackbar(
         'مرحبًا',

@@ -64,7 +64,7 @@ class DiscountsView extends StatelessWidget {
   void _openCreateDialog(BuildContext context, DiscountsController controller) {
     openFormDialog<void>(
       onBeforeOpen: () {
-        controller.clearForm;
+        controller.clearForm();
         controller.getMeta();
       },
       dialogBuilder: (_) => DiscountFormDialog(controller: controller),

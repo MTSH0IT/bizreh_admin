@@ -9,6 +9,8 @@ import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../category/controllers/all_category_crud_controller.dart';
+
 class AllSubCategoryCrudController extends GetxController {
   final SubCategoryService _subCategoryService = SubCategoryService();
   final CategoryService _categoryService = CategoryService();
@@ -69,6 +71,16 @@ class AllSubCategoryCrudController extends GetxController {
   }
 
   Future<void> getCategories() async {
+    final categoriesController = Get.isRegistered<AllCategoryCrudController>()
+        ? Get.find<AllCategoryCrudController>()
+        : null;
+
+    if (categoriesController != null &&
+        categoriesController.allCategories.isNotEmpty) {
+      categories.assignAll(categoriesController.allCategories);
+      return;
+    }
+
     try {
       isCategoriesLoading.value = true;
       final fetched = await _categoryService.getAllCategories();

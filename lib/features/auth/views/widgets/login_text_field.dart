@@ -7,6 +7,7 @@ class LoginTextField extends StatelessWidget {
   final IconData icon;
   final bool obscureText;
   final TextEditingController? controller;
+  final Widget? suffixIcon;
 
   const LoginTextField({
     super.key,
@@ -15,6 +16,7 @@ class LoginTextField extends StatelessWidget {
     required this.icon,
     this.obscureText = false,
     this.controller,
+    this.suffixIcon,
   });
 
   @override
@@ -36,6 +38,7 @@ class LoginTextField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hintText,
             prefixIcon: Icon(icon),
+            suffixIcon: suffixIcon,
             filled: true,
             fillColor: const Color(0xFFF3F4F6),
             isDense: true,

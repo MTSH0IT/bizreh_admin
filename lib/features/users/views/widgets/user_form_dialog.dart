@@ -71,17 +71,13 @@ class UserFormDialog extends StatelessWidget {
               keyboardType: TextInputType.phone,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             ),
-
-            Obx(() {
-              return LabeledTextField(
-                label: controller.isEditing
-                    ? 'Password (leave empty to keep current)'
-                    : 'Password',
+            if (!controller.isEditing)
+              LabeledTextField(
+                label: 'Password',
                 hint: 'Enter password',
                 controller: controller.passwordController,
                 obscureText: true,
-              );
-            }),
+              ),
           ],
         ),
       ),
