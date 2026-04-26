@@ -9,6 +9,8 @@ import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../products/controllers/products_controller.dart';
+
 class OffersCartItemInput {
   final RxnInt selectedOptionPackagingId;
   final TextEditingController quantityController;
@@ -140,7 +142,16 @@ class OffersCartController extends GetxController {
   }
 
   Future<void> getMeta() async {
-    //if (products.isNotEmpty) return;
+    final productsController = Get.isRegistered<ProductsController>()
+        ? Get.find<ProductsController>()
+        : null;
+
+    if (productsController != null && productsController.products.isNotEmpty) {
+      products.assignAll(productsController.products);
+      return;
+    }
+
+    if (products.isNotEmpty) return;
 
     try {
       isMetaLoading.value = true;

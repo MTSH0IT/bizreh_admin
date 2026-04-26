@@ -12,6 +12,9 @@ import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../Brands/controllers/brands_controler.dart';
+import '../../sub_category/controllers/all_sub_category_crud_controller.dart';
+
 class ProductsController extends GetxController {
   final ProductsService _productsService = ProductsService();
   final BrandsService _brandsService = BrandsService();
@@ -59,6 +62,26 @@ class ProductsController extends GetxController {
   }
 
   Future<void> getFormMeta() async {
+    final brandsController = Get.isRegistered<BrandsController>()
+        ? Get.find<BrandsController>()
+        : null;
+    final subCategoriesController =
+        Get.isRegistered<AllSubCategoryCrudController>()
+        ? Get.find<AllSubCategoryCrudController>()
+        : null;
+
+    if (brandsController != null && brandsController.brands.isNotEmpty) {
+      brands.assignAll(brandsController.brands);
+    }
+    if (subCategoriesController != null &&
+        subCategoriesController.allSubCategories.isNotEmpty) {
+      allSubCategories.assignAll(subCategoriesController.allSubCategories);
+    }
+
+    if (brands.isNotEmpty && allSubCategories.isNotEmpty) {
+      return;
+    }
+
     try {
       isMetaLoading.value = true;
 

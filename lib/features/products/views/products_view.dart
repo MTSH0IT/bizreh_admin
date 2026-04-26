@@ -64,7 +64,10 @@ class ProductsView extends StatelessWidget {
 
   void _openCreateDialog(BuildContext context, ProductsController controller) {
     openFormDialog<void>(
-      onBeforeOpen: controller.clearForm,
+      onBeforeOpen: () {
+        controller.clearForm();
+        controller.getFormMeta();
+      },
       dialogBuilder: (_) => ProductFormDialog(controller: controller),
     );
   }
@@ -75,7 +78,10 @@ class ProductsView extends StatelessWidget {
     ProductModel product,
   ) {
     openFormDialog<void>(
-      onBeforeOpen: () => controller.setProductForEdit(product),
+      onBeforeOpen: () {
+        controller.setProductForEdit(product);
+        controller.getFormMeta();
+      },
       dialogBuilder: (_) => ProductFormDialog(controller: controller),
     );
   }
