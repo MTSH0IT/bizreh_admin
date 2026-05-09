@@ -32,7 +32,7 @@ class CollectionView extends StatelessWidget {
             OutlinedButton.icon(
               onPressed: () => _openCreateDialog(controller),
               icon: const Icon(Icons.account_tree_outlined),
-              label: const Text('Add Parent Collection'),
+              label: const Text('Add Collection'),
             ),
           ],
         ),

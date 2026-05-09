@@ -17,11 +17,18 @@ class LoggingInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (true) {
+      dynamic requestData = options.data;
+      if (requestData is FormData) {
+        final fields = requestData.fields.map((e) => '${e.key}: ${e.value}').join(', ');
+        final files = requestData.files.map((e) => '${e.key}: ${e.value.filename}').join(', ');
+        requestData = 'FormData(fields: {$fields}, files: {$files})';
+      }
+
       _logger.i(
         '📤 REQUEST[${options.method}] => PATH: ${options.path}\n'
         'Headers: ${options.headers}\n'
         'Query Parameters: ${options.queryParameters}\n'
-        'Data: ${options.data}',
+        'Data: $requestData',
       );
     }
     return handler.next(options);

@@ -242,13 +242,9 @@ class CollectionsController extends GetxController {
     selectedImagePath.value = path;
   }
 
-  void setForCreate({int? parentId}) {
+  void setForCreateParent({int? parentId}) {
     clearForm();
     selectedParentId.value = parentId ?? 0;
-  }
-
-  void setForCreateParent({int? parentId}) {
-    setForCreate(parentId: parentId);
     isParentApi.value = true;
   }
 
@@ -256,17 +252,12 @@ class CollectionsController extends GetxController {
     selectedCollection.value = model;
     titleController.text = model.title ?? '';
     arTitleController.text = model.arTitle ?? '';
-    selectedBrandIds.assignAll(_parseIntIds(model.conditions?.brand));
-    selectedSubCategoryIds.assignAll(
-      _parseIntIds(model.conditions?.subCategory),
-    );
+    selectedBrandIds.assignAll(model.conditions?.brand ?? []);
+    selectedSubCategoryIds.assignAll(model.conditions?.subCategory ?? []);
     formTags.assignAll(model.conditions?.tags ?? const <String>[]);
-    tagInputController.clear();
-    _assignCustomProductIdsFromModel(model);
+    selectedCustomProductIds.assignAll(model.customProductsArray ?? []);
     conditionType.value = (model.conditionType ?? 'and').toString();
     status.value = model.status ?? 1;
-    selectedImagePath.value = '';
-    isParentApi.value = false;
     selectedParentId.value = model.parentCollectionId ?? 0;
   }
 
@@ -303,8 +294,6 @@ class CollectionsController extends GetxController {
     try {
       if (!_validateForm(requireImage: true)) return;
       isCreating.value = true;
-      _syncPendingTagInput();
-
       final parent = selectedParentId.value;
       await _service.createCollection(
         title: _trimmedOrNull(titleController.text) ?? '',
@@ -315,7 +304,7 @@ class CollectionsController extends GetxController {
         imagePath: selectedImagePath.value,
         brand: _idsCsvOrNull(selectedBrandIds),
         subCategory: _idsCsvOrNull(selectedSubCategoryIds),
-        tags: _effectiveTagsOrNull,
+        tags: _trimmedOrNull(tagsApiValue),
         customProducts: _idsCsvOrNull(selectedCustomProductIds),
       );
 
@@ -347,7 +336,6 @@ class CollectionsController extends GetxController {
       final isProductsType = (model!.type ?? '').toLowerCase() == 'products';
 
       if (isProductsType) {
-        _syncPendingTagInput();
         await _service.updateProductsCollection(
           id: model.id!,
           title: _trimmedOrNull(titleController.text),
@@ -360,7 +348,7 @@ class CollectionsController extends GetxController {
               : selectedImagePath.value,
           brand: selectedBrandIds.join(','),
           subCategory: selectedSubCategoryIds.join(','),
-          tags: _tagsForUpdatePayload,
+          tags: _trimmedOrNull(tagsApiValue) ?? '',
           customProducts: selectedCustomProductIds.join(','),
         );
       } else {
@@ -419,74 +407,10 @@ class CollectionsController extends GetxController {
   }
 
   String get tagsApiValue => formTags.join(',');
-  String get _tagsForUpdatePayload => tagsApiValue.trim();
-
-  String? get _effectiveTagsOrNull {
-    final fromChips = tagsApiValue.trim();
-    if (fromChips.isNotEmpty) return fromChips;
-    return null;
-  }
 
   String? _trimmedOrNull(String value) {
     final trimmed = value.trim();
     return trimmed.isEmpty ? null : trimmed;
-  }
-
-  String _normalizeConditionValue(dynamic value) {
-    if (value == null) return '';
-    if (value is List) {
-      return value
-          .map((e) => e?.toString().trim() ?? '')
-          .where((e) => e.isNotEmpty)
-          .join(',');
-    }
-
-    final raw = value.toString().trim();
-    if (raw.isEmpty) return '';
-    if (raw.startsWith('[') && raw.endsWith(']')) {
-      return raw
-          .substring(1, raw.length - 1)
-          .split(',')
-          .map((e) => e.trim())
-          .where((e) => e.isNotEmpty)
-          .join(',');
-    }
-    return raw;
-  }
-
-  List<int> _parseIntIds(dynamic value) {
-    final normalized = _normalizeConditionValue(value);
-    if (normalized.isEmpty) return [];
-    return normalized
-        .split(',')
-        .map((e) => int.tryParse(e.trim()))
-        .whereType<int>()
-        .toList();
-  }
-
-  void _assignCustomProductIdsFromModel(CollectionModel model) {
-    final list = model.customProductsArray;
-    if (list != null && list.isNotEmpty) {
-      selectedCustomProductIds.assignAll(
-        list.map((e) => int.tryParse(e.toString())).whereType<int>(),
-      );
-      return;
-    }
-    final raw = model.customProducts?.toString().trim() ?? '';
-    if (raw.isNotEmpty) {
-      selectedCustomProductIds.assignAll(
-        raw.split(',').map((e) => int.tryParse(e.trim())).whereType<int>(),
-      );
-      return;
-    }
-    final pids = model.productIds;
-    if (pids != null && pids.isNotEmpty) {
-      selectedCustomProductIds.assignAll(
-        pids.map((e) => int.tryParse(e.toString())).whereType<int>(),
-      );
-      return;
-    }
-    selectedCustomProductIds.clear();
   }
 
   String? _idsCsvOrNull(RxList<int> ids) {
@@ -501,12 +425,6 @@ class CollectionsController extends GetxController {
     if (incoming.isEmpty) return;
     formTags.addAll(incoming);
     tagInputController.clear();
-  }
-
-  void _syncPendingTagInput() {
-    final pending = tagInputController.text.trim();
-    if (pending.isEmpty) return;
-    addTagFromInput(pending);
   }
 
   void removeTag(String tag) {

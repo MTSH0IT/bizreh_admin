@@ -10,20 +10,8 @@ import 'package:dio/dio.dart';
 class CollectionsService {
   final DioClient _dioClient = DioClient();
 
-  void _logRequest(
-    String method,
-    String endpoint, {
-    Map<String, dynamic>? payload,
-  }) {
-    final hasPayload = payload != null && payload.isNotEmpty;
-    log(
-      '[CollectionsService] $method $endpoint${hasPayload ? ' | payload: $payload' : ''}',
-    );
-  }
-
   Future<List<CollectionModel>> getCollections() async {
     try {
-      _logRequest('GET', ApiEndpoint.getCollections);
       final response = await _dioClient.get(ApiEndpoint.getCollections);
 
       final apiResponse = ApiResponse.fromJson(response.data, (json) {
@@ -61,20 +49,6 @@ class CollectionsService {
     required String imagePath,
   }) async {
     try {
-      final payloadForLog = <String, dynamic>{
-        'title': title,
-        'ar_title': arTitle,
-        if (parentCollectionId != null)
-          'parent_collection_id': parentCollectionId,
-        'status': status,
-        'image_path': imagePath,
-      };
-      _logRequest(
-        'POST',
-        ApiEndpoint.createParentCollection,
-        payload: payloadForLog,
-      );
-
       final formData = FormData.fromMap({
         'title': title,
         'ar_title': arTitle,
@@ -126,21 +100,6 @@ class CollectionsService {
     String? customProducts,
   }) async {
     try {
-      final payloadForLog = <String, dynamic>{
-        'title': title,
-        'ar_title': arTitle,
-        if (parentCollectionId != null)
-          'parent_collection_id': parentCollectionId,
-        if (conditionType != null) 'condition_type': conditionType,
-        'status': status,
-        'image_path': imagePath,
-        if (brand != null) 'brand': brand,
-        if (subCategory != null) 'sub_category': subCategory,
-        if (tags != null) 'tags': tags,
-        if (customProducts != null) 'custom_products': customProducts,
-      };
-      _logRequest('POST', ApiEndpoint.createCollection, payload: payloadForLog);
-
       final formData = FormData.fromMap({
         'title': title,
         'ar_title': arTitle,
@@ -189,25 +148,11 @@ class CollectionsService {
     String? imagePath,
   }) async {
     try {
-      final payloadForLog = <String, dynamic>{
-        if (title != null) 'title': title,
-        if (arTitle != null) 'ar_title': arTitle,
-        if (parentCollectionId != null)
-          'parent_collection_id': parentCollectionId,
-        if (status != null) 'status': status,
-        if (imagePath != null) 'image_path': imagePath,
-      };
-      _logRequest(
-        'PUT',
-        ApiEndpoint.updateParentCollection(id),
-        payload: payloadForLog,
-      );
-
       final map = <String, dynamic>{
         if (title != null) 'title': title,
         if (arTitle != null) 'ar_title': arTitle,
-        if (parentCollectionId != null)
-          'parent_collection_id': parentCollectionId,
+        // if (parentCollectionId != null)
+        'parent_collection_id': parentCollectionId,
         if (status != null) 'status': status,
         if (imagePath != null) 'image': await MultipartFile.fromFile(imagePath),
       };
@@ -255,30 +200,11 @@ class CollectionsService {
     String? customProducts,
   }) async {
     try {
-      final payloadForLog = <String, dynamic>{
-        if (title != null) 'title': title,
-        if (arTitle != null) 'ar_title': arTitle,
-        if (parentCollectionId != null)
-          'parent_collection_id': parentCollectionId,
-        if (conditionType != null) 'condition_type': conditionType,
-        if (status != null) 'status': status,
-        if (brand != null) 'brand': brand,
-        if (subCategory != null) 'sub_category': subCategory,
-        if (tags != null) 'tags': tags,
-        if (customProducts != null) 'custom_products': customProducts,
-        if (imagePath != null) 'image_path': imagePath,
-      };
-      _logRequest(
-        'PUT',
-        ApiEndpoint.updateProductsCollection(id),
-        payload: payloadForLog,
-      );
-
       final map = <String, dynamic>{
         if (title != null) 'title': title,
         if (arTitle != null) 'ar_title': arTitle,
-        if (parentCollectionId != null)
-          'parent_collection_id': parentCollectionId,
+        // if (parentCollectionId != null)
+        'parent_collection_id': parentCollectionId,
         if (conditionType != null) 'condition_type': conditionType,
         if (status != null) 'status': status,
         if (brand != null) 'brand': brand,
@@ -321,7 +247,6 @@ class CollectionsService {
 
   Future<void> deleteCollection(int id) async {
     try {
-      _logRequest('DELETE', ApiEndpoint.deleteCollection(id));
       final response = await _dioClient.delete(
         ApiEndpoint.deleteCollection(id),
       );
