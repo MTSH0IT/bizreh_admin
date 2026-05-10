@@ -15,7 +15,7 @@ class AdsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AdsController controller = Get.put(AdsController());
+    final AdsController controller = Get.find<AdsController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -7,7 +7,6 @@ import 'package:bizreh_admin/services/offers_cart_service.dart';
 import 'package:bizreh_admin/services/products_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 import '../../products/controllers/products_controller.dart';
@@ -28,8 +27,14 @@ class OffersCartItemInput {
 }
 
 class OffersCartController extends GetxController {
-  final OffersCartService _service = sl<OffersCartService>();
-  final ProductsService _productsService = sl<ProductsService>();
+  final OffersCartService _service;
+  final ProductsService _productsService;
+
+  OffersCartController({
+    required OffersCartService offersCartService,
+    required ProductsService productsService,
+  }) : _service = offersCartService,
+       _productsService = productsService;
 
   final RxList<OffersCartModel> offers = <OffersCartModel>[].obs;
   final RxBool isLoading = false.obs;

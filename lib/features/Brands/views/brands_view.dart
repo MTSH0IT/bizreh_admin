@@ -15,7 +15,7 @@ class BrandsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BrandsController controller = Get.put(BrandsController());
+    final BrandsController controller = Get.find<BrandsController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

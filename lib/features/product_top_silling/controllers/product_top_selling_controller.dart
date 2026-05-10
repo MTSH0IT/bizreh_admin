@@ -4,12 +4,14 @@ import 'package:bizreh_admin/features/products/controllers/products_controller.d
 import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/product_top_selling.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:get/get.dart';
 
 class ProductTopSellingController extends GetxController {
-  final ProductTopSellingService _service = sl<ProductTopSellingService>();
+  final ProductTopSellingService _service;
+
+  ProductTopSellingController({required ProductTopSellingService service})
+    : _service = service;
 
   final RxList<ProductModel> products = <ProductModel>[].obs;
 

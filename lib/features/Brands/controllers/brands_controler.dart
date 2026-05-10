@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bizreh_admin/features/Brands/models/brands_model.dart';
 import 'package:bizreh_admin/services/brands_service.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 
 class BrandsController extends GetxController {
-  final BrandsService _brandsService = sl<BrandsService>();
+  final BrandsService _brandsService;
+
+  BrandsController({required BrandsService brandsService})
+    : _brandsService = brandsService;
 
   // Reactive variables
   final RxList<BrandsModel> brands = <BrandsModel>[].obs;

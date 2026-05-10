@@ -15,9 +15,8 @@ class SuperCategoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SuperCategoryController controller = Get.put(
-      SuperCategoryController(),
-    );
+    final SuperCategoryController controller =
+        Get.find<SuperCategoryController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

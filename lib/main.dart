@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:bizreh_admin/utils/storageService/storage_service.dart';
 
 import 'package:bizreh_admin/helper/di/service_locator.dart' as di;
+import 'package:bizreh_admin/helper/bindings/app_bindings.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      initialBinding: AppBindings(),
       home: const _RootDecider(),
       scrollBehavior: const AppScrollBehavior(),
       debugShowCheckedModeBanner: false,
@@ -42,7 +44,7 @@ class _RootDeciderState extends State<_RootDecider> {
   @override
   void initState() {
     super.initState();
-    _authController = Get.put(AuthController());
+    _authController = Get.find<AuthController>();
     _attemptAutoLogin();
   }
 

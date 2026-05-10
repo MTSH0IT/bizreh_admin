@@ -15,7 +15,7 @@ class SuppliersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SuppliersController controller = Get.put(SuppliersController());
+    final SuppliersController controller = Get.find<SuppliersController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

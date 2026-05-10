@@ -19,10 +19,9 @@ class ProductsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ProductsController controller = Get.put(ProductsController());
-    final ProductTopSellingController topSellingController = Get.put(
-      ProductTopSellingController(),
-    );
+    final ProductsController controller = Get.find<ProductsController>();
+    final ProductTopSellingController topSellingController =
+        Get.find<ProductTopSellingController>();
     final MainNavController nav = Get.find<MainNavController>();
 
     return Column(

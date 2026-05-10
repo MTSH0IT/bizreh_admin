@@ -15,7 +15,7 @@ class CitiesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CitiesController controller = Get.put(CitiesController());
+    final CitiesController controller = Get.find<CitiesController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

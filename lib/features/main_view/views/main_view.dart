@@ -33,7 +33,7 @@ class mainView extends StatefulWidget {
 
 class _mainViewState extends State<mainView> {
   int _selectedIndex = 0;
-  late final MainNavController _nav = Get.put(MainNavController());
+  late final MainNavController _nav = Get.find<MainNavController>();
   late final List<_MainMenuItem> _menuItems = [
     _MainMenuItem(
       title: 'Users',

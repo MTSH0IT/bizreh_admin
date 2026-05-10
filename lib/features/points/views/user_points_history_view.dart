@@ -5,6 +5,9 @@ import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/details_section_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
+import 'package:bizreh_admin/services/points_service.dart';
+import 'package:bizreh_admin/services/orders_service.dart';
 
 class UserPointsHistoryView extends StatelessWidget {
   final int userId;
@@ -16,8 +19,15 @@ class UserPointsHistoryView extends StatelessWidget {
     final tag = userId.toString();
     final UserPointsHistoryController controller =
         Get.isRegistered<UserPointsHistoryController>(tag: tag)
-        ? Get.find<UserPointsHistoryController>(tag: tag)
-        : Get.put(UserPointsHistoryController(userId: userId), tag: tag);
+            ? Get.find<UserPointsHistoryController>(tag: tag)
+            : Get.put(
+                UserPointsHistoryController(
+                  userId: userId,
+                  pointsService: sl<PointsService>(),
+                  ordersService: sl<OrdersService>(),
+                ),
+                tag: tag,
+              );
 
     return Obx(() {
       if (controller.isLoading.value) {

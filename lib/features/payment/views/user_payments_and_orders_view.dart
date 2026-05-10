@@ -10,6 +10,9 @@ import 'package:bizreh_admin/utils/widgets/search_field.dart';
 import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
+import 'package:bizreh_admin/services/orders_service.dart';
+import 'package:bizreh_admin/services/payment_service.dart';
 
 class UserPaymentsAndOrdersView extends StatefulWidget {
   final int userId;
@@ -34,7 +37,13 @@ class _UserPaymentsAndOrdersViewState extends State<UserPaymentsAndOrdersView> {
   void initState() {
     super.initState();
     tag = 'user_payments_orders_${widget.userId}';
-    controller = Get.put(UserPaymentsAndOrdersController(), tag: tag);
+    controller = Get.put(
+      UserPaymentsAndOrdersController(
+        paymentService: sl<PaymentService>(),
+        ordersService: sl<OrdersService>(),
+      ),
+      tag: tag,
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.load(widget.userId);

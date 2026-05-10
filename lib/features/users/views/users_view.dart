@@ -17,7 +17,7 @@ class UsersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final UsersController controller = Get.put(UsersController());
+    final UsersController controller = Get.find<UsersController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

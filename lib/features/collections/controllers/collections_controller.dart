@@ -14,14 +14,23 @@ import 'package:bizreh_admin/services/products_service.dart';
 import 'package:bizreh_admin/services/sub_category_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class CollectionsController extends GetxController {
-  final CollectionsService _service = sl<CollectionsService>();
-  final ProductsService _productsService = sl<ProductsService>();
-  final BrandsService _brandsService = sl<BrandsService>();
-  final SubCategoryService _subCategoryService = sl<SubCategoryService>();
+  final CollectionsService _service;
+  final ProductsService _productsService;
+  final BrandsService _brandsService;
+  final SubCategoryService _subCategoryService;
+
+  CollectionsController({
+    required CollectionsService collectionsService,
+    required ProductsService productsService,
+    required BrandsService brandsService,
+    required SubCategoryService subCategoryService,
+  }) : _service = collectionsService,
+       _productsService = productsService,
+       _brandsService = brandsService,
+       _subCategoryService = subCategoryService;
 
   final RxList<CollectionModel> collections = <CollectionModel>[].obs;
   final RxBool isLoading = false.obs;

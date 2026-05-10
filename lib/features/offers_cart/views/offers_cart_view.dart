@@ -17,7 +17,7 @@ class OffersCartView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final OffersCartController controller = Get.put(OffersCartController());
+    final OffersCartController controller = Get.find<OffersCartController>();
     final MainNavController nav = Get.find<MainNavController>();
 
     return Column(

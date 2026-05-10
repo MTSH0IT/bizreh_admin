@@ -4,11 +4,12 @@ import 'package:bizreh_admin/features/gifts/models/user_gifts_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/user_gifts_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class UserGiftsController extends GetxController {
-  final UserGiftsService _service = sl<UserGiftsService>();
+  final UserGiftsService _service;
+
+  UserGiftsController({required UserGiftsService service}) : _service = service;
 
   final RxList<UserGiftsModel> userGifts = <UserGiftsModel>[].obs;
   final RxBool isLoading = false.obs;

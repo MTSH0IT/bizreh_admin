@@ -15,9 +15,8 @@ class AllSubCategoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AllSubCategoryCrudController subController = Get.put(
-      AllSubCategoryCrudController(),
-    );
+    final AllSubCategoryCrudController subController =
+        Get.find<AllSubCategoryCrudController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

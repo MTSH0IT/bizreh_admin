@@ -5,18 +5,25 @@ import 'package:bizreh_admin/features/Brands/controllers/brands_controler.dart';
 import 'package:bizreh_admin/features/packaging/models/package_model.dart';
 import 'package:bizreh_admin/features/points/models/point_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
+import 'package:bizreh_admin/services/points_service.dart';
 import 'package:bizreh_admin/services/brands_service.dart';
 import 'package:bizreh_admin/services/packaging_service.dart';
-import 'package:bizreh_admin/services/points_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class PointsController extends GetxController {
-  final PointsService _pointsService = sl<PointsService>();
-  final BrandsService _brandsService = sl<BrandsService>();
-  final PackagingService _packagingService = sl<PackagingService>();
+  final PointsService _pointsService;
+  final BrandsService _brandsService;
+  final PackagingService _packagingService;
+
+  PointsController({
+    required PointsService pointsService,
+    required BrandsService brandsService,
+    required PackagingService packagingService,
+  }) : _pointsService = pointsService,
+       _brandsService = brandsService,
+       _packagingService = packagingService;
 
   final RxList<PointModel> pointsOffers = <PointModel>[].obs;
   final RxBool isLoading = false.obs;

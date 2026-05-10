@@ -5,6 +5,8 @@ import 'package:bizreh_admin/utils/widgets/search_field.dart';
 import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
+import 'package:bizreh_admin/services/payment_service.dart';
 
 class UserPaymentsReportByYearView extends StatefulWidget {
   const UserPaymentsReportByYearView({super.key});
@@ -24,7 +26,10 @@ class _UserPaymentsReportByYearViewState
   void initState() {
     super.initState();
     tag = 'user_reports_${DateTime.now().millisecondsSinceEpoch}';
-    controller = Get.put(UserReportsController(), tag: tag);
+    controller = Get.put(
+      UserReportsController(service: sl<PaymentService>()),
+      tag: tag,
+    );
 
     // Initialize with current year
     currentYear = DateTime.now().year;

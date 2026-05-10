@@ -15,7 +15,7 @@ class ColorFamilyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorFamilyController controller = Get.put(ColorFamilyController());
+    final ColorFamilyController controller = Get.find<ColorFamilyController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -8,12 +8,17 @@ import 'package:bizreh_admin/services/ads_service.dart';
 import 'package:bizreh_admin/services/products_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class AdsController extends GetxController {
-  final AdsService _adsService = sl<AdsService>();
-  final ProductsService _productsService = sl<ProductsService>();
+  final AdsService _adsService;
+  final ProductsService _productsService;
+
+  AdsController({
+    required AdsService adsService,
+    required ProductsService productsService,
+  }) : _adsService = adsService,
+       _productsService = productsService;
 
   final RxList<AdsModel> ads = <AdsModel>[].obs;
   final RxBool isLoading = false.obs;

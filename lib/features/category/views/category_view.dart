@@ -17,7 +17,8 @@ class CategoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CategoryController categoryController = Get.put(CategoryController());
+    final CategoryController categoryController =
+        Get.find<CategoryController>();
 
     if (superCategoryId != null &&
         categoryController.selectedSuperCategoryId.value != superCategoryId) {

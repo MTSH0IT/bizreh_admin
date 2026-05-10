@@ -9,6 +9,9 @@ import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
+import 'package:bizreh_admin/services/products_option_service.dart';
+import 'package:bizreh_admin/services/products_service.dart';
 
 import 'widgets/option_form_dialog.dart';
 import 'widgets/options_data_table.dart';
@@ -37,17 +40,15 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
     super.initState();
 
     optionsController = Get.put(
-      ProductOptionsController(product: widget.product),
+      ProductOptionsController(
+        product: widget.product,
+        service: sl<ProductsOptionService>(),
+        productsService: sl<ProductsService>(),
+      ),
       tag: _optionsTag,
     );
-
-    if (Get.isRegistered<PackagingController>()) {
-      packagingController = Get.find<PackagingController>();
-    } else {
-      packagingController = Get.put(PackagingController());
-    }
-
-    optionPackagingController = Get.put(OptionPackagingController());
+    packagingController = Get.find<PackagingController>();
+    optionPackagingController = Get.find<OptionPackagingController>();
     optionPackagingController.onSaved = () async {
       await optionsController.reloadFromServer();
     };

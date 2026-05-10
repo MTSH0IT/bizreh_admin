@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:bizreh_admin/features/cities/models/city_model.dart';
 import 'package:bizreh_admin/features/suppliers/models/supplier_model.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/cities_service.dart';
 import 'package:bizreh_admin/services/suppliers_service.dart';
@@ -11,8 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SuppliersController extends GetxController {
-  final SuppliersService _service = sl<SuppliersService>();
-  final CitiesService _citiesService = sl<CitiesService>();
+  final SuppliersService _service;
+  final CitiesService _citiesService;
+
+  SuppliersController({
+    required SuppliersService suppliersService,
+    required CitiesService citiesService,
+  }) : _service = suppliersService,
+       _citiesService = citiesService;
 
   final RxList<SupplierModel> suppliers = <SupplierModel>[].obs;
   final RxBool isLoading = false.obs;

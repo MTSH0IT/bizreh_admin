@@ -59,7 +59,7 @@ class PaymentFormDialog extends StatelessWidget {
         ),
       ],
       child: Obx(() {
-        final usersController = Get.put(UsersController());
+        final usersController = Get.find<UsersController>();
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [

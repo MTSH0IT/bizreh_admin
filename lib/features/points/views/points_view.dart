@@ -15,7 +15,7 @@ class PointsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PointsController controller = Get.put(PointsController());
+    final PointsController controller = Get.find<PointsController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +53,7 @@ class PointsView extends StatelessWidget {
   void _openCreateDialog(BuildContext context, PointsController controller) {
     openFormDialog<void>(
       onBeforeOpen: () {
-        controller.clearForm;
+        controller.clearForm();
         controller.getMeta();
       },
 

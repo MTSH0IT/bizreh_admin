@@ -1,6 +1,7 @@
 import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
 import 'package:bizreh_admin/helper/dioApiService/dio_client_adapter.dart';
 import 'package:bizreh_admin/helper/dioApiService/i_api_client.dart';
+import 'package:bizreh_admin/helper/di/token_provider.dart';
 import 'package:bizreh_admin/services/ads_service.dart';
 import 'package:bizreh_admin/services/auth_service.dart';
 import 'package:bizreh_admin/services/brands_service.dart';
@@ -119,4 +120,7 @@ Future<void> init() async {
     () => UsersService(apiClient: sl<IApiClient>()),
   );
   sl.registerLazySingleton<StorageService>(() => StorageService());
+  sl.registerLazySingleton<ITokenProvider>(
+    () => TokenProvider(storageService: sl<StorageService>()),
+  );
 }

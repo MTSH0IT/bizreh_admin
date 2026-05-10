@@ -9,16 +9,19 @@ import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/orders_service.dart';
 import 'package:bizreh_admin/services/points_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class UserPointsHistoryController extends GetxController {
   final int userId;
+  final PointsService _pointsService;
+  final OrdersService _ordersService;
 
-  UserPointsHistoryController({required this.userId});
-
-  final PointsService _pointsService = sl<PointsService>();
-  final OrdersService _ordersService = sl<OrdersService>();
+  UserPointsHistoryController({
+    required this.userId,
+    required PointsService pointsService,
+    required OrdersService ordersService,
+  })  : _pointsService = pointsService,
+        _ordersService = ordersService;
 
   final Rx<UserPointHistory?> pointHistory = Rx<UserPointHistory?>(null);
   final RxList<History> history = <History>[].obs;

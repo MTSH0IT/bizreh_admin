@@ -7,12 +7,17 @@ import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/driver_service.dart';
 import 'package:bizreh_admin/services/orders_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class OrdersController extends GetxController {
-  final OrdersService _ordersService = sl<OrdersService>();
-  final DriverService _driverService = sl<DriverService>();
+  final OrdersService _ordersService;
+  final DriverService _driverService;
+
+  OrdersController({
+    required OrdersService ordersService,
+    required DriverService driverService,
+  }) : _ordersService = ordersService,
+       _driverService = driverService;
 
   final RxList<OrderModel> orders = <OrderModel>[].obs;
   final RxBool isLoading = false.obs;

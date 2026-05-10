@@ -15,7 +15,7 @@ class PackagingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PackagingController controller = Get.put(PackagingController());
+    final PackagingController controller = Get.find<PackagingController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -9,15 +9,24 @@ import 'package:bizreh_admin/services/auth_service.dart';
 import 'package:bizreh_admin/utils/consts/const_key.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:bizreh_admin/utils/storageService/storage_service.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
+import 'package:bizreh_admin/helper/di/token_provider.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
   static String? token;
 
-  final AuthService _authService = sl<AuthService>();
-  final StorageService _storage = sl<StorageService>();
+  final AuthService _authService;
+  final StorageService _storage;
+  final ITokenProvider _tokenProvider;
+
+  AuthController({
+    required AuthService authService,
+    required StorageService storageService,
+    required ITokenProvider tokenProvider,
+  }) : _authService = authService,
+       _storage = storageService,
+       _tokenProvider = tokenProvider;
 
   final TextEditingController loginEmailCtrl = TextEditingController();
   final TextEditingController loginPasswordCtrl = TextEditingController();

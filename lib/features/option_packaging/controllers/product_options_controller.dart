@@ -7,16 +7,20 @@ import 'package:bizreh_admin/services/products_option_service.dart';
 import 'package:bizreh_admin/services/products_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class ProductOptionsController extends GetxController {
-  final ProductsOptionService _service = sl<ProductsOptionService>();
-  final ProductsService productsService = sl<ProductsService>();
+  final ProductsOptionService _service;
+  final ProductsService productsService;
 
   final ProductModel product;
 
-  ProductOptionsController({required this.product});
+  ProductOptionsController({
+    required this.product,
+    required ProductsOptionService service,
+    required ProductsService productsService,
+  }) : _service = service,
+       productsService = productsService;
 
   final RxList<Option> options = <Option>[].obs;
 

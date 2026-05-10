@@ -14,9 +14,7 @@ class ProductTopSellingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProductTopSellingController controller =
-        Get.isRegistered<ProductTopSellingController>()
-        ? Get.find<ProductTopSellingController>()
-        : Get.put(ProductTopSellingController());
+        Get.find<ProductTopSellingController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

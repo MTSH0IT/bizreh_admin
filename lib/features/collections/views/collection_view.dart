@@ -15,7 +15,7 @@ class CollectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CollectionsController controller = Get.put(CollectionsController());
+    final CollectionsController controller = Get.find<CollectionsController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -7,12 +7,17 @@ import 'package:bizreh_admin/services/color_servise.dart';
 import 'package:bizreh_admin/services/option_packaging_servise.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class OptionPackagingController extends GetxController {
-  final OptionPackagingService _service = sl<OptionPackagingService>();
-  final ColorService _colorService = sl<ColorService>();
+  final OptionPackagingService _service;
+  final ColorService _colorService;
+
+  OptionPackagingController({
+    required OptionPackagingService optionPackagingService,
+    required ColorService colorService,
+  }) : _service = optionPackagingService,
+       _colorService = colorService;
 
   final RxBool isSaving = false.obs;
   final RxBool isDeleting = false.obs;

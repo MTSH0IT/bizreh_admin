@@ -23,7 +23,7 @@ class OrdersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final OrdersController controller = Get.put(OrdersController());
+    final OrdersController controller = Get.find<OrdersController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -12,8 +12,8 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ProfileController controller = Get.put(ProfileController());
-    final authController = Get.put(AuthController());
+    final ProfileController controller = Get.find<ProfileController>();
+    final authController = Get.find<AuthController>();
 
     return Obx(() {
       if (controller.isLoading.value) {
@@ -79,7 +79,8 @@ class ProfileView extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () => Get.dialog(ChangePasswordDialog(controller: controller)),
+                onPressed: () =>
+                    Get.dialog(ChangePasswordDialog(controller: controller)),
                 icon: const Icon(Icons.lock_reset, color: Color(0xFF3B82F6)),
                 tooltip: 'تغيير كلمة المرور',
               ),

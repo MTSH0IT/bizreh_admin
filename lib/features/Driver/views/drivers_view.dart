@@ -15,7 +15,7 @@ class DriversView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DriversController controller = Get.put(DriversController());
+    final DriversController controller = Get.find<DriversController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

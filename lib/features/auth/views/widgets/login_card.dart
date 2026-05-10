@@ -13,7 +13,7 @@ class LoginCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthController authController = Get.put(AuthController());
+    final AuthController authController = Get.find<AuthController>();
     final RxBool rememberMe = false.obs;
 
     return Container(

@@ -17,7 +17,7 @@ class PaymentsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PaymentController controller = Get.put(PaymentController());
+    final PaymentController controller = Get.find<PaymentController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

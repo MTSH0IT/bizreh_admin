@@ -5,11 +5,12 @@ import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/gifts_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class GiftsController extends GetxController {
-  final GiftsService _giftsService = sl<GiftsService>();
+  final GiftsService _service;
+
+  GiftsController({required GiftsService service}) : _service = service;
 
   final RxList<GiftsModel> gifts = <GiftsModel>[].obs;
   final RxBool isLoading = false.obs;
@@ -44,7 +45,7 @@ class GiftsController extends GetxController {
     try {
       isLoading.value = true;
 
-      final fetched = await _giftsService.getGifts();
+      final fetched = await _service.getGifts();
       gifts.assignAll(fetched);
 
       log('Successfully fetched ${fetched.length} gifts');
@@ -65,7 +66,7 @@ class GiftsController extends GetxController {
     try {
       isCreating.value = true;
 
-      await _giftsService.createGift(
+      await _service.createGift(
         points: int.parse(pointsController.text.trim()),
         title: titleController.text.trim(),
         arTitle: arTitleController.text.trim(),
@@ -97,7 +98,7 @@ class GiftsController extends GetxController {
     try {
       isUpdating.value = true;
 
-      await _giftsService.updateGift(
+      await _service.updateGift(
         id: gift!.id!,
         points: int.parse(pointsController.text.trim()),
         title: titleController.text.trim(),
@@ -127,7 +128,7 @@ class GiftsController extends GetxController {
     try {
       isDeleting.value = true;
 
-      await _giftsService.deleteGift(giftId);
+      await _service.deleteGift(giftId);
       await getGifts();
 
       showMassage('Gift deleted successfully', true);

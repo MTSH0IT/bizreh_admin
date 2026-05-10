@@ -19,7 +19,7 @@ class UserGiftsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final UserGiftsController controller = Get.put(UserGiftsController());
+    final UserGiftsController controller = Get.find<UserGiftsController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

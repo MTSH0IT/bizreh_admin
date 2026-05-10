@@ -5,11 +5,13 @@ import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/profile_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class ProfileController extends GetxController {
-  final ProfileService _profileService = sl<ProfileService>();
+  final ProfileService _profileService;
+
+  ProfileController({required ProfileService profileService})
+    : _profileService = profileService;
 
   final RxBool isLoading = false.obs;
   final RxBool isLoadingChangePassword = false.obs;

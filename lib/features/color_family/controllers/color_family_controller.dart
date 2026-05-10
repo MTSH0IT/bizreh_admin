@@ -5,11 +5,12 @@ import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/color_servise.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
-import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class ColorFamilyController extends GetxController {
-  final ColorService _service = sl<ColorService>();
+  final ColorService _service;
+
+  ColorFamilyController({required ColorService service}) : _service = service;
 
   final RxList<ColorModel> colors = <ColorModel>[].obs;
   final RxBool isLoading = false.obs;

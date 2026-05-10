@@ -17,7 +17,7 @@ class GiftsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GiftsController controller = Get.put(GiftsController());
+    final GiftsController controller = Get.find<GiftsController>();
     final MainNavController nav = Get.find<MainNavController>();
 
     return Column(
