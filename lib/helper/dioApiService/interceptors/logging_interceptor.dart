@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
 /// Interceptor for logging HTTP requests and responses
@@ -16,7 +17,7 @@ class LoggingInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    if (true) {
+    if (kDebugMode) {
       dynamic requestData = options.data;
       if (requestData is FormData) {
         final fields = requestData.fields.map((e) => '${e.key}: ${e.value}').join(', ');
@@ -36,7 +37,7 @@ class LoggingInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    if (true) {
+    if (kDebugMode) {
       _logger.i(
         '📥 RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}\n'
         'Data: ${response.data}',
@@ -47,7 +48,7 @@ class LoggingInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    if (true) {
+    if (kDebugMode) {
       _logger.e(
         '❌ ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}\n'
         'Message: ${err.message}\n'

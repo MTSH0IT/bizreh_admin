@@ -1,3 +1,4 @@
+import 'package:bizreh_admin/helper/di/token_provider.dart';
 import 'package:bizreh_admin/helper/dioApiService/interceptors/auth_interceptor.dart';
 import 'package:bizreh_admin/helper/dioApiService/interceptors/error_interceptor.dart';
 import 'package:bizreh_admin/helper/dioApiService/interceptors/logging_interceptor.dart';
@@ -8,7 +9,7 @@ import 'package:dio/dio.dart';
 class DioClient {
   late final Dio _dio;
 
-  DioClient() {
+  DioClient({required ITokenProvider tokenProvider}) {
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiEndpoint.baseUrl,
@@ -19,7 +20,7 @@ class DioClient {
 
     // Add interceptors
     _dio.interceptors.addAll([
-      AuthInterceptor(),
+      AuthInterceptor(tokenProvider),
       ErrorInterceptor(),
       LoggingInterceptor(),
     ]);

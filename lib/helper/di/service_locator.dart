@@ -34,13 +34,19 @@ import 'package:get_it/get_it.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // 1. Register Core Dio Client
-  sl.registerLazySingleton<DioClient>(() => DioClient());
+  // 1. Register Storage and Token Provider first
+  sl.registerLazySingleton<StorageService>(() => StorageService());
+  sl.registerLazySingleton<ITokenProvider>(
+    () => TokenProvider(storageService: sl<StorageService>()),
+  );
 
-  // 2. Register IApiClient Adapter
+  // 2. Register Core Dio Client
+  sl.registerLazySingleton<DioClient>(
+    () => DioClient(tokenProvider: sl<ITokenProvider>()),
+  );
+
+  // 3. Register IApiClient Adapter
   sl.registerLazySingleton<IApiClient>(() => DioClientAdapter(sl<DioClient>()));
-
-  // 3. Register Services
   sl.registerLazySingleton<CategoryService>(
     () => CategoryService(apiClient: sl<IApiClient>()),
   );
@@ -118,9 +124,5 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<UsersService>(
     () => UsersService(apiClient: sl<IApiClient>()),
-  );
-  sl.registerLazySingleton<StorageService>(() => StorageService());
-  sl.registerLazySingleton<ITokenProvider>(
-    () => TokenProvider(storageService: sl<StorageService>()),
   );
 }

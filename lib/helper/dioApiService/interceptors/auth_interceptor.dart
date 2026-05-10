@@ -1,9 +1,11 @@
-import 'package:bizreh_admin/features/auth/controllers/auth_controller.dart';
+import 'package:bizreh_admin/helper/di/token_provider.dart';
 import 'package:dio/dio.dart';
 
 /// Interceptor for adding authentication token to requests
 class AuthInterceptor extends Interceptor {
-  // final StorageService _storageService = StorageService();
+  final ITokenProvider _tokenProvider;
+
+  AuthInterceptor(this._tokenProvider);
 
   @override
   void onRequest(
@@ -12,7 +14,7 @@ class AuthInterceptor extends Interceptor {
   ) async {
     // Get access token from storage and attach to headers if present
     try {
-      final token = AuthController.token;
+      final token = _tokenProvider.getToken();
       if (token != null && token.isNotEmpty) {
         options.headers['Authorization'] = 'Bearer $token';
       }

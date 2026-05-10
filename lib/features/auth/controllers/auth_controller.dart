@@ -14,7 +14,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
-  static String? token;
 
   final AuthService _authService;
   final StorageService _storage;
@@ -132,8 +131,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> _persistAuth(AuthResponse res) async {
-    log("persistAuth token:\n ${res.token}");
-    token = res.token;
+    await _tokenProvider.setToken(res.token);
 
     log("persistAuth user:\n ${res.user.toString()}");
     await _storage.setJson(StorageKey.user, res.user.toJson());
@@ -146,8 +144,7 @@ class AuthController extends GetxController {
 
   Future<void> logout() async {
     try {
-      token = null;
-      await _storage.remove(StorageKey.token);
+      await _tokenProvider.clearToken();
       await _storage.remove(StorageKey.user);
       await _storage.remove(StorageKey.email);
       await _storage.remove(StorageKey.password);
