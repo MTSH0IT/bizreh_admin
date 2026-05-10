@@ -1,20 +1,22 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/products/models/product_model/product_model.dart';
-import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
+import 'package:bizreh_admin/helper/dioApiService/i_api_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';
 import 'package:bizreh_admin/utils/models/api_response.dart';
 import 'package:dio/dio.dart';
 
 class ProductsService {
-  final DioClient _dioClient = DioClient();
+  final IApiClient _apiClient;
+
+  ProductsService({required IApiClient apiClient}) : _apiClient = apiClient;
 
   Future<ProductModel?> getProductById(int id) async {
     try {
-      final response = await _dioClient.get('${ApiEndpoint.getProducts}/$id');
+      final data = await _apiClient.get('${ApiEndpoint.getProducts}/$id');
 
-      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+      final apiResponse = ApiResponse.fromJson(data, (json) {
         final productWrapper = json['product']['product'];
         return ProductModel.fromJson(productWrapper as Map<String, dynamic>);
       });
@@ -24,16 +26,8 @@ class ProductsService {
       } else {
         throw Exception(apiResponse.message ?? 'Something went wrong');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'products service AppException getProductById : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('products service DioException getProductById : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('products service catch getProductById : ${e.toString()}');
       throw Exception(e.toString());
@@ -42,9 +36,9 @@ class ProductsService {
 
   Future<List<ProductModel>> getProducts() async {
     try {
-      final response = await _dioClient.get(ApiEndpoint.getProducts);
+      final data = await _apiClient.get(ApiEndpoint.getProducts);
 
-      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+      final apiResponse = ApiResponse.fromJson(data, (json) {
         final productsWrapper = json['products'];
         final List list =
             (productsWrapper?['products'] as List?) ?? <dynamic>[];
@@ -58,16 +52,8 @@ class ProductsService {
       } else {
         throw Exception(apiResponse.message ?? 'Something went wrong');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'products service AppException getProducts : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('products service DioException getProducts : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('products service catch getProducts : ${e.toString()}');
       throw Exception(e.toString());
@@ -98,26 +84,18 @@ class ProductsService {
         'image': await MultipartFile.fromFile(imagePath),
       });
 
-      final response = await _dioClient.post(
+      final data = await _apiClient.post(
         ApiEndpoint.createProducts,
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to create product');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'products service AppException createProduct : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('products service DioException createProduct : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('products service catch createProduct : ${e.toString()}');
       throw Exception(e.toString());
@@ -153,26 +131,18 @@ class ProductsService {
 
       final formData = FormData.fromMap(map);
 
-      final response = await _dioClient.put(
+      final data = await _apiClient.put(
         ApiEndpoint.updateProducts(id),
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to update product');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'products service AppException updateProduct : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('products service DioException updateProduct : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('products service catch updateProduct : ${e.toString()}');
       throw Exception(e.toString());
@@ -181,23 +151,15 @@ class ProductsService {
 
   Future<void> deleteProduct(int id) async {
     try {
-      final response = await _dioClient.delete(ApiEndpoint.deleteProducts(id));
+      final data = await _apiClient.delete(ApiEndpoint.deleteProducts(id));
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to delete product');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'products service AppException deleteProduct : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('products service DioException deleteProduct : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('products service catch deleteProduct : ${e.toString()}');
       throw Exception(e.toString());

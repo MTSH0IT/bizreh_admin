@@ -2,20 +2,21 @@ import 'dart:developer';
 
 import 'package:bizreh_admin/features/points/models/point_model.dart';
 import 'package:bizreh_admin/features/points/models/user_point_history/user_point_history.dart';
-import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
+import 'package:bizreh_admin/helper/dioApiService/i_api_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';
 import 'package:bizreh_admin/utils/models/api_response.dart';
-import 'package:dio/dio.dart';
 
 class PointsService {
-  final DioClient _dioClient = DioClient();
+  final IApiClient _apiClient;
+
+  PointsService({required IApiClient apiClient}) : _apiClient = apiClient;
 
   Future<List<PointModel>> getPointsOffers() async {
     try {
-      final response = await _dioClient.get(ApiEndpoint.getPointsOffers);
+      final data = await _apiClient.get(ApiEndpoint.getPointsOffers);
 
-      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+      final apiResponse = ApiResponse.fromJson(data, (json) {
         final List list = (json as List?) ?? <dynamic>[];
         return list
             .map((e) => PointModel.fromJson(e as Map<String, dynamic>))
@@ -26,16 +27,8 @@ class PointsService {
         return apiResponse.data as List<PointModel>;
       }
       throw Exception(apiResponse.message ?? 'Something went wrong');
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'points service AppException getPointsOffers : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('points service DioException getPointsOffers : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('points service catch getPointsOffers : ${e.toString()}');
       throw Exception(e.toString());
@@ -44,25 +37,17 @@ class PointsService {
 
   Future<void> createPointsOffer({required Map<String, dynamic> body}) async {
     try {
-      final response = await _dioClient.post(
+      final responseData = await _apiClient.post(
         ApiEndpoint.createPointsOffer,
         data: body,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(responseData, null);
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to create points offer');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'points service AppException createPointsOffer : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('points service DioException createPointsOffer : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('points service catch createPointsOffer : ${e.toString()}');
       throw Exception(e.toString());
@@ -74,25 +59,17 @@ class PointsService {
     required Map<String, dynamic> body,
   }) async {
     try {
-      final response = await _dioClient.put(
+      final responseData = await _apiClient.put(
         ApiEndpoint.updatePointsOffer(id),
         data: body,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(responseData, null);
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to update points offer');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'points service AppException updatePointsOffer : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('points service DioException updatePointsOffer : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('points service catch updatePointsOffer : ${e.toString()}');
       throw Exception(e.toString());
@@ -101,24 +78,16 @@ class PointsService {
 
   Future<void> deletePointsOffer(int id) async {
     try {
-      final response = await _dioClient.delete(
+      final responseData = await _apiClient.delete(
         ApiEndpoint.deletePointsOffer(id),
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(responseData, null);
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to delete points offer');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'points service AppException deletePointsOffer : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('points service DioException deletePointsOffer : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('points service catch deletePointsOffer : ${e.toString()}');
       throw Exception(e.toString());
@@ -127,12 +96,12 @@ class PointsService {
 
   Future<UserPointHistory> getUserPointsHistory(int userId) async {
     try {
-      final response = await _dioClient.get(
+      final data = await _apiClient.get(
         ApiEndpoint.getUserPointsHistory(userId),
       );
 
       final apiResponse = ApiResponse.fromJson(
-        response.data,
+        data,
         (json) => UserPointHistory.fromJson(json as Map<String, dynamic>),
       );
 
@@ -140,16 +109,8 @@ class PointsService {
         return apiResponse.data as UserPointHistory;
       }
       throw Exception(apiResponse.message ?? 'Something went wrong');
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'points service AppException getUserPointsHistory : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('points service DioException getUserPointsHistory : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('points service catch getUserPointsHistory : ${e.toString()}');
       throw Exception(e.toString());

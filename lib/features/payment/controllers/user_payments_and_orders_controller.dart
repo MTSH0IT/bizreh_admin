@@ -12,13 +12,14 @@ import 'package:bizreh_admin/services/orders_service.dart';
 import 'package:bizreh_admin/services/payment_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 enum PaymentTableType { orders, payments }
 
 class UserPaymentsAndOrdersController extends GetxController {
-  final PaymentService _paymentService = PaymentService();
-  final OrdersService _ordersService = OrdersService();
+  final PaymentService _paymentService = sl<PaymentService>();
+  final OrdersService _ordersService = sl<OrdersService>();
 
   final Rx<UserPaymentAndOrderModel?> data = Rx<UserPaymentAndOrderModel?>(
     null,

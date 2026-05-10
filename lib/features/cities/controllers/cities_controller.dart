@@ -6,10 +6,11 @@ import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/cities_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class CitiesController extends GetxController {
-  final CitiesService _service = CitiesService();
+  final CitiesService _service = sl<CitiesService>();
 
   final RxList<CityModel> cities = <CityModel>[].obs;
   final RxBool isLoading = false.obs;

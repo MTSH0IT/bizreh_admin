@@ -8,6 +8,7 @@ import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/brands_service.dart';
 import 'package:bizreh_admin/services/products_service.dart';
 import 'package:bizreh_admin/services/sub_category_service.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,9 +17,9 @@ import '../../Brands/controllers/brands_controler.dart';
 import '../../sub_category/controllers/all_sub_category_crud_controller.dart';
 
 class ProductsController extends GetxController {
-  final ProductsService _productsService = ProductsService();
-  final BrandsService _brandsService = BrandsService();
-  final SubCategoryService _subCategoryService = SubCategoryService();
+  final ProductsService _productsService = sl<ProductsService>();
+  final BrandsService _brandsService = sl<BrandsService>();
+  final SubCategoryService _subCategoryService = sl<SubCategoryService>();
 
   // Data
   final RxList<ProductModel> products = <ProductModel>[].obs;

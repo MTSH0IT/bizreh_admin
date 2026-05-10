@@ -2,14 +2,15 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bizreh_admin/features/users/models/user_model.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:bizreh_admin/services/users_service.dart';
 import 'package:bizreh_admin/services/notification_service.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 
 class UsersController extends GetxController {
-  final UsersService _usersService = UsersService();
-  final NotificationService _notificationService = NotificationService();
+  final UsersService _usersService = sl<UsersService>();
+  final NotificationService _notificationService = sl<NotificationService>();
 
   final RxList<UserModel> users = <UserModel>[].obs;
   final RxBool isLoading = false.obs;

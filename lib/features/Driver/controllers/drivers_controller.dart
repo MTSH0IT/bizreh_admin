@@ -8,11 +8,12 @@ import 'package:bizreh_admin/services/driver_service.dart';
 import 'package:bizreh_admin/services/suppliers_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class DriversController extends GetxController {
-  final DriverService _driverService = DriverService();
-  final SuppliersService _suppliersService = SuppliersService();
+  final DriverService _driverService = sl<DriverService>();
+  final SuppliersService _suppliersService = sl<SuppliersService>();
 
   final RxList<DriverModel> drivers = <DriverModel>[].obs;
   final RxBool isLoading = false.obs;

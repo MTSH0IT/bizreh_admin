@@ -5,10 +5,11 @@ import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/gifts_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class GiftsController extends GetxController {
-  final GiftsService _giftsService = GiftsService();
+  final GiftsService _giftsService = sl<GiftsService>();
 
   final RxList<GiftsModel> gifts = <GiftsModel>[].obs;
   final RxBool isLoading = false.obs;

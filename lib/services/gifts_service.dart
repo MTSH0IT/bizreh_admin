@@ -1,20 +1,22 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/gifts/models/gifts_model.dart';
-import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
+import 'package:bizreh_admin/helper/dioApiService/i_api_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';
 import 'package:bizreh_admin/utils/models/api_response.dart';
 import 'package:dio/dio.dart';
 
 class GiftsService {
-  final DioClient _dioClient = DioClient();
+  final IApiClient _apiClient;
+
+  GiftsService({required IApiClient apiClient}) : _apiClient = apiClient;
 
   Future<List<GiftsModel>> getGifts() async {
     try {
-      final response = await _dioClient.get(ApiEndpoint.getGifts);
+      final data = await _apiClient.get(ApiEndpoint.getGifts);
 
-      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+      final apiResponse = ApiResponse.fromJson(data, (json) {
         final List list = (json as List?) ?? [];
         return list
             .map((e) => GiftsModel.fromJson(e as Map<String, dynamic>))
@@ -26,16 +28,8 @@ class GiftsService {
       } else {
         throw Exception(apiResponse.message ?? 'Something went wrong');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          "gifts service AppException getGifts : ${err.message}${err.statusCode}",
-        );
-        throw err;
-      }
-      log("gifts service DioException getGifts : ${e.message}");
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log("gifts service catch getGifts : ${e.toString()}");
       throw Exception(e.toString());
@@ -58,29 +52,21 @@ class GiftsService {
         'is_active': isActive,
       });
 
-      final response = await _dioClient.post(
+      final data = await _apiClient.post(
         ApiEndpoint.createGift,
         data: formData,
       );
 
       final apiResponse = ApiResponse<dynamic>.fromJson(
-        response.data,
+        data,
         (j) => j,
       );
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to create gift');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          "gifts service AppException createGift : ${err.message}${err.statusCode}",
-        );
-        throw err;
-      }
-      log("gifts service DioException createGift : ${e.message}");
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log("gifts service catch createGift : ${e.toString()}");
       throw Exception(e.toString());
@@ -104,29 +90,21 @@ class GiftsService {
         'is_active': isActive,
       });
 
-      final response = await _dioClient.put(
+      final data = await _apiClient.put(
         ApiEndpoint.updateGift(id),
         data: formData,
       );
 
       final apiResponse = ApiResponse<dynamic>.fromJson(
-        response.data,
+        data,
         (j) => j,
       );
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to update gift');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          "gifts service AppException updateGift : ${err.message}${err.statusCode}",
-        );
-        throw err;
-      }
-      log("gifts service DioException updateGift : ${e.message}");
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log("gifts service catch updateGift : ${e.toString()}");
       throw Exception(e.toString());
@@ -135,23 +113,15 @@ class GiftsService {
 
   Future<void> deleteGift(int id) async {
     try {
-      final response = await _dioClient.delete(ApiEndpoint.deleteGift(id));
+      final data = await _apiClient.delete(ApiEndpoint.deleteGift(id));
 
-      final apiResponse = ApiResponse.fromJson(response.data, (json) => json);
+      final apiResponse = ApiResponse.fromJson(data, (json) => json);
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to delete gift');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          "gifts service AppException deleteGift : ${err.message}${err.statusCode}",
-        );
-        throw err;
-      }
-      log("gifts service DioException deleteGift : ${e.message}");
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log("gifts service catch deleteGift : ${e.toString()}");
       throw Exception(e.toString());

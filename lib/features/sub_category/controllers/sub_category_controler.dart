@@ -6,10 +6,11 @@ import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/sub_category_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class SubCategoryController extends GetxController {
-  final SubCategoryService _subCategoryService = SubCategoryService();
+  final SubCategoryService _subCategoryService = sl<SubCategoryService>();
 
   // بيانات
   final RxList<SubCategoryModel> subCategories = <SubCategoryModel>[].obs;

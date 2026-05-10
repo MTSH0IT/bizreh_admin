@@ -29,6 +29,7 @@ class UserGiftsView extends StatelessWidget {
             SearchField(
               hintText: 'Search by gift or user...',
               onChanged: controller.setSearchQuery,
+              initialValue: controller.searchQuery.value,
             ),
             const SizedBox(width: 16),
           ],

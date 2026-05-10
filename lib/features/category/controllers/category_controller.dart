@@ -3,12 +3,13 @@ import 'dart:developer';
 import 'package:bizreh_admin/features/category/models/category_model.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/category_service.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CategoryController extends GetxController {
-  final CategoryService _categoryService = CategoryService();
+  final CategoryService _categoryService = sl<CategoryService>();
 
   // Reactive data
   final RxList<CategoryModel> categories = <CategoryModel>[].obs;

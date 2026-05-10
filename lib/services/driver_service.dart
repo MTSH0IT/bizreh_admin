@@ -1,20 +1,21 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/Driver/models/driver_model.dart';
-import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
+import 'package:bizreh_admin/helper/dioApiService/i_api_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';
 import 'package:bizreh_admin/utils/models/api_response.dart';
-import 'package:dio/dio.dart';
 
 class DriverService {
-  final DioClient _dioClient = DioClient();
+  final IApiClient _apiClient;
+
+  DriverService({required IApiClient apiClient}) : _apiClient = apiClient;
 
   Future<List<DriverModel>> getDrivers() async {
     try {
-      final response = await _dioClient.get(ApiEndpoint.getDrivers);
+      final data = await _apiClient.get(ApiEndpoint.getDrivers);
 
-      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+      final apiResponse = ApiResponse.fromJson(data, (json) {
         final List list = (json['drivers'] as List?) ?? <dynamic>[];
         return list
             .map((e) => DriverModel.fromJson(e as Map<String, dynamic>))
@@ -26,16 +27,8 @@ class DriverService {
       } else {
         throw Exception(apiResponse.message ?? 'Something went wrong');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'driver service AppException getDrivers : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('driver service DioException getDrivers : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('driver service catch getDrivers : ${e.toString()}');
       throw Exception(e.toString());
@@ -66,25 +59,17 @@ class DriverService {
         'is_active': isActive,
       };
 
-      final response = await _dioClient.post(
+      final data = await _apiClient.post(
         ApiEndpoint.createDriver,
         data: body,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to create driver');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'driver service AppException createDriver : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('driver service DioException createDriver : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('driver service catch createDriver : ${e.toString()}');
       throw Exception(e.toString());
@@ -98,27 +83,19 @@ class DriverService {
     try {
       final body = {'is_active': isActive};
 
-      final response = await _dioClient.patch(
+      final data = await _apiClient.patch(
         ApiEndpoint.changeDriverStatus(id),
         data: body,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
       if (!apiResponse.success) {
         throw Exception(
           apiResponse.message ?? 'Failed to change driver status',
         );
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'driver service AppException changeDriverStatus : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('driver service DioException changeDriverStatus : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('driver service catch changeDriverStatus : ${e.toString()}');
       throw Exception(e.toString());
@@ -127,22 +104,14 @@ class DriverService {
 
   Future<void> deleteDriver(int id) async {
     try {
-      final response = await _dioClient.delete(ApiEndpoint.deleteDriver(id));
+      final data = await _apiClient.delete(ApiEndpoint.deleteDriver(id));
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to delete driver');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'driver service AppException deleteDriver : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('driver service DioException deleteDriver : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('driver service catch deleteDriver : ${e.toString()}');
       throw Exception(e.toString());

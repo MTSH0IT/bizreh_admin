@@ -3,11 +3,12 @@ import 'package:bizreh_admin/features/super_category/models/super_category_model
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bizreh_admin/services/super_category_service.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 
 class SuperCategoryController extends GetxController {
-  final SuperCategoryService _superCategoryService = SuperCategoryService();
+  final SuperCategoryService _superCategoryService = sl<SuperCategoryService>();
 
   // Reactive variables
   final RxList<SuperCategoryModel> superCategories = <SuperCategoryModel>[].obs;

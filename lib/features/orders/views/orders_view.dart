@@ -31,6 +31,7 @@ class OrdersView extends StatelessWidget {
         SearchField(
           hintText: 'Search orders...',
           onChanged: controller.setSearchQuery,
+          initialValue: controller.searchQuery.value,
         ),
         const SizedBox(height: 12),
         ToolbarRow(

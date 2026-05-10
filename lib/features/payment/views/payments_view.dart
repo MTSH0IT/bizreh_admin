@@ -25,6 +25,7 @@ class PaymentsView extends StatelessWidget {
         SearchField(
           hintText: 'Search payments...',
           onChanged: controller.setSearchQuery,
+          initialValue: controller.searchQuery.value,
         ),
         const SizedBox(height: 12),
         ToolbarRow(

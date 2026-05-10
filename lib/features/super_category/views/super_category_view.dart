@@ -25,6 +25,7 @@ class SuperCategoryView extends StatelessWidget {
         SearchField(
           hintText: 'Search super categories...',
           onChanged: (v) => controller.setSearchQuery(v),
+          initialValue: controller.searchQuery.value,
         ),
         const SizedBox(height: 12),
         ToolbarRow(

@@ -25,6 +25,7 @@ class AllSubCategoryView extends StatelessWidget {
         SearchField(
           hintText: 'Search sub categories... ',
           onChanged: subController.setSearchQuery,
+          initialValue: subController.searchQuery.value,
         ),
         const SizedBox(height: 12),
         ToolbarRow(

@@ -1,20 +1,22 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/collections/models/collection_model/collection_model.dart';
-import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
+import 'package:bizreh_admin/helper/dioApiService/i_api_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';
 import 'package:bizreh_admin/utils/models/api_response.dart';
 import 'package:dio/dio.dart';
 
 class CollectionsService {
-  final DioClient _dioClient = DioClient();
+  final IApiClient _apiClient;
+
+  CollectionsService({required IApiClient apiClient}) : _apiClient = apiClient;
 
   Future<List<CollectionModel>> getCollections() async {
     try {
-      final response = await _dioClient.get(ApiEndpoint.getCollections);
+      final data = await _apiClient.get(ApiEndpoint.getCollections);
 
-      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+      final apiResponse = ApiResponse.fromJson(data, (json) {
         final List list = (json as List?) ?? <dynamic>[];
         return list
             .map((e) => CollectionModel.fromJson(e as Map<String, dynamic>))
@@ -25,16 +27,8 @@ class CollectionsService {
         return apiResponse.data as List<CollectionModel>;
       }
       throw Exception(apiResponse.message ?? 'Failed to load collections');
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'collections service AppException getCollections : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('collections service DioException getCollections : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('collections service catch getCollections : ${e.toString()}');
       throw Exception(e.toString());
@@ -58,29 +52,19 @@ class CollectionsService {
         'image': await MultipartFile.fromFile(imagePath),
       });
 
-      final response = await _dioClient.post(
+      final data = await _apiClient.post(
         ApiEndpoint.createParentCollection,
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
       if (!apiResponse.success) {
         throw Exception(
           apiResponse.message ?? 'Failed to create parent collection',
         );
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'collections service AppException createParentCollection : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log(
-        'collections service DioException createParentCollection : ${e.message}',
-      );
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('collections service catch createParentCollection : ${e.toString()}');
       throw Exception(e.toString());
@@ -114,25 +98,17 @@ class CollectionsService {
         if (customProducts != null) 'custom_products': customProducts,
       });
 
-      final response = await _dioClient.post(
+      final data = await _apiClient.post(
         ApiEndpoint.createCollection,
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to create collection');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'collections service AppException createCollection : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('collections service DioException createCollection : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('collections service catch createCollection : ${e.toString()}');
       throw Exception(e.toString());
@@ -159,27 +135,17 @@ class CollectionsService {
 
       final formData = FormData.fromMap(map);
 
-      final response = await _dioClient.put(
+      final data = await _apiClient.put(
         ApiEndpoint.updateParentCollection(id),
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to update collection');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'collections service AppException updateParentCollection : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log(
-        'collections service DioException updateParentCollection : ${e.message}',
-      );
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('collections service catch updateParentCollection : ${e.toString()}');
       throw Exception(e.toString());
@@ -216,27 +182,17 @@ class CollectionsService {
 
       final formData = FormData.fromMap(map);
 
-      final response = await _dioClient.put(
+      final data = await _apiClient.put(
         ApiEndpoint.updateProductsCollection(id),
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to update collection');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'collections service AppException updateProductsCollection : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log(
-        'collections service DioException updateProductsCollection : ${e.message}',
-      );
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log(
         'collections service catch updateProductsCollection : ${e.toString()}',
@@ -247,24 +203,16 @@ class CollectionsService {
 
   Future<void> deleteCollection(int id) async {
     try {
-      final response = await _dioClient.delete(
+      final data = await _apiClient.delete(
         ApiEndpoint.deleteCollection(id),
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to delete collection');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'collections service AppException deleteCollection : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('collections service DioException deleteCollection : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('collections service catch deleteCollection : ${e.toString()}');
       throw Exception(e.toString());

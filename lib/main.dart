@@ -7,8 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bizreh_admin/utils/storageService/storage_service.dart';
 
+import 'package:bizreh_admin/helper/di/service_locator.dart' as di;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
   await StorageService.init();
   runApp(const MyApp());
 }

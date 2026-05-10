@@ -8,11 +8,12 @@ import 'package:bizreh_admin/services/category_service.dart';
 import 'package:bizreh_admin/services/super_category_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class AllCategoryCrudController extends GetxController {
-  final CategoryService _categoryService = CategoryService();
-  final SuperCategoryService _superCategoryService = SuperCategoryService();
+  final CategoryService _categoryService = sl<CategoryService>();
+  final SuperCategoryService _superCategoryService = sl<SuperCategoryService>();
 
   final RxList<AllCategoryModel> allCategories = <AllCategoryModel>[].obs;
   final RxBool isLoading = false.obs;

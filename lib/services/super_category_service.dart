@@ -1,19 +1,22 @@
 import 'dart:developer';
+
 import 'package:bizreh_admin/features/super_category/models/super_category_model.dart';
-import 'package:dio/dio.dart';
-import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
+import 'package:bizreh_admin/helper/dioApiService/i_api_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';
 import 'package:bizreh_admin/utils/models/api_response.dart';
+import 'package:dio/dio.dart';
 
 class SuperCategoryService {
-  final DioClient _dioClient = DioClient();
+  final IApiClient _apiClient;
+
+  SuperCategoryService({required IApiClient apiClient}) : _apiClient = apiClient;
 
   Future<List<SuperCategoryModel>> getSuperCategories() async {
     try {
-      final response = await _dioClient.get(ApiEndpoint.getSuperCategories);
+      final data = await _apiClient.get(ApiEndpoint.getSuperCategories);
 
-      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+      final apiResponse = ApiResponse.fromJson(data, (json) {
         final List list = (json['super_categories'] as List?) ?? [];
         return list
             .map((e) => SuperCategoryModel.fromJson(e as Map<String, dynamic>))
@@ -25,18 +28,8 @@ class SuperCategoryService {
       } else {
         throw Exception(apiResponse.message ?? 'Something went wrong');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          "super category service AppException getSuperCategories : ${err.message}${err.statusCode}",
-        );
-        throw err;
-      }
-      log(
-        "super category service DioException getSuperCategories : ${e.message}",
-      );
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log("super category service catch getSuperCategories : ${e.toString()}");
       throw Exception(e.toString());
@@ -57,12 +50,12 @@ class SuperCategoryService {
         'image': await MultipartFile.fromFile(imagePath),
       });
 
-      final response = await _dioClient.post(
+      final data = await _apiClient.post(
         ApiEndpoint.createSuperCategory,
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
 
       if (apiResponse.success) {
         log("${apiResponse.message}");
@@ -71,18 +64,8 @@ class SuperCategoryService {
           apiResponse.message ?? 'Failed to create super category',
         );
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          "super category service AppException createSuperCategory : ${err.message}${err.statusCode}",
-        );
-        throw err;
-      }
-      log(
-        "super category service DioException createSuperCategory : ${e.message}",
-      );
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log("super category service catch createSuperCategory : ${e.toString()}");
       throw Exception(e.toString());
@@ -104,13 +87,13 @@ class SuperCategoryService {
         if (imagePath != null) 'image': await MultipartFile.fromFile(imagePath),
       });
 
-      final response = await _dioClient.put(
+      final data = await _apiClient.put(
         ApiEndpoint.updateSuperCategory(id),
         data: formData,
       );
 
       final apiResponse = ApiResponse<dynamic>.fromJson(
-        response.data,
+        data,
         (json) => json,
       );
 
@@ -119,18 +102,8 @@ class SuperCategoryService {
           apiResponse.message ?? 'Failed to update super category',
         );
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          "super category service AppException updateSuperCategory : ${err.message}${err.statusCode}",
-        );
-        throw err;
-      }
-      log(
-        "super category service DioException updateSuperCategory : ${e.message}",
-      );
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log("super category service catch updateSuperCategory : ${e.toString()}");
       throw Exception(e.toString());
@@ -139,29 +112,19 @@ class SuperCategoryService {
 
   Future<void> deleteSuperCategory(int id) async {
     try {
-      final response = await _dioClient.delete(
+      final data = await _apiClient.delete(
         ApiEndpoint.deleteSuperCategory(id),
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
 
       if (!apiResponse.success) {
         throw Exception(
           apiResponse.message ?? 'Failed to delete super category',
         );
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          "super category service AppException deleteSuperCategory : ${err.message}${err.statusCode}",
-        );
-        throw err;
-      }
-      log(
-        "super category service DioException deleteSuperCategory : ${e.message}",
-      );
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log("super category service catch deleteSuperCategory : ${e.toString()}");
       throw Exception(e.toString());

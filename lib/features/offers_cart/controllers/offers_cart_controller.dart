@@ -7,6 +7,7 @@ import 'package:bizreh_admin/services/offers_cart_service.dart';
 import 'package:bizreh_admin/services/products_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 import '../../products/controllers/products_controller.dart';
@@ -27,8 +28,8 @@ class OffersCartItemInput {
 }
 
 class OffersCartController extends GetxController {
-  final OffersCartService _service = OffersCartService();
-  final ProductsService _productsService = ProductsService();
+  final OffersCartService _service = sl<OffersCartService>();
+  final ProductsService _productsService = sl<ProductsService>();
 
   final RxList<OffersCartModel> offers = <OffersCartModel>[].obs;
   final RxBool isLoading = false.obs;
@@ -123,6 +124,23 @@ class OffersCartController extends GetxController {
     }
 
     super.onClose();
+  }
+
+  @override
+  Future<void> refresh() async {
+    try {
+      isLoading.value = true;
+      final fetched = await _service.getOffersCart();
+      offers.assignAll(fetched);
+    } on AppException catch (e) {
+      showMassage(e.message, false);
+      log('AppException in getOffers: ${e.message}');
+    } catch (e) {
+      showMassage('Failed to load offers', false);
+      log('Error in getOffers: $e');
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   Future<void> getOffers() async {

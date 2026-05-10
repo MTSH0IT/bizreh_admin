@@ -4,10 +4,11 @@ import 'package:bizreh_admin/features/payment/models/user_payment_py_year/user_p
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/payment_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class UserReportsController extends GetxController {
-  final PaymentService _service = PaymentService();
+  final PaymentService _service = sl<PaymentService>();
 
   final RxList<UserPaymentPyYear> userReports = <UserPaymentPyYear>[].obs;
   final RxBool isLoadingUserReports = false.obs;

@@ -2,20 +2,22 @@ import 'dart:developer';
 
 import 'package:bizreh_admin/features/category/models/all_category_model.dart';
 import 'package:bizreh_admin/features/category/models/category_model.dart';
-import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
+import 'package:bizreh_admin/helper/dioApiService/i_api_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';
 import 'package:bizreh_admin/utils/models/api_response.dart';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart'; // Still needed for MultipartFile/FormData for now, unless we abstract it further
 
 class CategoryService {
-  final DioClient _dioClient = DioClient();
+  final IApiClient _apiClient;
+
+  CategoryService({required IApiClient apiClient}) : _apiClient = apiClient;
 
   Future<List<AllCategoryModel>> getAllCategories() async {
     try {
-      final response = await _dioClient.get(ApiEndpoint.getAllCategories);
+      final data = await _apiClient.get(ApiEndpoint.getAllCategories);
 
-      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+      final apiResponse = ApiResponse.fromJson(data, (json) {
         final List list = (json['sub_categories'] as List?) ?? <dynamic>[];
         return list
             .map((e) => AllCategoryModel.fromJson(e as Map<String, dynamic>))
@@ -26,16 +28,8 @@ class CategoryService {
         return apiResponse.data as List<AllCategoryModel>;
       }
       throw Exception(apiResponse.message ?? 'Something went wrong');
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'category service AppException getAllCategories : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('category service DioException getAllCategories : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('category service catch getAllCategories : ${e.toString()}');
       throw Exception(e.toString());
@@ -44,11 +38,11 @@ class CategoryService {
 
   Future<List<CategoryModel>> getCategories(int superCategoryId) async {
     try {
-      final response = await _dioClient.get(
+      final data = await _apiClient.get(
         ApiEndpoint.getCategories(superCategoryId),
       );
 
-      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+      final apiResponse = ApiResponse.fromJson(data, (json) {
         final categoriesWrapper = json['categories'];
         final List list =
             (categoriesWrapper?['categories'] as List?) ?? <dynamic>[];
@@ -62,16 +56,8 @@ class CategoryService {
       } else {
         throw Exception(apiResponse.message ?? 'Something went wrong');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'category service AppException getCategories : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('category service DioException getCategories : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('category service catch getCategories : ${e.toString()}');
       throw Exception(e.toString());
@@ -94,26 +80,18 @@ class CategoryService {
         'image': await MultipartFile.fromFile(imagePath),
       });
 
-      final response = await _dioClient.post(
+      final data = await _apiClient.post(
         ApiEndpoint.createCategory,
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to create category');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'category service AppException createCategory : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('category service DioException createCategory : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('category service catch createCategory : ${e.toString()}');
       throw Exception(e.toString());
@@ -142,29 +120,21 @@ class CategoryService {
 
       final formData = FormData.fromMap(map);
 
-      final response = await _dioClient.put(
+      final data = await _apiClient.put(
         ApiEndpoint.updateCategory(id),
         data: formData,
       );
 
       final apiResponse = ApiResponse<dynamic>.fromJson(
-        response.data,
+        data,
         (json) => json,
       );
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to update category');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'category service AppException updateCategory : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('category service DioException updateCategory : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('category service catch updateCategory : ${e.toString()}');
       throw Exception(e.toString());
@@ -173,23 +143,15 @@ class CategoryService {
 
   Future<void> deleteCategory(int id) async {
     try {
-      final response = await _dioClient.delete(ApiEndpoint.deleteCategory(id));
+      final data = await _apiClient.delete(ApiEndpoint.deleteCategory(id));
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to delete category');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'category service AppException deleteCategory : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('category service DioException deleteCategory : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('category service catch deleteCategory : ${e.toString()}');
       throw Exception(e.toString());

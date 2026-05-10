@@ -17,14 +17,15 @@ import 'package:bizreh_admin/services/products_service.dart';
 import 'package:bizreh_admin/services/sub_category_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class DiscountsController extends GetxController {
-  final DiscountsService _discountsService = DiscountsService();
-  final ProductsService _productsService = ProductsService();
-  final BrandsService _brandsService = BrandsService();
-  final CategoryService _categoryService = CategoryService();
-  final SubCategoryService _subCategoryService = SubCategoryService();
+  final DiscountsService _discountsService = sl<DiscountsService>();
+  final ProductsService _productsService = sl<ProductsService>();
+  final BrandsService _brandsService = sl<BrandsService>();
+  final CategoryService _categoryService = sl<CategoryService>();
+  final SubCategoryService _subCategoryService = sl<SubCategoryService>();
 
   final RxList<DiscountModel> discounts = <DiscountModel>[].obs;
   final RxBool isLoading = false.obs;

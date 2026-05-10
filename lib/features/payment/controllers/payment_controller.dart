@@ -5,10 +5,11 @@ import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/payment_service.dart';
 import 'package:bizreh_admin/utils/func/show_massage_snacbar.dart';
 import 'package:flutter/material.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:get/get.dart';
 
 class PaymentController extends GetxController {
-  final PaymentService _service = PaymentService();
+  final PaymentService _service = sl<PaymentService>();
 
   final RxList<PaymentModel> payments = <PaymentModel>[].obs;
   final RxBool isLoading = false.obs;

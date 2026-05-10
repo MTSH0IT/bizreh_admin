@@ -2,22 +2,24 @@ import 'dart:developer';
 
 import 'package:bizreh_admin/features/sub_category/models/all_sub_category_model.dart';
 import 'package:bizreh_admin/features/sub_category/models/sub_category_model.dart';
-import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
+import 'package:bizreh_admin/helper/dioApiService/i_api_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';
 import 'package:bizreh_admin/utils/models/api_response.dart';
 import 'package:dio/dio.dart';
 
 class SubCategoryService {
-  final DioClient _dioClient = DioClient();
+  final IApiClient _apiClient;
+
+  SubCategoryService({required IApiClient apiClient}) : _apiClient = apiClient;
 
   Future<List<SubCategoryModel>> getSubCategories(int categoryId) async {
     try {
-      final response = await _dioClient.get(
+      final data = await _apiClient.get(
         ApiEndpoint.getSubCategories(categoryId),
       );
 
-      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+      final apiResponse = ApiResponse.fromJson(data, (json) {
         final List list = (json['sub_categories'] as List?) ?? <dynamic>[];
         return list
             .map((e) => SubCategoryModel.fromJson(e as Map<String, dynamic>))
@@ -29,16 +31,8 @@ class SubCategoryService {
       } else {
         throw Exception(apiResponse.message ?? 'Something went wrong');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'subCategory service AppException getSubCategories : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('subCategory service DioException getSubCategories : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('subCategory service catch getSubCategories : ${e.toString()}');
       throw Exception(e.toString());
@@ -61,26 +55,18 @@ class SubCategoryService {
         'image': await MultipartFile.fromFile(imagePath),
       });
 
-      final response = await _dioClient.post(
+      final data = await _apiClient.post(
         ApiEndpoint.createSubCategory,
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to create sub category');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'subCategory service AppException createSubCategory : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('subCategory service DioException createSubCategory : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('subCategory service catch createSubCategory : ${e.toString()}');
       throw Exception(e.toString());
@@ -106,26 +92,18 @@ class SubCategoryService {
 
       final formData = FormData.fromMap(map);
 
-      final response = await _dioClient.put(
+      final data = await _apiClient.put(
         ApiEndpoint.updateSubCategory(id),
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to update sub category');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'subCategory service AppException updateSubCategory : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('subCategory service DioException updateSubCategory : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('subCategory service catch updateSubCategory : ${e.toString()}');
       throw Exception(e.toString());
@@ -134,25 +112,17 @@ class SubCategoryService {
 
   Future<void> deleteSubCategory(int id) async {
     try {
-      final response = await _dioClient.delete(
+      final data = await _apiClient.delete(
         ApiEndpoint.deleteSubCategory(id),
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to delete sub category');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'subCategory service AppException deleteSubCategory : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('subCategory service DioException deleteSubCategory : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('subCategory service catch deleteSubCategory : ${e.toString()}');
       throw Exception(e.toString());
@@ -161,8 +131,8 @@ class SubCategoryService {
 
   Future<List<AllSubCategoryModel>> getAllSubCategories() async {
     try {
-      final response = await _dioClient.get(ApiEndpoint.getAllSubCategory);
-      final apiResponse = ApiResponse.fromJson(response.data, (json) {
+      final data = await _apiClient.get(ApiEndpoint.getAllSubCategory);
+      final apiResponse = ApiResponse.fromJson(data, (json) {
         final List list = (json['sub_categories'] as List?) ?? <dynamic>[];
         return list
             .map((e) => AllSubCategoryModel.fromJson(e as Map<String, dynamic>))
@@ -174,16 +144,8 @@ class SubCategoryService {
       } else {
         throw Exception(apiResponse.message ?? 'Something went wrong');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'subCategory service AppException getSubCategories : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('subCategory service DioException getSubCategories : ${e.message}');
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('subCategory service catch getSubCategories : ${e.toString()}');
       throw Exception(e.toString());

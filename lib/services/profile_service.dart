@@ -1,20 +1,21 @@
 import 'dart:developer';
 
 import 'package:bizreh_admin/features/profile/models/profile_model.dart';
-import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
+import 'package:bizreh_admin/helper/dioApiService/i_api_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';
 import 'package:bizreh_admin/utils/models/api_response.dart';
-import 'package:dio/dio.dart';
 
 class ProfileService {
-  final DioClient _dioClient = DioClient();
+  final IApiClient _apiClient;
+
+  ProfileService({required IApiClient apiClient}) : _apiClient = apiClient;
 
   Future<ProfileModel> getProfile() async {
     try {
-      final response = await _dioClient.get(ApiEndpoint.getProfile);
+      final data = await _apiClient.get(ApiEndpoint.getProfile);
 
-      final apiResponse = ApiResponse<ProfileModel>.fromJson(response.data, (
+      final apiResponse = ApiResponse<ProfileModel>.fromJson(data, (
         json,
       ) {
         final data = (json as Map<String, dynamic>);
@@ -30,16 +31,8 @@ class ProfileService {
       throw UnknownException(
         message: apiResponse.message ?? 'Failed to load profile',
       );
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          'profile service AppException getProfile : ${err.message}${err.statusCode}',
-        );
-        throw err;
-      }
-      log('profile service DioException getProfile : ${e.message}');
-      throw UnknownException(message: e.message ?? 'Failed to load profile');
+    } on AppException {
+      rethrow;
     } catch (e) {
       log('profile service catch getProfile : ${e.toString()}');
       throw UnknownException(message: 'Failed to load profile');
@@ -51,26 +44,22 @@ class ProfileService {
     required String newPassword,
   }) async {
     try {
-      final response = await _dioClient.patch(
+      final responseData = await _apiClient.patch(
         ApiEndpoint.changePassword,
         data: {
           "current_password": currentPassword,
           "new_password": newPassword,
         },
       );
-      final apiResponse = ApiResponse.fromJson(response.data, null);
+      final apiResponse = ApiResponse.fromJson(responseData, null);
       if (apiResponse.success) {
         log("user service change password : ${apiResponse.message}");
         return;
       } else {
         throw Exception(apiResponse.message ?? 'Something went wrong');
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        throw err;
-      }
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       throw Exception(e.toString());
     }

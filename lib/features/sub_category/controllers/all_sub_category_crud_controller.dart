@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bizreh_admin/features/category/models/all_category_model.dart';
 import 'package:bizreh_admin/features/sub_category/models/all_sub_category_model.dart';
+import 'package:bizreh_admin/helper/di/service_locator.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/services/category_service.dart';
 import 'package:bizreh_admin/services/sub_category_service.dart';
@@ -12,8 +13,8 @@ import 'package:get/get.dart';
 import '../../category/controllers/all_category_crud_controller.dart';
 
 class AllSubCategoryCrudController extends GetxController {
-  final SubCategoryService _subCategoryService = SubCategoryService();
-  final CategoryService _categoryService = CategoryService();
+  final SubCategoryService _subCategoryService = sl<SubCategoryService>();
+  final CategoryService _categoryService = sl<CategoryService>();
 
   final RxList<AllSubCategoryModel> allSubCategories =
       <AllSubCategoryModel>[].obs;

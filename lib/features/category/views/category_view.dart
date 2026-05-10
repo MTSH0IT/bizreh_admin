@@ -32,6 +32,7 @@ class CategoryView extends StatelessWidget {
         SearchField(
           hintText: 'Search categories...',
           onChanged: categoryController.setSearchQuery,
+          initialValue: categoryController.searchQuery.value,
         ),
         const SizedBox(height: 12),
         ToolbarRow(

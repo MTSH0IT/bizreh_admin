@@ -55,6 +55,7 @@ class _UserPaymentsAndOrdersViewState extends State<UserPaymentsAndOrdersView> {
         SearchField(
           hintText: 'Search orders and payments...',
           onChanged: controller.setSearchQuery,
+          initialValue: controller.searchQuery.value,
         ),
         const SizedBox(height: 12),
         ToolbarRow(

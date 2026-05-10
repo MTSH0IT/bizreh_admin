@@ -1,13 +1,15 @@
 import 'dart:developer';
 
-import 'package:dio/dio.dart';
-import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
+import 'package:bizreh_admin/helper/dioApiService/i_api_client.dart';
 import 'package:bizreh_admin/helper/exceptions/app_exception.dart';
 import 'package:bizreh_admin/utils/consts/api_endpoint.dart';
 import 'package:bizreh_admin/utils/models/api_response.dart';
+import 'package:dio/dio.dart';
 
 class ProductsOptionService {
-  final DioClient _dioClient = DioClient();
+  final IApiClient _apiClient;
+
+  ProductsOptionService({required IApiClient apiClient}) : _apiClient = apiClient;
 
   Future<void> createProductOption({
     required String optionName,
@@ -24,30 +26,20 @@ class ProductsOptionService {
           'main_image': await MultipartFile.fromFile(mainImagePath),
       });
 
-      final response = await _dioClient.post(
+      final responseData = await _apiClient.post(
         ApiEndpoint.createProductOption,
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(responseData, null);
 
       if (!apiResponse.success) {
         throw Exception(
           apiResponse.message ?? 'Failed to create product option',
         );
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          "product option service AppException createProductOption : ${err.message}${err.statusCode}",
-        );
-        throw err;
-      }
-      log(
-        "product option service DioException createProductOption : ${e.message}",
-      );
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log("product option service catch createProductOption : ${e.toString()}");
       throw Exception(e.toString());
@@ -70,30 +62,20 @@ class ProductsOptionService {
           'main_image': await MultipartFile.fromFile(mainImagePath),
       });
 
-      final response = await _dioClient.put(
+      final responseData = await _apiClient.put(
         ApiEndpoint.updateProductOption(id),
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(responseData, null);
 
       if (!apiResponse.success) {
         throw Exception(
           apiResponse.message ?? 'Failed to update product option',
         );
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          "product option service AppException updateProductOption : ${err.message}${err.statusCode}",
-        );
-        throw err;
-      }
-      log(
-        "product option service DioException updateProductOption : ${e.message}",
-      );
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log("product option service catch updateProductOption : ${e.toString()}");
       throw Exception(e.toString());
@@ -102,29 +84,19 @@ class ProductsOptionService {
 
   Future<void> deleteProductOption(int id) async {
     try {
-      final response = await _dioClient.delete(
+      final responseData = await _apiClient.delete(
         ApiEndpoint.deleteProductOption(id),
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(response.data, null);
+      final apiResponse = ApiResponse<dynamic>.fromJson(responseData, null);
 
       if (!apiResponse.success) {
         throw Exception(
           apiResponse.message ?? 'Failed to delete product option',
         );
       }
-    } on DioException catch (e) {
-      final err = e.error;
-      if (err is AppException) {
-        log(
-          "product option service AppException deleteProductOption : ${err.message}${err.statusCode}",
-        );
-        throw err;
-      }
-      log(
-        "product option service DioException deleteProductOption : ${e.message}",
-      );
-      throw Exception(e.message);
+    } on AppException {
+      rethrow;
     } catch (e) {
       log("product option service catch deleteProductOption : ${e.toString()}");
       throw Exception(e.toString());

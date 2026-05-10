@@ -47,6 +47,7 @@ class _UserPaymentsReportByYearViewState
         SearchField(
           hintText: 'Search reports...',
           onChanged: controller.setUserReportSearchQuery,
+          initialValue: controller.userReportSearchQuery.value,
         ),
         const SizedBox(height: 12),
         ToolbarRow(
