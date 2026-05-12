@@ -28,6 +28,8 @@ class SuppliersController extends GetxController {
   final RxList<CityModel> cities = <CityModel>[].obs;
   final RxBool isMetaLoading = false.obs;
   final RxInt selectedCityId = 0.obs;
+  final RxInt isActive = 1.obs;
+  final RxBool isPasswordVisible = false.obs;
 
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -99,6 +101,7 @@ class SuppliersController extends GetxController {
         phone: phoneController.text.trim(),
         password: passwordController.text.trim(),
         cityId: selectedCityId.value,
+        isActive: isActive.value,
       );
       await getSuppliers();
       clearForm();
@@ -118,7 +121,7 @@ class SuppliersController extends GetxController {
   Future<void> updateSupplier() async {
     final current = selectedSupplier.value;
     if (current?.id == null) return;
-    if (!_validateForm(requirePassword: false, requireCity: false)) return;
+    if (!_validateForm(requirePassword: false, requireCity: true)) return;
 
     try {
       isUpdating.value = true;
@@ -128,6 +131,8 @@ class SuppliersController extends GetxController {
         lastName: lastNameController.text.trim(),
         email: emailController.text.trim(),
         phone: phoneController.text.trim(),
+        cityId: selectedCityId.value,
+        isActive: isActive.value,
       );
       await getSuppliers();
       clearForm();
@@ -206,6 +211,7 @@ class SuppliersController extends GetxController {
     phoneController.clear();
     passwordController.clear();
     selectedCityId.value = 0;
+    isActive.value = 1;
     selectedSupplier.value = null;
   }
 
@@ -216,11 +222,16 @@ class SuppliersController extends GetxController {
     emailController.text = model.email ?? '';
     phoneController.text = model.phone ?? '';
     passwordController.clear();
-    selectedCityId.value = 0;
+    selectedCityId.value = int.parse(model.cityIds ?? '0');
+    isActive.value = model.isActive ?? 1;
   }
 
   void setSearchQuery(String q) {
     searchQuery.value = q;
+  }
+
+  void togglePasswordVisibility() {
+    isPasswordVisible.value = !isPasswordVisible.value;
   }
 
   List<SupplierModel> get filteredSuppliers {

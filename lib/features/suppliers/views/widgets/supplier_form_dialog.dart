@@ -63,43 +63,70 @@ class SupplierFormDialog extends StatelessWidget {
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           ),
           if (!isEditing)
-            LabeledTextField(
-              label: 'Password',
-              hint: 'Enter password',
-              controller: controller.passwordController,
-              obscureText: true,
+            Obx(
+              () => LabeledTextField(
+                label: 'Password',
+                hint: 'Enter password',
+                controller: controller.passwordController,
+                obscureText: !controller.isPasswordVisible.value,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    controller.isPasswordVisible.value
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                    color: const Color(0xFF6B7280),
+                  ),
+                  onPressed: controller.togglePasswordVisibility,
+                ),
+              ),
             ),
           const SizedBox(height: 12),
-          if (!isEditing)
-            Obx(() {
-              final loading = controller.isMetaLoading.value;
-              final items = controller.cities
-                  .where((c) => c.id != null)
-                  .map(
-                    (c) => DropdownMenuItem<int>(
-                      value: c.id!,
-                      child: Text(c.title ?? c.arTitle ?? 'City #${c.id!}'),
-                    ),
-                  )
-                  .toList();
+          Obx(() {
+            final loading = controller.isMetaLoading.value;
+            final items = controller.cities
+                .where((c) => c.id != null)
+                .map(
+                  (c) => DropdownMenuItem<int>(
+                    value: c.id!,
+                    child: Text(c.title ?? c.arTitle ?? 'City #${c.id!}'),
+                  ),
+                )
+                .toList();
 
-              final selected = controller.selectedCityId.value == 0
-                  ? null
-                  : controller.selectedCityId.value;
+            final selected = controller.selectedCityId.value == 0
+                ? null
+                : controller.selectedCityId.value;
 
-              return LoadingDropdownFormField2<int>(
-                isLoading: loading,
-                items: items,
-                value: selected,
-                labelText: 'City',
-                hintText: 'Select city',
-                enableSearch: true,
-                searchHintText: 'Search city...',
-                onChanged: (v) {
-                  controller.selectedCityId.value = v ?? 0;
-                },
-              );
-            }),
+            return LoadingDropdownFormField2<int>(
+              isLoading: loading,
+              items: items,
+              value: selected,
+              labelText: 'City',
+              hintText: 'Select city',
+              enableSearch: true,
+              searchHintText: 'Search city...',
+              onChanged: (v) {
+                controller.selectedCityId.value = v ?? 0;
+              },
+            );
+          }),
+          const SizedBox(height: 12),
+          Obx(() {
+            return LoadingDropdownFormField2<int>(
+              isLoading: false,
+              items: const [
+                DropdownMenuItem(value: 1, child: Text('Active')),
+                DropdownMenuItem(value: 0, child: Text('Inactive')),
+              ],
+              value: controller.isActive.value,
+              onChanged: (v) {
+                if (v == null) return;
+                controller.isActive.value = v;
+              },
+              labelText: 'Status',
+              hintText: 'Select status',
+            );
+          }),
         ],
       ),
     );

@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 
 class ProductOptionsController extends GetxController {
   final ProductsOptionService _service;
-  final ProductsService productsService;
+  final ProductsService _productsService;
 
   final ProductModel product;
 
@@ -20,7 +20,7 @@ class ProductOptionsController extends GetxController {
     required ProductsOptionService service,
     required ProductsService productsService,
   }) : _service = service,
-       productsService = productsService;
+       _productsService = productsService;
 
   final RxList<Option> options = <Option>[].obs;
 
@@ -60,7 +60,7 @@ class ProductOptionsController extends GetxController {
     try {
       isReloading.value = true;
 
-      final ProductModel? updated = await productsService.getProductById(
+      final ProductModel? updated = await _productsService.getProductById(
         productId,
       );
 

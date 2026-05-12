@@ -11,6 +11,7 @@ class LabeledTextField extends StatelessWidget {
   final bool obscureText;
   final int? maxLines;
   final ValueChanged<String>? onChanged;
+  final Widget? suffixIcon;
 
   const LabeledTextField({
     super.key,
@@ -23,6 +24,7 @@ class LabeledTextField extends StatelessWidget {
     this.obscureText = false,
     this.maxLines = 1,
     this.onChanged,
+    this.suffixIcon,
   });
 
   @override
@@ -81,6 +83,7 @@ class LabeledTextField extends StatelessWidget {
                 ),
               ),
               errorText: errorText,
+              suffixIcon: suffixIcon,
             ),
           ),
         ],

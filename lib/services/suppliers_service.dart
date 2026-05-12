@@ -41,6 +41,7 @@ class SuppliersService {
     required String phone,
     required String password,
     required int cityId,
+    required int isActive,
   }) async {
     try {
       final body = {
@@ -50,6 +51,7 @@ class SuppliersService {
         'email': email,
         'phone': phone,
         'city_id': cityId,
+        'is_active': isActive,
       };
 
       final responseData = await _apiClient.post(
@@ -75,6 +77,8 @@ class SuppliersService {
     required String lastName,
     required String email,
     required String phone,
+    required int cityId,
+    required int isActive,
   }) async {
     try {
       final body = {
@@ -82,6 +86,8 @@ class SuppliersService {
         'last_name': lastName,
         'email': email,
         'phone': phone,
+        'city_id': cityId,
+        'is_active': isActive,
       };
 
       final responseData = await _apiClient.put(
@@ -103,7 +109,9 @@ class SuppliersService {
 
   Future<void> deleteSupplier(int id) async {
     try {
-      final responseData = await _apiClient.delete(ApiEndpoint.deleteSupplier(id));
+      final responseData = await _apiClient.delete(
+        ApiEndpoint.deleteSupplier(id),
+      );
 
       final apiResponse = ApiResponse<dynamic>.fromJson(responseData, null);
       if (!apiResponse.success) {

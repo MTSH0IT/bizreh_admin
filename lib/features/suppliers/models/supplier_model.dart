@@ -7,6 +7,7 @@ class SupplierModel {
   int? isActive;
   DateTime? createdAt;
   String? cities;
+  String? cityIds;
   int? driversCount;
   int? ordersCount;
   num? totalSales;
@@ -20,6 +21,7 @@ class SupplierModel {
     this.isActive,
     this.createdAt,
     this.cities,
+    this.cityIds,
     this.driversCount,
     this.ordersCount,
     this.totalSales,
@@ -27,7 +29,7 @@ class SupplierModel {
 
   @override
   String toString() {
-    return 'SupplierModel(id: $id, firstName: $firstName, lastName: $lastName, email: $email, phone: $phone, isActive: $isActive, createdAt: $createdAt, cities: $cities, driversCount: $driversCount, ordersCount: $ordersCount, totalSales: $totalSales)';
+    return 'SupplierModel(id: $id, firstName: $firstName, lastName: $lastName, email: $email, phone: $phone, isActive: $isActive, createdAt: $createdAt, cities: $cities, cityIds: $cityIds, driversCount: $driversCount, ordersCount: $ordersCount, totalSales: $totalSales)';
   }
 
   factory SupplierModel.fromJson(Map<String, dynamic> json) => SupplierModel(
@@ -41,6 +43,7 @@ class SupplierModel {
         ? null
         : DateTime.parse(json['created_at'] as String),
     cities: json['cities'] as String?,
+    cityIds: json['city_ids'] as String?,
     driversCount: json['drivers_count'] as int?,
     ordersCount: json['orders_count'] as int?,
     totalSales: json['total_sales'] as num?,
@@ -55,6 +58,7 @@ class SupplierModel {
     'is_active': isActive,
     'created_at': createdAt?.toIso8601String(),
     'cities': cities,
+    'city_ids': cityIds,
     'drivers_count': driversCount,
     'orders_count': ordersCount,
     'total_sales': totalSales,
