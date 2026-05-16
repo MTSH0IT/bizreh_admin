@@ -343,7 +343,20 @@ class CollectionsController extends GetxController {
       isUpdating.value = true;
 
       final parent = selectedParentId.value;
-      final isProductsType = (model!.type ?? '').toLowerCase() == 'products';
+
+      if (parent == model!.id) {
+        showMassage('Collection cannot be its own parent', false);
+        isUpdating.value = false;
+        return;
+      }
+
+      if (_isDescendant(model.id!, parent)) {
+        showMassage('Cannot set a child collection as parent', false);
+        isUpdating.value = false;
+        return;
+      }
+
+      final isProductsType = (model.type ?? '').toLowerCase() == 'products';
 
       if (isProductsType) {
         await _service.updateProductsCollection(
@@ -481,6 +494,35 @@ class CollectionsController extends GetxController {
   String? _validateImagePath(String value, {required bool requireImage}) {
     final v = value.trim();
     if (requireImage && v.isEmpty) return 'Image is required';
+    return null;
+  }
+
+  bool _isDescendant(int collectionId, int newParentId) {
+    if (newParentId == 0) return false;
+
+    final node = _findCollectionById(collectionId, collections);
+    if (node == null) return false;
+
+    return _childrenContainId(node.subCollections, newParentId);
+  }
+
+  bool _childrenContainId(List<CollectionModel>? children, int targetId) {
+    if (children == null || children.isEmpty) return false;
+    for (final child in children) {
+      if (child.id == targetId) return true;
+      if (_childrenContainId(child.subCollections, targetId)) return true;
+    }
+    return false;
+  }
+
+  CollectionModel? _findCollectionById(int id, List<CollectionModel> list) {
+    for (final item in list) {
+      if (item.id == id) return item;
+      if (item.subCollections != null && item.subCollections!.isNotEmpty) {
+        final found = _findCollectionById(id, item.subCollections!);
+        if (found != null) return found;
+      }
+    }
     return null;
   }
 }

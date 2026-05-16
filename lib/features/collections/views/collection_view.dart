@@ -89,7 +89,10 @@ class CollectionView extends StatelessWidget {
 
   void _openCreateDialog(CollectionsController controller, {int? parentId}) {
     openFormDialog<void>(
-      onBeforeOpen: () => controller.setForCreateParent(parentId: parentId),
+      onBeforeOpen: () {
+        controller.getMeta();
+        controller.setForCreateParent(parentId: parentId);
+      },
       dialogBuilder: (_) => CollectionFormDialog(controller: controller),
     );
   }
@@ -99,7 +102,10 @@ class CollectionView extends StatelessWidget {
     CollectionModel model,
   ) {
     openFormDialog<void>(
-      onBeforeOpen: () => controller.setForEdit(model),
+      onBeforeOpen: () {
+        controller.getMeta();
+        controller.setForEdit(model);
+      },
       dialogBuilder: (_) => CollectionFormDialog(controller: controller),
     );
   }
