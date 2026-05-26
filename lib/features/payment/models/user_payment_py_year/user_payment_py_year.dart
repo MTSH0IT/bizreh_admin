@@ -17,11 +17,11 @@ class UserPaymentPyYear {
       summary: json['summary'] == null
           ? null
           : Summary.fromJson(json['summary'] as Map<String, dynamic>),
-      suggestedBonus: json['suggested_bonus'] == null
-          ? null
-          : SuggestedBonus.fromJson(
+      suggestedBonus: json['suggested_bonus'] is Map<String, dynamic>
+          ? SuggestedBonus.fromJson(
               json['suggested_bonus'] as Map<String, dynamic>,
-            ),
+            )
+          : null,
     );
   }
 
