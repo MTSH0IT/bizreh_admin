@@ -153,6 +153,9 @@ class _UserPaymentsReportByYearViewState
     );
 
     if (selectedYear != null) {
+      setState(() {
+        currentYear = selectedYear;
+      });
       controller.getUserReportsByYear(selectedYear);
     }
   }
