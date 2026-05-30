@@ -184,14 +184,63 @@ class DataTableImageCell extends StatelessWidget {
     this.borderRadius = 10,
   });
 
+  void _showImagePreview(BuildContext context, String url) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.black87,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.75,
+                  maxWidth: MediaQuery.of(context).size.width * 0.9,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: InteractiveViewer(
+                    minScale: 0.8,
+                    maxScale: 4.0,
+                    child: ImageNetwork(
+                      image: url,
+                      icon: Icons.broken_image_outlined,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              IconButton(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(Icons.close, color: Colors.white, size: 28),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final defaultSize = width ?? height ?? 54;
+    final hasImage = imageUrl != null && imageUrl!.trim().isNotEmpty;
 
-    return SizedBox(
-      width: width ?? defaultSize,
-      height: height ?? defaultSize,
+    Widget child = SizedBox(
+      width: width ?? 54,
+      height: height ?? 54,
       child: ImageNetwork(image: imageUrl ?? ''),
+    );
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: hasImage ? () => _showImagePreview(context, imageUrl!) : null,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: child,
+      ),
     );
   }
 }

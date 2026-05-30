@@ -18,7 +18,7 @@ class FormImagePickerSection extends StatelessWidget {
     required this.existingImageUrl,
     required this.isEditing,
     required this.onPathSelected,
-    this.imageQuality = 80,
+    this.imageQuality = 90,
   });
 
   @override
