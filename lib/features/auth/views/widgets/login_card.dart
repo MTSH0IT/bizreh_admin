@@ -1,4 +1,3 @@
-import 'package:bizreh_admin/utils/consts/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bizreh_admin/features/auth/views/widgets/login_button.dart';
@@ -41,11 +40,7 @@ class LoginCard extends StatelessWidget {
               shape: BoxShape.circle,
               color: Color(0xFFE0E7FF),
             ),
-            child: const Icon(
-              Icons.auto_awesome_outlined,
-              color: kprimaryColor,
-              size: 30,
-            ),
+            child: Image.asset('assets/images/logo.png', fit: BoxFit.contain),
           ),
           const SizedBox(height: 24),
           Text(
