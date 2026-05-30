@@ -1,6 +1,6 @@
 {
-    "name": "bizreh_admin",
-    "short_name": "bizreh_admin",
+    "name": "Admin BIzreh Paints",
+    "short_name": "Admin BIzreh Paints",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
