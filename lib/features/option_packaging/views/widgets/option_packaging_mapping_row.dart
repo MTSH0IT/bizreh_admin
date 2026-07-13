@@ -53,7 +53,7 @@ class OptionPackagingMappingRow extends StatelessWidget {
             const SizedBox(width: 6),
             Flexible(
               child: Text(
-                'SKU:${mapping.optionSku ?? '-'}  P:${mapping.price?.toString() ?? '-'}  S:${mapping.stock?.toString() ?? '-'}',
+                'SKU:${mapping.optionSku ?? '-'}  P:${mapping.price?.toString() ?? '-'}',
                 style: const TextStyle(fontSize: 12, color: Color(0xFF374151)),
                 overflow: TextOverflow.ellipsis,
               ),

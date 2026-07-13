@@ -18,7 +18,7 @@ class OptionPackagingFormDialog extends StatefulWidget {
   final PackageModel packaging;
   final int? mappingId;
   final num? initialPrice;
-  final int? initialStock;
+  // final int? initialStock;
   final int? initialColorId;
   final String? initialSku;
 
@@ -29,7 +29,7 @@ class OptionPackagingFormDialog extends StatefulWidget {
     required this.packaging,
     this.mappingId,
     this.initialPrice,
-    this.initialStock,
+    // this.initialStock,
     this.initialColorId,
     this.initialSku,
   });
@@ -41,7 +41,7 @@ class OptionPackagingFormDialog extends StatefulWidget {
 
 class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
   late final TextEditingController _priceController;
-  late final TextEditingController _stockController;
+  // late final TextEditingController _stockController;
   late final TextEditingController _skuController;
 
   @override
@@ -50,9 +50,9 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
     _priceController = TextEditingController(
       text: widget.initialPrice?.toString() ?? '',
     );
-    _stockController = TextEditingController(
-      text: widget.initialStock?.toString() ?? '',
-    );
+    // _stockController = TextEditingController(
+    //   text: widget.initialStock?.toString() ?? '',
+    // );
     _skuController = TextEditingController(text: widget.initialSku ?? '');
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -67,7 +67,7 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
   @override
   void dispose() {
     _priceController.dispose();
-    _stockController.dispose();
+    // _stockController.dispose();
     _skuController.dispose();
     super.dispose();
   }
@@ -105,7 +105,7 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
           },
           onSubmit: () async {
             final price = num.tryParse(_priceController.text.trim());
-            final stock = int.tryParse(_stockController.text.trim());
+            // final stock = int.tryParse(_stockController.text.trim());
             final sku = _skuController.text.trim();
             final selectedColorId = widget.controller.selectedColorId.value;
             final colorId = selectedColorId == 0 ? null : selectedColorId;
@@ -115,7 +115,7 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
               productOptionId: widget.option.id!,
               packagingId: widget.packaging.id!,
               pricePerUnit: price,
-              stockQuantity: stock,
+              // stockQuantity: stock,
               optionSku: sku,
               colorId: colorId,
             );
@@ -141,13 +141,13 @@ class _OptionPackagingFormDialogState extends State<OptionPackagingFormDialog> {
               FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
             ],
           ),
-          LabeledTextField(
-            label: 'Stock quantity',
-            hint: 'Enter stock',
-            controller: _stockController,
-            keyboardType: TextInputType.number,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          ),
+          // LabeledTextField(
+          //   label: 'Stock quantity',
+          //   hint: 'Enter stock',
+          //   controller: _stockController,
+          //   keyboardType: TextInputType.number,
+          //   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          // ),
           LabeledTextField(
             label: 'SKU',
             hint: 'Enter sku',

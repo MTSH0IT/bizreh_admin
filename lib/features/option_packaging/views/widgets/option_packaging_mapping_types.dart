@@ -4,7 +4,7 @@ import 'package:bizreh_admin/features/products/models/product_model/option.dart'
 typedef OptionPackagingMapping = ({
   int? id,
   num? price,
-  int? stock,
+  // int? stock,
   int? colorId,
   String? colorDegree,
   String? optionSku,

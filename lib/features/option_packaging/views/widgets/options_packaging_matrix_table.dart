@@ -28,7 +28,7 @@ class OptionsPackagingMatrixTable extends StatelessWidget {
         results.add((
           id: p.id,
           price: p.pricePerUnit,
-          stock: p.stockQuantity,
+          // stock: p.stockQuantity,
           colorId: p.color?.id,
           colorDegree: p.color?.degree,
           optionSku: p.optionSku,

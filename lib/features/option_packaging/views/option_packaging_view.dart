@@ -161,7 +161,7 @@ class _OptionPackagingViewState extends State<OptionPackagingView> {
         packaging: args.packaging,
         mappingId: mapping?.id,
         initialPrice: mapping?.price,
-        initialStock: mapping?.stock,
+        // initialStock: mapping?.stock,
         initialColorId: mapping?.colorId,
         initialSku: mapping?.optionSku,
       ),

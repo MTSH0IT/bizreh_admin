@@ -74,7 +74,7 @@ class OptionPackagingController extends GetxController {
 
   bool validateMappingInputs({
     required num? pricePerUnit,
-    required int? stockQuantity,
+    int? stockQuantity,
     required String? optionSku,
   }) {
     if (pricePerUnit == null) {
@@ -87,15 +87,15 @@ class OptionPackagingController extends GetxController {
       return false;
     }
 
-    if (stockQuantity == null) {
-      showMassage('Please enter a valid stock quantity', false);
-      return false;
-    }
-
-    if (stockQuantity < 0) {
-      showMassage('Stock quantity cannot be negative', false);
-      return false;
-    }
+    // if (stockQuantity == null) {
+    //   showMassage('Please enter a valid stock quantity', false);
+    //   return false;
+    // }
+    //
+    // if (stockQuantity < 0) {
+    //   showMassage('Stock quantity cannot be negative', false);
+    //   return false;
+    // }
 
     if (optionSku == null || optionSku.trim().isEmpty) {
       showMassage('Please enter a valid sku', false);
@@ -130,7 +130,7 @@ class OptionPackagingController extends GetxController {
           productOptionId: productOptionId,
           packagingId: packagingId,
           pricePerUnit: pricePerUnit!,
-          stockQuantity: stockQuantity!,
+          stockQuantity: 1, // default to 1 since stock is commented out
           optionSku: optionSku.trim(),
           colorId: colorId,
         );
@@ -143,7 +143,7 @@ class OptionPackagingController extends GetxController {
           productOptionId: productOptionId,
           packagingId: packagingId,
           pricePerUnit: pricePerUnit!,
-          stockQuantity: stockQuantity!,
+          stockQuantity: 1, // default to 1 since stock is commented out
           optionSku: optionSku.trim(),
           colorId: colorId,
         );
