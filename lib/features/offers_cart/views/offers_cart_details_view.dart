@@ -115,7 +115,7 @@ class _SummaryCard extends StatelessWidget {
               Expanded(
                 child: DetailsKeyValue(
                   label: 'Price',
-                  value: offer.price ?? '-',
+                  value: offer.price?.toString() ?? '-',
                 ),
               ),
               Expanded(

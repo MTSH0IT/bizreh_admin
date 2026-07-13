@@ -248,7 +248,7 @@ class OffersCartController extends GetxController {
     arNameController.text = offer.arName ?? '';
     descriptionController.text = offer.description ?? '';
     arDescriptionController.text = offer.arDescription ?? '';
-    priceController.text = offer.price ?? '';
+    priceController.text = offer.price?.toString() ?? '';
     quantityController.text = offer.quantity?.toString() ?? '';
 
     selectedIsActive.value = offer.isActive ?? 1;

@@ -7,8 +7,8 @@ class Item {
   int? id;
   int? optionPackagingId;
   int? quantity;
-  int? pricePerUnit;
-  int? totalPrice;
+  double? pricePerUnit;
+  double? totalPrice;
   DateTime? createdAt;
   Packaging? packaging;
   ProductOption? productOption;
@@ -34,8 +34,12 @@ class Item {
     id: json['id'] as int?,
     optionPackagingId: json['option_packaging_id'] as int?,
     quantity: json['quantity'] as int?,
-    pricePerUnit: json['price_per_unit'] as int?,
-    totalPrice: json['total_price'] as int?,
+    pricePerUnit: json['price_per_unit'] != null
+        ? double.tryParse(json['price_per_unit'].toString())
+        : null,
+    totalPrice: json['total_price'] != null
+        ? double.tryParse(json['total_price'].toString())
+        : null,
     createdAt: json['created_at'] == null
         ? null
         : DateTime.parse(json['created_at'] as String),

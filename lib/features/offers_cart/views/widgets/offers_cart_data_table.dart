@@ -69,7 +69,7 @@ class OffersCartDataTable extends StatelessWidget {
         return [
           DataCell(DataTableTextCell(text: o.name)),
           DataCell(DataTableTextCell(text: o.arName)),
-          DataCell(DataTableTextCell(text: o.price)),
+          DataCell(DataTableTextCell(text: o.price?.toString())),
           DataCell(DataTableNumberCell(number: o.quantity)),
           DataCell(DataTableNumberCell(number: o.itemsCount)),
           DataCell(
