@@ -59,8 +59,10 @@ class ProductsController extends GetxController {
   // Selected product for edit
   final Rx<ProductModel?> selectedProduct = Rx<ProductModel?>(null);
 
-  // Search
+  // Search and filters
   final RxString searchQuery = ''.obs;
+  final RxInt filterBrandId = 0.obs;
+  final RxInt filterSubCategoryId = 0.obs;
 
   @override
   void onInit() {
@@ -325,6 +327,14 @@ class ProductsController extends GetxController {
     searchQuery.value = query;
   }
 
+  void setFilterBrandId(int? id) {
+    filterBrandId.value = id ?? 0;
+  }
+
+  void setFilterSubCategoryId(int? id) {
+    filterSubCategoryId.value = id ?? 0;
+  }
+
   List<String> _parseTagsFromText(String raw) {
     final tags = <String>[];
     for (final part in raw.split(RegExp(r'[,\n\u060C]'))) {
@@ -354,13 +364,27 @@ class ProductsController extends GetxController {
 
   List<ProductModel> get filteredProducts {
     final q = searchQuery.value.trim().toLowerCase();
-    if (q.isEmpty) return products.toList();
+    final brandId = filterBrandId.value;
+    final subCatId = filterSubCategoryId.value;
 
     return products.where((p) {
-      final title = (p.title ?? '').toLowerCase();
-      final arTitle = (p.arTitle ?? '').toLowerCase();
-      final tags = (p.tags ?? '').toLowerCase();
-      return title.contains(q) || arTitle.contains(q) || tags.contains(q);
+      if (q.isNotEmpty) {
+        final title = (p.title ?? '').toLowerCase();
+        final arTitle = (p.arTitle ?? '').toLowerCase();
+        final tags = (p.tags ?? '').toLowerCase();
+        final matchQuery = title.contains(q) || arTitle.contains(q) || tags.contains(q);
+        if (!matchQuery) return false;
+      }
+
+      if (brandId != 0 && p.brandId != brandId) {
+        return false;
+      }
+
+      if (subCatId != 0 && p.subCategoryId != subCatId) {
+        return false;
+      }
+
+      return true;
     }).toList();
   }
 

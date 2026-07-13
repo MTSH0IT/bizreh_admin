@@ -10,6 +10,7 @@ import 'package:bizreh_admin/utils/widgets/build_progress_indicator.dart';
 import 'package:bizreh_admin/utils/widgets/confirm_delete_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/open_form_dialog.dart';
 import 'package:bizreh_admin/utils/widgets/search_field.dart';
+import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
 import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,6 +39,80 @@ class ProductsView extends StatelessWidget {
           onRefresh: controller.getProducts,
           addText: 'Add Product',
           refreshText: 'Refresh',
+          extraActions: [
+            Obx(() {
+              return SizedBox(
+                width: 220,
+                child: LoadingDropdownFormField2<int>(
+                  isLoading: controller.isMetaLoading.value,
+                  items: [
+                    const DropdownMenuItem<int>(
+                      value: 0,
+                      child: Text('All Brands'),
+                    ),
+                    ...controller.brands
+                        .where((b) => b.id != null)
+                        .map(
+                          (b) => DropdownMenuItem<int>(
+                            value: b.id!,
+                            child: Text(
+                              b.title ?? b.arTitle ?? 'Brand #${b.id!}',
+                            ),
+                          ),
+                        ),
+                  ],
+                  value: controller.filterBrandId.value == 0
+                      ? 0
+                      : controller.filterBrandId.value,
+                  labelText: 'Filter by Brand',
+                  hintText: 'All Brands',
+                  enableSearch: true,
+                  searchHintText: 'Search brand...',
+                  onChanged: (v) {
+                    controller.setFilterBrandId(v);
+                  },
+                ),
+              );
+            }),
+            const SizedBox(width: 12),
+            Obx(() {
+              return SizedBox(
+                width: 250,
+                child: LoadingDropdownFormField2<int>(
+                  isLoading: controller.isMetaLoading.value,
+                  items: [
+                    const DropdownMenuItem<int>(
+                      value: 0,
+                      child: Text('All Sub Categories'),
+                    ),
+                    ...controller.allSubCategories
+                        .where((s) => s.id != null)
+                        .map((s) {
+                          final title = s.title ?? s.arTitle ?? 'Sub #${s.id!}';
+                          final parent = s.categoryTitle ?? s.categoryArTitle;
+                          final text = parent == null || parent.isEmpty
+                              ? title
+                              : '$title - $parent';
+                          return DropdownMenuItem<int>(
+                            value: s.id!,
+                            child: Text(text),
+                          );
+                        }),
+                  ],
+                  value: controller.filterSubCategoryId.value == 0
+                      ? 0
+                      : controller.filterSubCategoryId.value,
+                  labelText: 'Filter by Sub Category',
+                  hintText: 'All Sub Categories',
+                  enableSearch: true,
+                  searchHintText: 'Search sub category...',
+                  onChanged: (v) {
+                    controller.setFilterSubCategoryId(v);
+                  },
+                ),
+              );
+            }),
+          ],
         ),
         const SizedBox(height: 16),
         Obx(() {
