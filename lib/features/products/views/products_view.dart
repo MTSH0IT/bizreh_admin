@@ -14,6 +14,7 @@ import 'package:bizreh_admin/utils/widgets/loading_dropdown_form_field2.dart';
 import 'package:bizreh_admin/utils/widgets/toolbar_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:bizreh_admin/features/auth/controllers/auth_controller.dart';
 
 class ProductsView extends StatelessWidget {
   const ProductsView({super.key});
@@ -24,6 +25,7 @@ class ProductsView extends StatelessWidget {
     final ProductTopSellingController topSellingController =
         Get.find<ProductTopSellingController>();
     final MainNavController nav = Get.find<MainNavController>();
+    final isDataEntry = Get.find<AuthController>().isDataEntry;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +128,9 @@ class ProductsView extends StatelessWidget {
             rows: filtered,
             onDetails: (product) => _openDetailsPage(nav, product),
             onEdit: (product) => _openEditDialog(context, controller, product),
-            onDelete: (product) => _confirmDelete(context, controller, product),
+            onDelete: isDataEntry
+                ? null
+                : (product) => _confirmDelete(context, controller, product),
             onOptions: (product) => _openOptionsPage(nav, product),
             isTopSelling: (p) => topSellingController.isTopSelling(p.id),
             onToggleTopSelling: (p) =>

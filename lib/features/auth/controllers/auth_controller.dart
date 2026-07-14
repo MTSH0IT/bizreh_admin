@@ -35,6 +35,18 @@ class AuthController extends GetxController {
   final RxBool isForgettingPassword = false.obs;
   final RxBool isPasswordVisible = false.obs;
 
+  String? get userType {
+    try {
+      final userJson = _storage.getJson(StorageKey.user);
+      if (userJson != null) {
+        return userJson['user_type'] as String?;
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  bool get isDataEntry => userType == 'data_entry';
+
   String get loginEmail => loginEmailCtrl.text.trim();
   String get loginPassword => loginPasswordCtrl.text.trim();
 
