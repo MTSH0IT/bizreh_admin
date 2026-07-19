@@ -40,7 +40,9 @@ class OffersCartModel {
       arName: json['ar_name'] as String?,
       description: json['description'] as String?,
       arDescription: json['ar_description'] as String?,
-      price: json['price'] != null ? double.tryParse(json['price'].toString()) : null,
+      price: json['price'] != null
+          ? double.tryParse(json['price'].toString())
+          : null,
       quantity: json['quantity'] as int?,
       isActive: json['is_active'] as int?,
       createdAt: json['created_at'] == null

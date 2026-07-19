@@ -95,9 +95,7 @@ class ColorService {
 
   Future<void> deleteColorFamily(int id) async {
     try {
-      final data = await _apiClient.delete(
-        ApiEndpoint.deleteColerFamily(id),
-      );
+      final data = await _apiClient.delete(ApiEndpoint.deleteColerFamily(id));
 
       final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
       if (!apiResponse.success) {

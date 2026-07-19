@@ -1,3 +1,4 @@
+import 'package:bizreh_admin/services/products_sku_service.dart';
 import 'package:bizreh_admin/helper/dioApiService/dio_client.dart';
 import 'package:bizreh_admin/helper/dioApiService/dio_client_adapter.dart';
 import 'package:bizreh_admin/helper/dioApiService/i_api_client.dart';
@@ -109,6 +110,9 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<ProductTopSellingService>(
     () => ProductTopSellingService(apiClient: sl<IApiClient>()),
+  );
+  sl.registerLazySingleton<ProductsSkuService>(
+    () => ProductsSkuService(apiClient: sl<IApiClient>()),
   );
   sl.registerLazySingleton<ProductsOptionService>(
     () => ProductsOptionService(apiClient: sl<IApiClient>()),

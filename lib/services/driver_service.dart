@@ -59,10 +59,7 @@ class DriverService {
         'is_active': isActive,
       };
 
-      final data = await _apiClient.post(
-        ApiEndpoint.createDriver,
-        data: body,
-      );
+      final data = await _apiClient.post(ApiEndpoint.createDriver, data: body);
 
       final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
       if (!apiResponse.success) {

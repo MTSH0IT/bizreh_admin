@@ -17,7 +17,8 @@ class SubCategoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SubCategoryController subController = Get.find<SubCategoryController>();
+    final SubCategoryController subController =
+        Get.find<SubCategoryController>();
 
     if (categoryId != null &&
         subController.selectedCategoryId.value != categoryId) {

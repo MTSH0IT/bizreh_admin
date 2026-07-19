@@ -20,8 +20,12 @@ class LoggingInterceptor extends Interceptor {
     if (kDebugMode) {
       dynamic requestData = options.data;
       if (requestData is FormData) {
-        final fields = requestData.fields.map((e) => '${e.key}: ${e.value}').join(', ');
-        final files = requestData.files.map((e) => '${e.key}: ${e.value.filename}').join(', ');
+        final fields = requestData.fields
+            .map((e) => '${e.key}: ${e.value}')
+            .join(', ');
+        final files = requestData.files
+            .map((e) => '${e.key}: ${e.value.filename}')
+            .join(', ');
         requestData = 'FormData(fields: {$fields}, files: {$files})';
       }
 

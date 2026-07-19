@@ -95,7 +95,9 @@ class PaymentService {
 
   Future<void> deletePayment(int id) async {
     try {
-      final responseData = await _apiClient.delete(ApiEndpoint.deletePayment(id));
+      final responseData = await _apiClient.delete(
+        ApiEndpoint.deletePayment(id),
+      );
 
       final apiResponse = ApiResponse<dynamic>.fromJson(responseData, null);
       if (!apiResponse.success) {
@@ -111,9 +113,7 @@ class PaymentService {
 
   Future<List<UserPaymentPyYear>> getUserReportByYear(int year) async {
     try {
-      final data = await _apiClient.get(
-        ApiEndpoint.getUserReportByYear(year),
-      );
+      final data = await _apiClient.get(ApiEndpoint.getUserReportByYear(year));
 
       final apiResponse = ApiResponse.fromJson(data, (json) {
         final List list = (json as List?) ?? <dynamic>[];

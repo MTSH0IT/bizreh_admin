@@ -14,7 +14,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
-
   final AuthService _authService;
   final StorageService _storage;
   final ITokenProvider _tokenProvider;

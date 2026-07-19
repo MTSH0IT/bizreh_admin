@@ -8,7 +8,8 @@ import 'package:bizreh_admin/utils/models/api_response.dart';
 class OptionPackagingService {
   final IApiClient _apiClient;
 
-  OptionPackagingService({required IApiClient apiClient}) : _apiClient = apiClient;
+  OptionPackagingService({required IApiClient apiClient})
+    : _apiClient = apiClient;
 
   Future<void> createOptionPackaging({
     required int productOptionId,

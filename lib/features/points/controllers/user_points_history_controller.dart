@@ -20,8 +20,8 @@ class UserPointsHistoryController extends GetxController {
     required this.userId,
     required PointsService pointsService,
     required OrdersService ordersService,
-  })  : _pointsService = pointsService,
-        _ordersService = ordersService;
+  }) : _pointsService = pointsService,
+       _ordersService = ordersService;
 
   final Rx<UserPointHistory?> pointHistory = Rx<UserPointHistory?>(null);
   final RxList<History> history = <History>[].obs;
@@ -59,7 +59,7 @@ class UserPointsHistoryController extends GetxController {
   }
 
   Summary? get summary => pointHistory.value?.summary;
-  
+
   @override
   Future<void> refresh() async {
     await load();

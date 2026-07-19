@@ -77,9 +77,7 @@ class OffersCartService {
 
   Future<void> deleteOffer(int id) async {
     try {
-      final data = await _apiClient.delete(
-        ApiEndpoint.deleteOffersCart(id),
-      );
+      final data = await _apiClient.delete(ApiEndpoint.deleteOffersCart(id));
 
       final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
       if (!apiResponse.success) {

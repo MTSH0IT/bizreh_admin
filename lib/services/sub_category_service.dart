@@ -112,9 +112,7 @@ class SubCategoryService {
 
   Future<void> deleteSubCategory(int id) async {
     try {
-      final data = await _apiClient.delete(
-        ApiEndpoint.deleteSubCategory(id),
-      );
+      final data = await _apiClient.delete(ApiEndpoint.deleteSubCategory(id));
 
       final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
 

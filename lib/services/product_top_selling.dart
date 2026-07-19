@@ -9,7 +9,8 @@ import 'package:bizreh_admin/utils/models/api_response.dart';
 class ProductTopSellingService {
   final IApiClient _apiClient;
 
-  ProductTopSellingService({required IApiClient apiClient}) : _apiClient = apiClient;
+  ProductTopSellingService({required IApiClient apiClient})
+    : _apiClient = apiClient;
 
   Future<List<ProductModel>> getTopSellingProducts() async {
     try {

@@ -50,6 +50,7 @@ class ApiEndpoint {
   static String deleteProductOption(int id) => "/admin/product/option/$id";
 
   // Option-Packaging
+  static const String getOptionPackagings = "/admin/product/option_packaging";
   static String createOptionPackaging = "/admin/product/option-packaging";
   static String updateOptionPackaging(int id) =>
       "/admin/product/option-packaging/$id";

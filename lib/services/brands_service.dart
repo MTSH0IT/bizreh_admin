@@ -55,10 +55,7 @@ class BrandsService {
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(
-        data,
-        (json) => json,
-      );
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, (json) => json);
 
       if (apiResponse.success) {
         log("${apiResponse.message}");
@@ -93,10 +90,7 @@ class BrandsService {
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(
-        data,
-        (json) => json,
-      );
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, (json) => json);
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to update brand');

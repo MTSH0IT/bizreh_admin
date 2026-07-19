@@ -10,7 +10,8 @@ import 'package:dio/dio.dart';
 class SuperCategoryService {
   final IApiClient _apiClient;
 
-  SuperCategoryService({required IApiClient apiClient}) : _apiClient = apiClient;
+  SuperCategoryService({required IApiClient apiClient})
+    : _apiClient = apiClient;
 
   Future<List<SuperCategoryModel>> getSuperCategories() async {
     try {
@@ -92,10 +93,7 @@ class SuperCategoryService {
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(
-        data,
-        (json) => json,
-      );
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, (json) => json);
 
       if (!apiResponse.success) {
         throw Exception(
@@ -112,9 +110,7 @@ class SuperCategoryService {
 
   Future<void> deleteSuperCategory(int id) async {
     try {
-      final data = await _apiClient.delete(
-        ApiEndpoint.deleteSuperCategory(id),
-      );
+      final data = await _apiClient.delete(ApiEndpoint.deleteSuperCategory(id));
 
       final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
 

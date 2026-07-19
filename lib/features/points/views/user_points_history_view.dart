@@ -19,15 +19,15 @@ class UserPointsHistoryView extends StatelessWidget {
     final tag = userId.toString();
     final UserPointsHistoryController controller =
         Get.isRegistered<UserPointsHistoryController>(tag: tag)
-            ? Get.find<UserPointsHistoryController>(tag: tag)
-            : Get.put(
-                UserPointsHistoryController(
-                  userId: userId,
-                  pointsService: sl<PointsService>(),
-                  ordersService: sl<OrdersService>(),
-                ),
-                tag: tag,
-              );
+        ? Get.find<UserPointsHistoryController>(tag: tag)
+        : Get.put(
+            UserPointsHistoryController(
+              userId: userId,
+              pointsService: sl<PointsService>(),
+              ordersService: sl<OrdersService>(),
+            ),
+            tag: tag,
+          );
 
     return Obx(() {
       if (controller.isLoading.value) {

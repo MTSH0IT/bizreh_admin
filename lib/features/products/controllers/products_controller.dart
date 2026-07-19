@@ -372,7 +372,8 @@ class ProductsController extends GetxController {
         final title = (p.title ?? '').toLowerCase();
         final arTitle = (p.arTitle ?? '').toLowerCase();
         final tags = (p.tags ?? '').toLowerCase();
-        final matchQuery = title.contains(q) || arTitle.contains(q) || tags.contains(q);
+        final matchQuery =
+            title.contains(q) || arTitle.contains(q) || tags.contains(q);
         if (!matchQuery) return false;
       }
 

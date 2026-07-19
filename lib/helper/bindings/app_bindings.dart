@@ -27,6 +27,8 @@ import 'package:bizreh_admin/services/points_service.dart';
 import 'package:bizreh_admin/services/packaging_service.dart';
 import 'package:bizreh_admin/services/color_servise.dart';
 import 'package:bizreh_admin/services/product_top_selling.dart';
+import 'package:bizreh_admin/services/products_sku_service.dart';
+import 'package:bizreh_admin/features/products_sku/controllers/products_sku_controller.dart';
 
 // Auth
 import 'package:bizreh_admin/features/auth/controllers/auth_controller.dart';
@@ -284,6 +286,10 @@ class AppBindings extends Bindings {
     Get.lazyPut<ProductTopSellingController>(
       () =>
           ProductTopSellingController(service: sl<ProductTopSellingService>()),
+      fenix: true,
+    );
+    Get.lazyPut<ProductsSkuController>(
+      () => ProductsSkuController(productsSkuService: sl<ProductsSkuService>()),
       fenix: true,
     );
 

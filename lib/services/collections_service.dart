@@ -203,9 +203,7 @@ class CollectionsService {
 
   Future<void> deleteCollection(int id) async {
     try {
-      final data = await _apiClient.delete(
-        ApiEndpoint.deleteCollection(id),
-      );
+      final data = await _apiClient.delete(ApiEndpoint.deleteCollection(id));
 
       final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
       if (!apiResponse.success) {

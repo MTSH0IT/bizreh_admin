@@ -11,7 +11,7 @@ class TokenProvider implements ITokenProvider {
   final StorageService _storageService;
 
   TokenProvider({required StorageService storageService})
-      : _storageService = storageService;
+    : _storageService = storageService;
 
   @override
   String? getToken() {

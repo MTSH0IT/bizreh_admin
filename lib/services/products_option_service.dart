@@ -9,7 +9,8 @@ import 'package:dio/dio.dart';
 class ProductsOptionService {
   final IApiClient _apiClient;
 
-  ProductsOptionService({required IApiClient apiClient}) : _apiClient = apiClient;
+  ProductsOptionService({required IApiClient apiClient})
+    : _apiClient = apiClient;
 
   Future<void> createProductOption({
     required String optionName,

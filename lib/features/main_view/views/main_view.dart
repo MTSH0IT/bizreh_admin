@@ -1,3 +1,4 @@
+import 'package:bizreh_admin/features/products_sku/views/products_sku_view.dart';
 import 'package:bizreh_admin/features/Brands/views/brands_view.dart';
 import 'package:bizreh_admin/features/Driver/views/drivers_view.dart';
 import 'package:bizreh_admin/features/category/views/all_category_view.dart';
@@ -80,15 +81,24 @@ class _mainViewState extends State<mainView> {
         icon: Icons.collections_bookmark_outlined,
         entry: const MainNavEntry(title: 'Collection', page: CollectionView()),
       ),
-      _MainMenuItem(
-        title: 'Products',
-        icon: Icons.inventory_2_outlined,
-        entry: const MainNavEntry(title: 'Products', page: ProductsView()),
-      ),
-      _MainMenuItem(
-        title: 'Color Family',
-        icon: Icons.palette_outlined,
-        entry: const MainNavEntry(title: 'Color Family', page: ColorFamilyView()),
+       _MainMenuItem(
+         title: 'Products',
+         icon: Icons.inventory_2_outlined,
+         entry: const MainNavEntry(title: 'Products', page: ProductsView()),
+       ),
+       _MainMenuItem(
+         title: 'Product SKUs',
+         icon: Icons.qr_code,
+         entry: const MainNavEntry(title: 'Product SKUs', page: ProductsSkuView()),
+       ),
+       _MainMenuItem(
+         title: 'Color Family',
+         icon: Icons.palette_outlined,
+
+        entry: const MainNavEntry(
+          title: 'Color Family',
+          page: ColorFamilyView(),
+        ),
       ),
       _MainMenuItem(
         title: 'Top Selling',
@@ -163,10 +173,13 @@ class _mainViewState extends State<mainView> {
         'Sub Categories',
         'Collection',
         'Products',
+        'Product SKUs',
         'Color Family',
         'Packagings',
       };
-      _menuItems = allItems.where((item) => productInputTitles.contains(item.title)).toList();
+      _menuItems = allItems
+          .where((item) => productInputTitles.contains(item.title))
+          .toList();
     } else {
       _menuItems = allItems;
     }

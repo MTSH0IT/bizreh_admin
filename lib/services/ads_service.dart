@@ -55,10 +55,7 @@ class AdsService {
         'is_active': isActive,
       });
 
-      final data = await _apiClient.post(
-        ApiEndpoint.createAd,
-        data: formData,
-      );
+      final data = await _apiClient.post(ApiEndpoint.createAd, data: formData);
 
       final apiResponse = ApiResponse<dynamic>.fromJson(data, null);
       if (!apiResponse.success) {

@@ -15,9 +15,7 @@ class ProfileService {
     try {
       final data = await _apiClient.get(ApiEndpoint.getProfile);
 
-      final apiResponse = ApiResponse<ProfileModel>.fromJson(data, (
-        json,
-      ) {
+      final apiResponse = ApiResponse<ProfileModel>.fromJson(data, (json) {
         final data = (json as Map<String, dynamic>);
         final user =
             (data['user'] as Map<String, dynamic>?) ?? <String, dynamic>{};

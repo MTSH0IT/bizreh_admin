@@ -21,10 +21,7 @@ class NotificationService {
         data: {'user_id': userId, 'title': title, 'message': message},
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(
-        data,
-        (json) => json,
-      );
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, (json) => json);
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to send notification');
@@ -47,10 +44,7 @@ class NotificationService {
         data: {'user_type': 'user', 'title': title, 'message': message},
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(
-        data,
-        (json) => json,
-      );
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, (json) => json);
 
       if (!apiResponse.success) {
         throw Exception(

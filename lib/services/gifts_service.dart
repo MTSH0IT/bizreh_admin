@@ -57,10 +57,7 @@ class GiftsService {
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(
-        data,
-        (j) => j,
-      );
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, (j) => j);
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to create gift');
@@ -95,10 +92,7 @@ class GiftsService {
         data: formData,
       );
 
-      final apiResponse = ApiResponse<dynamic>.fromJson(
-        data,
-        (j) => j,
-      );
+      final apiResponse = ApiResponse<dynamic>.fromJson(data, (j) => j);
 
       if (!apiResponse.success) {
         throw Exception(apiResponse.message ?? 'Failed to update gift');
