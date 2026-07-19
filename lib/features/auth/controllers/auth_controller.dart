@@ -45,6 +45,7 @@ class AuthController extends GetxController {
   }
 
   bool get isDataEntry => userType == 'data_entry';
+  bool get isSku => userType == 'sku';
 
   String get loginEmail => loginEmailCtrl.text.trim();
   String get loginPassword => loginPasswordCtrl.text.trim();
@@ -98,7 +99,7 @@ class AuthController extends GetxController {
         await _storage.remove(StorageKey.email);
         await _storage.remove(StorageKey.password);
       }
-      Get.offAll(() => mainView());
+      Get.offAll(() => MainView());
       clearCtrl();
       Get.snackbar(
         'مرحبًا',

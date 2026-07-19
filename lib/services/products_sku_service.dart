@@ -40,4 +40,26 @@ class ProductsSkuService {
       throw Exception(e.toString());
     }
   }
+
+  Future<void> updateOptionPackagingSku(int id, String optionSku) async {
+    try {
+      final data = await _apiClient.put(
+        ApiEndpoint.updateOptionPackagingSku(id),
+        data: {'option_sku': optionSku},
+      );
+
+      final apiResponse = ApiResponse.fromJson(data, (json) => json);
+
+      if (!apiResponse.success) {
+        throw Exception(apiResponse.message ?? 'Failed to update SKU');
+      }
+    } on AppException {
+      rethrow;
+    } catch (e) {
+      log(
+        'products sku service catch updateOptionPackagingSku : ${e.toString()}',
+      );
+      throw Exception(e.toString());
+    }
+  }
 }

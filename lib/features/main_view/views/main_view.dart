@@ -26,14 +26,14 @@ import 'package:bizreh_admin/features/main_view/views/widgets/admin_sidebar.dart
 import 'package:get/get.dart';
 import 'package:bizreh_admin/features/auth/controllers/auth_controller.dart';
 
-class mainView extends StatefulWidget {
-  const mainView({super.key});
+class MainView extends StatefulWidget {
+  const MainView({super.key});
 
   @override
-  State<mainView> createState() => _mainViewState();
+  State<MainView> createState() => _MainViewState();
 }
 
-class _mainViewState extends State<mainView> {
+class _MainViewState extends State<MainView> {
   int _selectedIndex = 0;
   late final MainNavController _nav = Get.find<MainNavController>();
   late final List<_MainMenuItem> _menuItems;
@@ -81,19 +81,22 @@ class _mainViewState extends State<mainView> {
         icon: Icons.collections_bookmark_outlined,
         entry: const MainNavEntry(title: 'Collection', page: CollectionView()),
       ),
-       _MainMenuItem(
-         title: 'Products',
-         icon: Icons.inventory_2_outlined,
-         entry: const MainNavEntry(title: 'Products', page: ProductsView()),
-       ),
-       _MainMenuItem(
-         title: 'Product SKUs',
-         icon: Icons.qr_code,
-         entry: const MainNavEntry(title: 'Product SKUs', page: ProductsSkuView()),
-       ),
-       _MainMenuItem(
-         title: 'Color Family',
-         icon: Icons.palette_outlined,
+      _MainMenuItem(
+        title: 'Products',
+        icon: Icons.inventory_2_outlined,
+        entry: const MainNavEntry(title: 'Products', page: ProductsView()),
+      ),
+      _MainMenuItem(
+        title: 'Product SKU',
+        icon: Icons.qr_code,
+        entry: const MainNavEntry(
+          title: 'Product SKU',
+          page: ProductsSkuView(),
+        ),
+      ),
+      _MainMenuItem(
+        title: 'Color Family',
+        icon: Icons.palette_outlined,
 
         entry: const MainNavEntry(
           title: 'Color Family',
@@ -165,7 +168,11 @@ class _mainViewState extends State<mainView> {
       ),
     ];
 
-    if (userType == 'data_entry') {
+    if (userType == 'sku') {
+      _menuItems = allItems
+          .where((item) => item.title == 'Product SKU')
+          .toList();
+    } else if (userType == 'data_entry') {
       final productInputTitles = {
         'Brands',
         'Super Categories',
